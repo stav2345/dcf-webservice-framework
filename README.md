@@ -78,5 +78,8 @@ In this way it is possible to use the list in the web services call. For example
 	// here the list contains all the data retrieved from the web service
 	output.get(0).myCustomMethod();
 
-
+# Dependencies
+The project needs the following projects to work properly:
+* https://github.com/openefsa/zip-manager
+* https://github.com/openefsa/http-manager
 
