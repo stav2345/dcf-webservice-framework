@@ -3,14 +3,14 @@ package dataset;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import soap.GetDatasetList;
+import soap.GetDatasetsList;
 
 /**
- * List of dataset received by calling {@link GetDatasetList}
+ * List of dataset received by calling {@link GetDatasetsList}
  * @author avonva
  *
  */
-public class DcfDatasetList extends ArrayList<IDcfDataset> implements IDcfDatasetList {
+public class DcfDatasetsList extends ArrayList<IDcfDataset> implements IDcfDatasetsList {
 	
 	/**
 	 * 
@@ -22,9 +22,9 @@ public class DcfDatasetList extends ArrayList<IDcfDataset> implements IDcfDatase
 	 * @param regex
 	 * @return
 	 */
-	public DcfDatasetList filterByDatasetId(String regex) {
+	public DcfDatasetsList filterByDatasetId(String regex) {
 		
-		DcfDatasetList filteredList = new DcfDatasetList();
+		DcfDatasetsList filteredList = new DcfDatasetsList();
 		
 		for (IDcfDataset dataset : this) {
 			
@@ -46,9 +46,9 @@ public class DcfDatasetList extends ArrayList<IDcfDataset> implements IDcfDatase
 	 * @param regex
 	 * @return
 	 */
-	public DcfDatasetList filterBySenderId(String regex) {
+	public DcfDatasetsList filterBySenderId(String regex) {
 		
-		DcfDatasetList filteredList = new DcfDatasetList();
+		DcfDatasetsList filteredList = new DcfDatasetsList();
 		
 		for (IDcfDataset dataset : this) {
 			
@@ -70,7 +70,7 @@ public class DcfDatasetList extends ArrayList<IDcfDataset> implements IDcfDatase
 	 * @param statusFilter
 	 * @return
 	 */
-	public DcfDatasetList filterByStatus(Collection<DcfDatasetStatus> statusFilter) {
+	public DcfDatasetsList filterByStatus(Collection<DcfDatasetStatus> statusFilter) {
 		return filterByStatus(statusFilter, false);
 	}
 	
@@ -79,9 +79,9 @@ public class DcfDatasetList extends ArrayList<IDcfDataset> implements IDcfDatase
 	 * @param statusFilter
 	 * @return
 	 */
-	public DcfDatasetList filterByStatus(Collection<DcfDatasetStatus> statusFilter, boolean exclude) {
+	public DcfDatasetsList filterByStatus(Collection<DcfDatasetStatus> statusFilter, boolean exclude) {
 		
-		DcfDatasetList filteredList = new DcfDatasetList();
+		DcfDatasetsList filteredList = new DcfDatasetsList();
 		for (IDcfDataset d: this) {
 			
 			boolean contained = statusFilter.contains(d.getStatus());
@@ -98,7 +98,7 @@ public class DcfDatasetList extends ArrayList<IDcfDataset> implements IDcfDatase
 		return filteredList;
 	}
 	
-	public DcfDatasetList filterByStatus(DcfDatasetStatus statusFilter, boolean exclude) {
+	public DcfDatasetsList filterByStatus(DcfDatasetStatus statusFilter, boolean exclude) {
 		
 		Collection<DcfDatasetStatus> status = new ArrayList<>();
 		status.add(statusFilter);
@@ -106,7 +106,7 @@ public class DcfDatasetList extends ArrayList<IDcfDataset> implements IDcfDatase
 		return filterByStatus(status, exclude);
 	}
 	
-	public DcfDatasetList filterByStatus(DcfDatasetStatus statusFilter) {		
+	public DcfDatasetsList filterByStatus(DcfDatasetStatus statusFilter) {		
 		return filterByStatus(statusFilter, false);
 	}
 

@@ -3,7 +3,6 @@ package soap;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
 
@@ -31,27 +30,46 @@ public class UploadCatalogueFile extends SOAPRequest {
 	private static final String URL = "https://dcf-cms.efsa.europa.eu/catalogues";
 	private static final String TEST_URL = "https://dcf-01.efsa.test/dc-catalog-public-ws/catalogues/?wsdl";
 	
-	private File file;
+	private String attachment;
 	
 	/**
-	 * Initialize the url and the namespace of the upload catalogue file
-	 * request.
+	 * Upload data to DCF
+	 * @param user
+	 * @param file
 	 */
-	public UploadCatalogueFile(IDcfUser user, File file) {
+	public UploadCatalogueFile(IDcfUser user) {
 		super(user, NAMESPACE);
-		this.file = file;
 	}
 	
 	/**
-	 * Upload the attached file to the dcf and get the 
-	 * processed response
+	 * Upload a file to DCF
 	 * @return the code of the log which tracks the request
 	 * @throws SOAPException 
+	 * @throws IOException 
 	 */
-	public String send() throws SOAPException {
+	public String send(File file) throws SOAPException, IOException {
+		
+		// read the file into a string
+		String data = new String(Files.readAllBytes(Paths.get(file.getAbsolutePath())));
+
+		return this.send(data);
+	}
+	
+	/**
+	 * Upload an .xml file contained in a string to dcf
+	 * @param attachment
+	 * @return
+	 * @throws MySOAPException
+	 */
+	public String send(String attachment) throws MySOAPException {
+		
+		this.attachment = attachment;
+		
 		Config config = new Config();
-		String logCode = (String) makeRequest(config.isProductionEnvironment() ? URL : TEST_URL);
-		return logCode;
+		
+		// return the log code got from dcf
+		return (String) makeRequest(config.isProductionEnvironment() 
+				? URL : TEST_URL);
 	}
 
 	/**
@@ -73,35 +91,20 @@ public class UploadCatalogueFile extends SOAPRequest {
 		SOAPElement fileData = upload.addChildElement("fileData");
 		
 		// get the attachment in base64 format
-		String encodedAttachment = createEncodedAttachment(file);
-		
+		String encodedAttachment = encodeAttachment(attachment);
+
 		// row data node (child of file data)
 		SOAPElement rowData = fileData.addChildElement("rowData");
 		rowData.setValue(encodedAttachment);
-		
+
 		// save the changes in the message and return it
 		soapMsg.saveChanges();
 
 		return soapMsg;
 	}
 	
-	/**
-	 * Create the encoded attachment for the request.
-	 * @param file the file where the attachment is stored
-	 * @return
-	 */
-	private String createEncodedAttachment(File file) {
-		
-		Path path = Paths.get(file.getAbsolutePath());
-		
-		byte[] data = null;
-		try {
-			data = Files.readAllBytes(path);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		// encode the data with base64
+	private String encodeAttachment(String attachment) {
+		byte[] data = attachment.getBytes();
 		return new String(Base64.getEncoder().encode(data));
 	}
 	

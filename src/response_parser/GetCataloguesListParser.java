@@ -8,7 +8,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import catalogue.IDcfCatalogue;
-import catalogue.IDcfCatalogueList;
+import catalogue.IDcfCataloguesList;
 import utils.TimeUtils;
 
 public class GetCataloguesListParser {
@@ -16,13 +16,13 @@ public class GetCataloguesListParser {
 	// date format of the catalogues
 	public static final String ISO_8601_24H_FULL_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
 	
-	private IDcfCatalogueList output;
+	private IDcfCataloguesList output;
 	
-	public GetCataloguesListParser(IDcfCatalogueList output) {
+	public GetCataloguesListParser(IDcfCataloguesList output) {
 		this.output = output;
 	}
 	
-	public IDcfCatalogueList parse(Document cdata) {
+	public IDcfCataloguesList parse(Document cdata) {
 		
 		// get all the catalogues nodes from the CDATA field (which is text, but XML formatted)
 		NodeList cataloguesNodes = cdata.getElementsByTagName("catalogue");

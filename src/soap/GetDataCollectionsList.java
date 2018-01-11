@@ -8,8 +8,8 @@ import javax.xml.soap.SOAPMessage;
 import org.w3c.dom.Document;
 
 import data_collection.IDcfDataCollection;
-import data_collection.IDcfDataCollectionList;
-import response_parser.GetDataCollectionListParser;
+import data_collection.IDcfDataCollectionsList;
+import response_parser.GetDataCollectionsListParser;
 import user.IDcfUser;
 
 /**
@@ -23,17 +23,17 @@ public class GetDataCollectionsList extends GetList<IDcfDataCollection> {
 	private static final String URL = "https://dcf-elect.efsa.europa.eu/elect2";
 	private static final String TEST_URL = "https://dcf-01.efsa.test/dcf-dp-ws/elect2/?wsdl";
 
-	private IDcfDataCollectionList output;
+	private IDcfDataCollectionsList output;
 	
-	public GetDataCollectionsList(IDcfUser user, IDcfDataCollectionList output) {
+	public GetDataCollectionsList(IDcfUser user, IDcfDataCollectionsList output) {
 		super(user, URL, TEST_URL, NAMESPACE);
 		this.output = output;
 	}
 
 	@Override
-	public IDcfDataCollectionList getList(Document cdata) {
+	public IDcfDataCollectionsList getList(Document cdata) {
 
-		GetDataCollectionListParser parser = new GetDataCollectionListParser(output);
+		GetDataCollectionsListParser parser = new GetDataCollectionsListParser(output);
 		return parser.parse(cdata);
 	}
 

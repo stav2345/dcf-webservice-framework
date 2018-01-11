@@ -4,18 +4,18 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import resource.IDcfResourceList;
+import resource.IDcfResourcesList;
 import resource.IDcfResourceReference;
 
-public class GetResourceListParser {
+public class GetResourcesListParser {
 	
 	private static final String RESOURCE_REF_NODE = "resourceReference";
 	private static final String RESOURCE_TYPE_NODE = "resourceType";
 	private static final String RESOURCE_ID_NODE = "resourceId";
 	
-	private IDcfResourceList output;
+	private IDcfResourcesList output;
 	
-	public GetResourceListParser(IDcfResourceList output) {
+	public GetResourcesListParser(IDcfResourcesList output) {
 		this.output = output;
 	}
 	
@@ -24,7 +24,7 @@ public class GetResourceListParser {
 	 * @param document
 	 * @return
 	 */
-	public IDcfResourceList parse(Document cdata) {
+	public IDcfResourcesList parse(Document cdata) {
 		
 		NodeList refs = cdata.getElementsByTagName(RESOURCE_REF_NODE);
 		

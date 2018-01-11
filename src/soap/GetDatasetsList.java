@@ -7,8 +7,8 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
 import config.Config;
-import dataset.IDcfDatasetList;
-import response_parser.GetDatasetListParser;
+import dataset.IDcfDatasetsList;
+import response_parser.GetDatasetsListParser;
 import user.IDcfUser;
 
 /**
@@ -18,7 +18,7 @@ import user.IDcfUser;
  * @author avonva
  *
  */
-public class GetDatasetList extends SOAPRequest {
+public class GetDatasetsList extends SOAPRequest {
 
 	// web service link of the getDatasetList service
 	private static final String URL = "https://dcf-elect.efsa.europa.eu/elect2/";
@@ -26,14 +26,14 @@ public class GetDatasetList extends SOAPRequest {
 	private static final String TEST_URL = "https://dcf-01.efsa.test/dcf-dp-ws/elect2/?wsdl";
 	
 	private String dataCollectionCode;
-	private IDcfDatasetList output;
+	private IDcfDatasetsList output;
 	
 	/**
 	 * Initialize the get dataset list request with the data collection
 	 * that is required.
 	 * @param dataCollectionCode
 	 */
-	public GetDatasetList(IDcfUser user, String dataCollectionCode, IDcfDatasetList output) {
+	public GetDatasetsList(IDcfUser user, String dataCollectionCode, IDcfDatasetsList output) {
 		super(user, LIST_NAMESPACE);
 		this.dataCollectionCode = dataCollectionCode;
 		this.output = output;
@@ -43,9 +43,9 @@ public class GetDatasetList extends SOAPRequest {
 	 * Send the request and get the dataset list
 	 * @throws SOAPException
 	 */
-	public IDcfDatasetList getList() throws MySOAPException {
+	public IDcfDatasetsList getList() throws MySOAPException {
 		
-		IDcfDatasetList datasets = null;
+		IDcfDatasetsList datasets = null;
 		
 		Config config = new Config();
 		
@@ -53,7 +53,7 @@ public class GetDatasetList extends SOAPRequest {
 		
 		// get the list from the response if possible
 		if (response != null) {
-			datasets = (IDcfDatasetList) response;
+			datasets = (IDcfDatasetsList) response;
 		}
 		
 		return datasets;
@@ -82,7 +82,7 @@ public class GetDatasetList extends SOAPRequest {
 	public Object processResponse(SOAPMessage soapResponse) throws SOAPException {
 
 		// parse the dom document and return the contents
-		GetDatasetListParser parser = new GetDatasetListParser(output);
+		GetDatasetsListParser parser = new GetDatasetsListParser(output);
 		SOAPBody body = soapResponse.getSOAPPart().getEnvelope().getBody();
 		return parser.parse(body);
 	}

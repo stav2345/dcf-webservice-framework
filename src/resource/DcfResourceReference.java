@@ -1,9 +1,9 @@
 package resource;
 
-import soap.GetResourceList;
+import soap.GetResourcesList;
 
 /**
- * Single object contained in the {@link GetResourceList}
+ * Single object contained in the {@link GetResourcesList}
  * response
  * @author avonva
  *

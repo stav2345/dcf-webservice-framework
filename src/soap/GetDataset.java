@@ -78,6 +78,6 @@ public class GetDataset extends SOAPRequest {
 
 	@Override
 	public Object processResponse(SOAPMessage soapResponse) throws SOAPException {
-		return writeZippedAttachment(soapResponse, "xml");
+		return writeZippedAttachment(soapResponse, ".xml");
 	}
 }

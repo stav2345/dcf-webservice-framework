@@ -9,7 +9,7 @@ import javax.xml.soap.SOAPMessage;
 import org.w3c.dom.Document;
 
 import catalogue.IDcfCatalogue;
-import catalogue.IDcfCatalogueList;
+import catalogue.IDcfCataloguesList;
 import response_parser.GetCataloguesListParser;
 import user.IDcfUser;
 
@@ -24,15 +24,15 @@ public class GetCataloguesList extends GetList<IDcfCatalogue> {
 	private static final String NAMESPACE = "http://ws.catalog.dc.efsa.europa.eu/";
 	private static final String TEST_URL = "https://dcf-01.efsa.test/dc-catalog-public-ws/catalogues/?wsdl";
 	
-	private IDcfCatalogueList output;
+	private IDcfCataloguesList output;
 	
-	public GetCataloguesList(IDcfUser user, IDcfCatalogueList output) {
+	public GetCataloguesList(IDcfUser user, IDcfCataloguesList output) {
 		super(user, URL, TEST_URL, NAMESPACE);
 		this.output = output;
 	}
 	
 	@Override
-	public IDcfCatalogueList getList(Document cdata) {
+	public IDcfCataloguesList getList(Document cdata) {
 		GetCataloguesListParser parser = new GetCataloguesListParser(output);
 		return parser.parse(cdata);
 	}

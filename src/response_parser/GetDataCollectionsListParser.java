@@ -7,20 +7,20 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import data_collection.IDcfDataCollection;
-import data_collection.IDcfDataCollectionList;
+import data_collection.IDcfDataCollectionsList;
 import utils.TimeUtils;
 
-public class GetDataCollectionListParser {
+public class GetDataCollectionsListParser {
 
 	public static final String DATE_FORMAT = "yyyy-MM-ddX";
 	
-	private IDcfDataCollectionList output;
+	private IDcfDataCollectionsList output;
 	
-	public GetDataCollectionListParser(IDcfDataCollectionList output) {
+	public GetDataCollectionsListParser(IDcfDataCollectionsList output) {
 		this.output = output;
 	}
 	
-	public IDcfDataCollectionList parse(Document cdata) {
+	public IDcfDataCollectionsList parse(Document cdata) {
 
 		NodeList dcNodes = cdata.getElementsByTagName("dataCollectionMainInfo");
 

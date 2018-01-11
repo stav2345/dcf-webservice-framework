@@ -2,7 +2,7 @@ package catalogue;
 
 import java.util.ArrayList;
 
-public class DcfCatalogueList extends ArrayList<IDcfCatalogue> implements IDcfCatalogueList {
+public class DcfCataloguesList extends ArrayList<IDcfCatalogue> implements IDcfCataloguesList {
 	private static final long serialVersionUID = 944117596551368064L;
 
 	@Override

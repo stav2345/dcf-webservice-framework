@@ -1,26 +1,27 @@
 package test_case;
 
 import java.io.File;
+import java.io.IOException;
 
 import javax.xml.soap.SOAPException;
 
 import org.w3c.dom.Document;
 
 import ack.DcfAck;
-import catalogue.DcfCatalogueList;
-import data_collection.DcfDCTableList;
-import data_collection.DcfDataCollectionList;
-import dataset.DcfDatasetList;
+import catalogue.DcfCataloguesList;
+import data_collection.DcfDCTablesList;
+import data_collection.DcfDataCollectionsList;
+import dataset.DcfDatasetsList;
 import message.MessageResponse;
-import resource.DcfResourceList;
+import resource.DcfResourcesList;
 import soap.ExportCatalogueFile;
 import soap.GetAck;
 import soap.GetCataloguesList;
 import soap.GetDataCollectionTables;
 import soap.GetDataCollectionsList;
 import soap.GetDataset;
-import soap.GetDatasetList;
-import soap.GetResourceList;
+import soap.GetDatasetsList;
+import soap.GetResourcesList;
 import soap.GetXsdFile;
 import soap.MySOAPException;
 import soap.Ping;
@@ -95,10 +96,10 @@ public class SoapTest {
 		
 		System.out.print("Testing GetCataloguesList...");
 		
-		DcfCatalogueList output = new DcfCatalogueList();
+		DcfCataloguesList output = new DcfCataloguesList();
 		
 		GetCataloguesList request = new GetCataloguesList(user, output);
-		DcfCatalogueList list = (DcfCatalogueList) request.getList();
+		DcfCataloguesList list = (DcfCataloguesList) request.getList();
 		
 		if (list.isEmpty()) {
 			System.err.println("ERROR");
@@ -117,10 +118,10 @@ public class SoapTest {
 		
 		System.out.print("Testing GetDataCollectionList...");
 		
-		DcfDataCollectionList output = new DcfDataCollectionList();
+		DcfDataCollectionsList output = new DcfDataCollectionsList();
 		
 		GetDataCollectionsList request = new GetDataCollectionsList(user, output);
-		DcfDataCollectionList list = (DcfDataCollectionList) request.getList();
+		DcfDataCollectionsList list = (DcfDataCollectionsList) request.getList();
 
 		if (list.isEmpty()) {
 			System.err.println("WARNING: no data collection was retrieved => Check your DP account!");
@@ -137,10 +138,10 @@ public class SoapTest {
 	
 	private static void testGetDatasetList(DcfUser user, String dcCode) throws MySOAPException {
 		
-		DcfDatasetList output = new DcfDatasetList();
+		DcfDatasetsList output = new DcfDatasetsList();
 		
 		System.out.print("Testing GetDatasetList...");
-		GetDatasetList request = new GetDatasetList(user, dcCode, output);
+		GetDatasetsList request = new GetDatasetsList(user, dcCode, output);
 		request.getList();
 
 		if (output.isEmpty()) {
@@ -160,10 +161,10 @@ public class SoapTest {
 		
 		System.out.print("Testing GetResourceList...");
 		
-		DcfResourceList output = new DcfResourceList();
+		DcfResourcesList output = new DcfResourcesList();
 		
-		GetResourceList request = new GetResourceList(user, dcCode, output);
-		DcfResourceList list = (DcfResourceList) request.getList();
+		GetResourcesList request = new GetResourcesList(user, dcCode, output);
+		DcfResourcesList list = (DcfResourcesList) request.getList();
 
 		if (list.isEmpty()) {
 			System.err.println("WARNING: no resource was retrieved");
@@ -257,14 +258,15 @@ public class SoapTest {
 			System.err.println("FAILED: No response received!");
 	}
 	
-	private static void testUploadCatalogueFile(DcfUser user) throws SOAPException {
+	private static void testUploadCatalogueFile(DcfUser user) 
+			throws SOAPException, IOException {
 		
 		System.out.print("Testing UploadCatalogueFile...");
 		
 		File file = new File("test-files" 
 				+ System.getProperty("file.separator") + "unreserve.xml");
-		UploadCatalogueFile request = new UploadCatalogueFile(user, file);
-		String logCode = request.send();
+		UploadCatalogueFile request = new UploadCatalogueFile(user);
+		String logCode = request.send(file);
 
 		if (logCode != null)
 			System.out.println("OK");
@@ -276,7 +278,7 @@ public class SoapTest {
 		
 		System.out.print("Testing GetDCConfig...");
 		
-		DcfDCTableList output = new DcfDCTableList();
+		DcfDCTablesList output = new DcfDCTablesList();
 		GetDataCollectionTables req = new GetDataCollectionTables(user, output, resourceId);
 		req.getTables();
 		

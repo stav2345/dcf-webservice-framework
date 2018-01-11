@@ -8,9 +8,9 @@ import javax.xml.soap.SOAPMessage;
 
 import org.w3c.dom.Document;
 
-import resource.IDcfResourceList;
+import resource.IDcfResourcesList;
 import resource.IDcfResourceReference;
-import response_parser.GetResourceListParser;
+import response_parser.GetResourcesListParser;
 import user.IDcfUser;
 
 /**
@@ -18,7 +18,7 @@ import user.IDcfUser;
  * @author avonva
  *
  */
-public class GetResourceList extends GetList<IDcfResourceReference> {
+public class GetResourcesList extends GetList<IDcfResourceReference> {
 
 	private String dataCollectionCode;
 	
@@ -27,17 +27,17 @@ public class GetResourceList extends GetList<IDcfResourceReference> {
 	private static final String TEST_URL = "https://dcf-01.efsa.test/dcf-dp-ws/elect2/?wsdl";
 	private static final String NAMESPACE = "http://dcf-elect.efsa.europa.eu/";
 	
-	private IDcfResourceList output;
+	private IDcfResourcesList output;
 	
-	public GetResourceList(IDcfUser user, String dataCollectionCode, IDcfResourceList output) {
+	public GetResourcesList(IDcfUser user, String dataCollectionCode, IDcfResourcesList output) {
 		super(user, URL, TEST_URL, NAMESPACE);
 		this.dataCollectionCode = dataCollectionCode;
 		this.output = output;
 	}
 	
 	@Override
-	public IDcfResourceList getList(Document cdata) {
-		GetResourceListParser parser = new GetResourceListParser(output);
+	public IDcfResourcesList getList(Document cdata) {
+		GetResourcesListParser parser = new GetResourcesListParser(output);
 		return parser.parse(cdata);
 	}
 

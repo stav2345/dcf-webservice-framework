@@ -1,9 +1,9 @@
 package dataset;
 
-import soap.GetDatasetList;
+import soap.GetDatasetsList;
 
 /**
- * Dcf dataset that is downloaded using the {@link GetDatasetList}
+ * Dcf dataset that is downloaded using the {@link GetDatasetsList}
  * request.
  * @author avonva
  *

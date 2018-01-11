@@ -2,14 +2,14 @@ package resource;
 
 import java.util.ArrayList;
 
-import soap.GetResourceList;
+import soap.GetResourcesList;
 
 /**
- * Result of {@link GetResourceList} call.
+ * Result of {@link GetResourcesList} call.
  * @author avonva
  *
  */
-public class DcfResourceList extends ArrayList<IDcfResourceReference> implements IDcfResourceList {
+public class DcfResourcesList extends ArrayList<IDcfResourceReference> implements IDcfResourcesList {
 
 	/**
 	 * 
@@ -21,9 +21,9 @@ public class DcfResourceList extends ArrayList<IDcfResourceReference> implements
 	 * @param resourceType
 	 * @return
 	 */
-	public DcfResourceList getByType(String resourceType) {
+	public DcfResourcesList getByType(String resourceType) {
 		
-		DcfResourceList resources = new DcfResourceList();
+		DcfResourcesList resources = new DcfResourcesList();
 		
 		for (IDcfResourceReference ref : this) {
 			if (ref.getType().equals(resourceType))

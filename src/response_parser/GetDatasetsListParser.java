@@ -7,16 +7,16 @@ import org.w3c.dom.NodeList;
 
 import dataset.DcfDatasetStatus;
 import dataset.IDcfDataset;
-import dataset.IDcfDatasetList;
-import soap.GetDatasetList;
+import dataset.IDcfDatasetsList;
+import soap.GetDatasetsList;
 
 /**
- * Parser for a dom document containing the {@link GetDatasetList}
+ * Parser for a dom document containing the {@link GetDatasetsList}
  * response
  * @author avonva
  *
  */
-public class GetDatasetListParser {
+public class GetDatasetsListParser {
 
 	private static final String DATASET_ID_NODE = "datasetId";
 	private static final String SENDER_DATASET_ID_NODE = "datasetSenderId";
@@ -24,9 +24,9 @@ public class GetDatasetListParser {
 	private static final String STATUS_NODE = "status";
 	private static final String STEP_NODE = "step";
 	
-	private IDcfDatasetList output;
+	private IDcfDatasetsList output;
 	
-	public GetDatasetListParser(IDcfDatasetList output) {
+	public GetDatasetsListParser(IDcfDatasetsList output) {
 		this.output = output;
 	}
 	
@@ -35,7 +35,7 @@ public class GetDatasetListParser {
 	 * @param body
 	 * @return
 	 */
-	public IDcfDatasetList parse(SOAPBody body) {
+	public IDcfDatasetsList parse(SOAPBody body) {
 		
 		NodeList datas = body.getElementsByTagName("dataset");
 

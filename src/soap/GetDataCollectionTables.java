@@ -7,28 +7,28 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.stream.XMLStreamException;
 
-import data_collection.IDcfDCTableList;
+import data_collection.IDcfDCTableLists;
 import response_parser.DCResourceParser;
 import user.IDcfUser;
 
 public class GetDataCollectionTables extends GetFile {
 
-	private IDcfDCTableList output;
+	private IDcfDCTableLists output;
 
-	public GetDataCollectionTables(IDcfUser user, IDcfDCTableList output, String resourceId) {
+	public GetDataCollectionTables(IDcfUser user, IDcfDCTableLists output, String resourceId) {
 		super(user, resourceId);
 		this.output = output;
 	}
 	
-	public IDcfDCTableList getTables() throws MySOAPException {
+	public IDcfDCTableLists getTables() throws MySOAPException {
 		
-		IDcfDCTableList tables = null;
+		IDcfDCTableLists tables = null;
 		
 		Object response = makeRequest(getUrl());
 		
 		// get the list from the response if possible
 		if (response != null) {
-			tables = (IDcfDCTableList) response;
+			tables = (IDcfDCTableLists) response;
 		}
 		
 		return tables;

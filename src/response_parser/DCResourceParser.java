@@ -16,7 +16,7 @@ import javax.xml.stream.events.XMLEvent;
 
 import data_collection.IDcfCatalogueConfig;
 import data_collection.IDcfDCTable;
-import data_collection.IDcfDCTableList;
+import data_collection.IDcfDCTableLists;
 
 /**
  * Parser used to extract all the {@link DCTable} from
@@ -33,7 +33,7 @@ public class DCResourceParser implements AutoCloseable {
 	private static final String CAT_CODE_NODE = "catalogueCode";
 	private static final String HIER_CODE_NODE = "hierarchyCode";
 	
-	private IDcfDCTableList output;  // output list
+	private IDcfDCTableLists output;  // output list
 	
 	private IDcfDCTable table;
 	private IDcfCatalogueConfig catalogueConfig;
@@ -48,7 +48,7 @@ public class DCResourceParser implements AutoCloseable {
 	 * @throws FileNotFoundException
 	 * @throws XMLStreamException
 	 */
-	public DCResourceParser(IDcfDCTableList output, File file) throws FileNotFoundException, XMLStreamException {
+	public DCResourceParser(IDcfDCTableLists output, File file) throws FileNotFoundException, XMLStreamException {
 		
 		this.output = output;
 		
@@ -64,7 +64,7 @@ public class DCResourceParser implements AutoCloseable {
 	 * @return list of DCTable created
 	 * @throws XMLStreamException
 	 */
-	public IDcfDCTableList parse() throws XMLStreamException {
+	public IDcfDCTableLists parse() throws XMLStreamException {
 		
 		while (eventReader.hasNext()) {
 			// read the node
