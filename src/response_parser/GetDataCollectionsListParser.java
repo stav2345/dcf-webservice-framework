@@ -10,17 +10,17 @@ import data_collection.IDcfDataCollection;
 import data_collection.IDcfDataCollectionsList;
 import utils.TimeUtils;
 
-public class GetDataCollectionsListParser {
+public class GetDataCollectionsListParser<T extends IDcfDataCollection> {
 
 	public static final String DATE_FORMAT = "yyyy-MM-ddX";
 	
-	private IDcfDataCollectionsList output;
+	private IDcfDataCollectionsList<T> output;
 	
-	public GetDataCollectionsListParser(IDcfDataCollectionsList output) {
+	public GetDataCollectionsListParser(IDcfDataCollectionsList<T> output) {
 		this.output = output;
 	}
 	
-	public IDcfDataCollectionsList parse(Document cdata) {
+	public IDcfDataCollectionsList<T> parse(Document cdata) {
 
 		NodeList dcNodes = cdata.getElementsByTagName("dataCollectionMainInfo");
 
@@ -30,7 +30,7 @@ public class GetDataCollectionsListParser {
 			// get the current node
 			Node node = dcNodes.item(i);
 
-			output.addElem(getDataCollection(node));
+			output.add(getDataCollection(node));
 		}
 
 		return output;
@@ -41,12 +41,12 @@ public class GetDataCollectionsListParser {
 	 * @param node
 	 * @return
 	 */
-	private IDcfDataCollection getDataCollection(Node node) {
+	private T getDataCollection(Node node) {
 
 		// get elements
 		NodeList nodes = node.getChildNodes();
 
-		IDcfDataCollection dc = output.create();
+		T dc = output.create();
 		
 		// for each element
 		for ( int i = 0; i < nodes.getLength(); ++i ) {

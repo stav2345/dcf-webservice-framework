@@ -16,7 +16,7 @@ import soap.GetDatasetsList;
  * @author avonva
  *
  */
-public class GetDatasetsListParser {
+public class GetDatasetsListParser<T extends IDcfDataset> {
 
 	private static final String DATASET_ID_NODE = "datasetId";
 	private static final String SENDER_DATASET_ID_NODE = "datasetSenderId";
@@ -24,9 +24,9 @@ public class GetDatasetsListParser {
 	private static final String STATUS_NODE = "status";
 	private static final String STEP_NODE = "step";
 	
-	private IDcfDatasetsList output;
+	private IDcfDatasetsList<T> output;
 	
-	public GetDatasetsListParser(IDcfDatasetsList output) {
+	public GetDatasetsListParser(IDcfDatasetsList<T> output) {
 		this.output = output;
 	}
 	
@@ -35,7 +35,7 @@ public class GetDatasetsListParser {
 	 * @param body
 	 * @return
 	 */
-	public IDcfDatasetsList parse(SOAPBody body) {
+	public IDcfDatasetsList<T> parse(SOAPBody body) {
 		
 		NodeList datas = body.getElementsByTagName("dataset");
 
@@ -44,7 +44,7 @@ public class GetDatasetsListParser {
 			// get the current dataset
 			Node datasetNode = datas.item(i);
 
-			output.addElem(getDataset(datasetNode));
+			output.add(getDataset(datasetNode));
 		}
 		
 		return output;
@@ -55,12 +55,12 @@ public class GetDatasetsListParser {
 	 * @param datasetNode
 	 * @return
 	 */
-	private IDcfDataset getDataset(Node datasetNode) {
+	private T getDataset(Node datasetNode) {
 		
 		// get the info related to the dataset
 		NodeList datasetInfoNode = datasetNode.getChildNodes();
 		
-		IDcfDataset dataset = output.create();
+		T dataset = output.create();
 		
 		// parse the dataset info
 		for (int i = 0; i < datasetInfoNode.getLength(); ++i) {

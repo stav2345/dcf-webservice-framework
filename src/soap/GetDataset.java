@@ -40,9 +40,13 @@ public class GetDataset extends SOAPRequest {
 	 */
 	public File getDatasetFile() throws MySOAPException {
 		
+		SOAPConsole.log("GetDataset: datasetId=" + datasetId, getUser());
+		
 		Config config = new Config();
 		
 		Object response = makeRequest(config.isProductionEnvironment() ? URL : TEST_URL);
+		
+		SOAPConsole.log("GetDataset:", response);
 		
 		if (response == null)
 			return null;

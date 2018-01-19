@@ -47,9 +47,13 @@ public class SendMessage extends SOAPRequest {
 	 */
 	public MessageResponse send() throws MySOAPException {
 		
+		SOAPConsole.log("SendMessage: file=" + file, getUser());
+		
 		Config config = new Config();
 		
 		Object response = makeRequest(config.isProductionEnvironment() ? URL : TEST_URL);
+		
+		SOAPConsole.log("SendMessage:", response);
 		
 		if (response == null)
 			return null;

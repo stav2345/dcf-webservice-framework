@@ -27,8 +27,8 @@ public class GetXsdFile extends GetFile {
 	 * @return
 	 * @throws SOAPException
 	 */
-	public Document getFile() throws SOAPException {
-		Object response = makeRequest(getUrl());
+	public Document getXsdFile() throws SOAPException {
+		Object response = getFile();
 		if (response == null)
 			return null;
 		

@@ -11,6 +11,7 @@ import org.w3c.dom.Document;
 import resource.IDcfResourcesList;
 import resource.IDcfResourceReference;
 import response_parser.GetResourcesListParser;
+import response_parser.IDcfList;
 import user.IDcfUser;
 
 /**
@@ -18,7 +19,7 @@ import user.IDcfUser;
  * @author avonva
  *
  */
-public class GetResourcesList extends GetList<IDcfResourceReference> {
+public class GetResourcesList<T extends IDcfResourceReference> extends GetList<T> {
 
 	private String dataCollectionCode;
 	
@@ -27,17 +28,27 @@ public class GetResourcesList extends GetList<IDcfResourceReference> {
 	private static final String TEST_URL = "https://dcf-01.efsa.test/dcf-dp-ws/elect2/?wsdl";
 	private static final String NAMESPACE = "http://dcf-elect.efsa.europa.eu/";
 	
-	private IDcfResourcesList output;
+	private IDcfResourcesList<T> output;
 	
-	public GetResourcesList(IDcfUser user, String dataCollectionCode, IDcfResourcesList output) {
+	public GetResourcesList(IDcfUser user, String dataCollectionCode, IDcfResourcesList<T> output) {
 		super(user, URL, TEST_URL, NAMESPACE);
 		this.dataCollectionCode = dataCollectionCode;
 		this.output = output;
 	}
 	
 	@Override
-	public IDcfResourcesList getList(Document cdata) {
-		GetResourcesListParser parser = new GetResourcesListParser(output);
+	public IDcfList<T> getList() throws MySOAPException {
+		SOAPConsole.log("GetResourcesList: dcCode=" + dataCollectionCode, getUser());
+		IDcfList<T> response = super.getList();
+		
+		SOAPConsole.log("GetResourcesList:", response);
+		
+		return response;
+	}
+	
+	@Override
+	public IDcfResourcesList<T> getList(Document cdata) {
+		GetResourcesListParser<T> parser = new GetResourcesListParser<>(output);
 		return parser.parse(cdata);
 	}
 

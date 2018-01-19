@@ -11,6 +11,7 @@ import org.w3c.dom.Document;
 import catalogue.IDcfCatalogue;
 import catalogue.IDcfCataloguesList;
 import response_parser.GetCataloguesListParser;
+import response_parser.IDcfList;
 import user.IDcfUser;
 
 /**
@@ -18,22 +19,34 @@ import user.IDcfUser;
  * @author avonva
  *
  */
-public class GetCataloguesList extends GetList<IDcfCatalogue> {
+public class GetCataloguesList<T extends IDcfCatalogue> extends GetList<T> {
 
 	private static final String URL = "https://dcf-cms.efsa.europa.eu/catalogues";
 	private static final String NAMESPACE = "http://ws.catalog.dc.efsa.europa.eu/";
 	private static final String TEST_URL = "https://dcf-01.efsa.test/dc-catalog-public-ws/catalogues/?wsdl";
 	
-	private IDcfCataloguesList output;
+	private IDcfCataloguesList<T> output;
 	
-	public GetCataloguesList(IDcfUser user, IDcfCataloguesList output) {
+	public GetCataloguesList(IDcfUser user, IDcfCataloguesList<T> output) {
 		super(user, URL, TEST_URL, NAMESPACE);
 		this.output = output;
 	}
 	
 	@Override
-	public IDcfCataloguesList getList(Document cdata) {
-		GetCataloguesListParser parser = new GetCataloguesListParser(output);
+	public IDcfList<T> getList() throws MySOAPException {
+		
+		SOAPConsole.log("GetCataloguesList", getUser());
+
+		IDcfList<T> response = super.getList();
+		
+		SOAPConsole.log("GetCataloguesList:", response);
+		
+		return response;
+	}
+	
+	@Override
+	public IDcfCataloguesList<T> getList(Document cdata) {
+		GetCataloguesListParser<T> parser = new GetCataloguesListParser<>(output);
 		return parser.parse(cdata);
 	}
 

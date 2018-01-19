@@ -7,28 +7,30 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.stream.XMLStreamException;
 
+import data_collection.IDcfDCTable;
 import data_collection.IDcfDCTableLists;
 import response_parser.DCResourceParser;
 import user.IDcfUser;
 
-public class GetDataCollectionTables extends GetFile {
+public class GetDataCollectionTables<T extends IDcfDCTable> extends GetFile {
 
-	private IDcfDCTableLists output;
+	private IDcfDCTableLists<T> output;
 
-	public GetDataCollectionTables(IDcfUser user, IDcfDCTableLists output, String resourceId) {
+	public GetDataCollectionTables(IDcfUser user, IDcfDCTableLists<T> output, String resourceId) {
 		super(user, resourceId);
 		this.output = output;
 	}
 	
-	public IDcfDCTableLists getTables() throws MySOAPException {
+	@SuppressWarnings("unchecked")
+	public IDcfDCTableLists<T> getTables() throws MySOAPException {
 		
-		IDcfDCTableLists tables = null;
+		IDcfDCTableLists<T> tables = null;
 		
-		Object response = makeRequest(getUrl());
+		Object response = getFile();
 		
 		// get the list from the response if possible
 		if (response != null) {
-			tables = (IDcfDCTableLists) response;
+			tables = (IDcfDCTableLists<T>) response;
 		}
 		
 		return tables;
@@ -43,7 +45,7 @@ public class GetDataCollectionTables extends GetFile {
 		if (file == null)
 			return null;
 		
-		try(DCResourceParser parser = new DCResourceParser(output, file);) {
+		try(DCResourceParser<T> parser = new DCResourceParser<>(output, file);) {
 			return parser.parse();
 		}
 		catch (XMLStreamException | IOException e) {

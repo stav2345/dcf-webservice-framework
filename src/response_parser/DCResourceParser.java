@@ -24,7 +24,7 @@ import data_collection.IDcfDCTableLists;
  * @author avonva
  *
  */
-public class DCResourceParser implements AutoCloseable {
+public class DCResourceParser<T extends IDcfDCTable> implements AutoCloseable {
 
 	private static final String TABLE_NODE = "dataCollectionTable";
 	private static final String TABLE_NAME_NODE = "tableName";
@@ -33,9 +33,9 @@ public class DCResourceParser implements AutoCloseable {
 	private static final String CAT_CODE_NODE = "catalogueCode";
 	private static final String HIER_CODE_NODE = "hierarchyCode";
 	
-	private IDcfDCTableLists output;  // output list
+	private IDcfDCTableLists<T> output;  // output list
 	
-	private IDcfDCTable table;
+	private T table;
 	private IDcfCatalogueConfig catalogueConfig;
 	
 	private String currentNode;  // current xml node which is parsed
@@ -48,7 +48,7 @@ public class DCResourceParser implements AutoCloseable {
 	 * @throws FileNotFoundException
 	 * @throws XMLStreamException
 	 */
-	public DCResourceParser(IDcfDCTableLists output, File file) throws FileNotFoundException, XMLStreamException {
+	public DCResourceParser(IDcfDCTableLists<T> output, File file) throws FileNotFoundException, XMLStreamException {
 		
 		this.output = output;
 		
@@ -64,7 +64,7 @@ public class DCResourceParser implements AutoCloseable {
 	 * @return list of DCTable created
 	 * @throws XMLStreamException
 	 */
-	public IDcfDCTableLists parse() throws XMLStreamException {
+	public IDcfDCTableLists<T> parse() throws XMLStreamException {
 		
 		while (eventReader.hasNext()) {
 			// read the node
@@ -105,7 +105,7 @@ public class DCResourceParser implements AutoCloseable {
 
 		switch (currentNode) {
 		case TABLE_NODE:
-			this.table = this.output.create(); 
+			this.table = this.output.create();
 			break;
 		case CONFIG_NODE:
 			this.catalogueConfig = this.output.createConfig(); 
@@ -164,7 +164,7 @@ public class DCResourceParser implements AutoCloseable {
 		case TABLE_NODE:
 
 			// add table to output
-			output.addElem(table);
+			output.add(table);
 			table = null;
 			break;
 			

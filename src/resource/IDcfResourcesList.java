@@ -2,4 +2,4 @@ package resource;
 
 import response_parser.IDcfList;
 
-public interface IDcfResourcesList extends IDcfList<IDcfResourceReference> {}
+public interface IDcfResourcesList<T extends IDcfResourceReference> extends IDcfList<T> {}

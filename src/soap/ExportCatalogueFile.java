@@ -44,6 +44,8 @@ public class ExportCatalogueFile extends SOAPRequest {
 	
 	public File exportCatalogue(String catalogueCode) throws SOAPException {
 		
+		SOAPConsole.log("ExportCatalogueFile: export last published version of catalogue=" + catalogueCode, getUser());
+		
 		Object log = exportXml(catalogueCode, EXPORT_TYPE_CATALOGUE, 
 				XML_FILE_TYPE);
 		
@@ -63,6 +65,8 @@ public class ExportCatalogueFile extends SOAPRequest {
 	public File exportLog(String code) 
 			throws SOAPException {
 		
+		SOAPConsole.log("ExportCatalogueFile: export log=" + code, getUser());
+		
 		Object log = exportXml(code, EXPORT_TYPE_LOG, 
 				XML_FILE_TYPE);
 		
@@ -81,6 +85,9 @@ public class ExportCatalogueFile extends SOAPRequest {
 	 */
 	public File exportLastInternalVersion(String catalogueCode) 
 			throws SOAPException {
+		
+		SOAPConsole.log("ExportCatalogueFile: export last internal version of catalogue=" 
+				+ catalogueCode, getUser());
 		
 		Object lastVersion = exportXml(catalogueCode, 
 				EXPORT_TYPE_INTERNAL_VERSION, 

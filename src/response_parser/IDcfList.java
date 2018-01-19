@@ -1,12 +1,14 @@
 package response_parser;
 
-public interface IDcfList<T> {
+import java.util.Collection;
+
+public interface IDcfList<T> extends Collection<T> {
 
 	/**
 	 * Add a new element to the list
 	 * @param dataset
 	 */
-	public boolean addElem(T elem);
+	public boolean add(T elem);
 	
 	/**
 	 * Create a new instance of an element

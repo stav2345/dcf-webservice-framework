@@ -7,15 +7,15 @@ import org.w3c.dom.NodeList;
 import resource.IDcfResourcesList;
 import resource.IDcfResourceReference;
 
-public class GetResourcesListParser {
+public class GetResourcesListParser<T extends IDcfResourceReference> {
 	
 	private static final String RESOURCE_REF_NODE = "resourceReference";
 	private static final String RESOURCE_TYPE_NODE = "resourceType";
 	private static final String RESOURCE_ID_NODE = "resourceId";
 	
-	private IDcfResourcesList output;
+	private IDcfResourcesList<T> output;
 	
-	public GetResourcesListParser(IDcfResourcesList output) {
+	public GetResourcesListParser(IDcfResourcesList<T> output) {
 		this.output = output;
 	}
 	
@@ -24,13 +24,13 @@ public class GetResourcesListParser {
 	 * @param document
 	 * @return
 	 */
-	public IDcfResourcesList parse(Document cdata) {
+	public IDcfResourcesList<T> parse(Document cdata) {
 		
 		NodeList refs = cdata.getElementsByTagName(RESOURCE_REF_NODE);
 		
 		for (int i = 0; i < refs.getLength(); ++i) {
 			Node ref = refs.item(i);
-			output.addElem(getResource(ref));
+			output.add(getResource(ref));
 		}
 		
 		return output;
@@ -41,11 +41,11 @@ public class GetResourcesListParser {
 	 * @param resNode
 	 * @return
 	 */
-	public IDcfResourceReference getResource(Node resNode) {
+	public T getResource(Node resNode) {
 		
 		NodeList fields = resNode.getChildNodes();
 		
-		IDcfResourceReference reference = output.create();
+		T reference = output.create();
 		
 		for (int i = 0; i < fields.getLength(); ++i) {
 			

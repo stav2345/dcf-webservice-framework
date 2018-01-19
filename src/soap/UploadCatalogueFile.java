@@ -63,13 +63,22 @@ public class UploadCatalogueFile extends SOAPRequest {
 	 */
 	public String send(String attachment) throws MySOAPException {
 		
+		SOAPConsole.log("UploadCatalogueFile: attachment=" + attachment, getUser());
+		
 		this.attachment = attachment;
 		
 		Config config = new Config();
 		
 		// return the log code got from dcf
-		return (String) makeRequest(config.isProductionEnvironment() 
+		Object response = makeRequest(config.isProductionEnvironment() 
 				? URL : TEST_URL);
+		
+		SOAPConsole.log("UploadCatalogueFile:", response);
+		
+		if (response == null)
+			return null;
+		
+		return (String) response;
 	}
 
 	/**

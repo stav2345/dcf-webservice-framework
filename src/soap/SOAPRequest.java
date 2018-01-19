@@ -47,19 +47,14 @@ import http.HttpManager;
 import proxy.ProxyConfigException;
 import sun.net.www.protocol.http.AuthCacheImpl;
 import sun.net.www.protocol.http.AuthCacheValue;
-import user.DcfUser;
 import user.IDcfUser;
 import utils.FileUtils;
 import zip_manager.ZipManager;
 
 /**
  * Abstract class used to create soap requests and to process soap responses.
- * Note that the user must be logged in to use this request 
- * (i.e. {@link DcfUser#login(String, String)} must be successfully executed).
  * @author avonva
- *
  */
-
 public abstract class SOAPRequest {
 
 	private IDcfUser user;
@@ -76,10 +71,6 @@ public abstract class SOAPRequest {
 		this.namespace = namespace;
 	}
 	
-	private Proxy getProxy() throws ProxyConfigException {
-		return HttpManager.getProxy();
-	}
-	
 	/**
 	 * Use the proxy if present
 	 * @param stringUrl
@@ -90,7 +81,7 @@ public abstract class SOAPRequest {
 	private URL getEndpoint(String stringUrl) throws MalformedURLException, 
 		ProxyConfigException {
 		
-		Proxy proxy = getProxy();
+		Proxy proxy = HttpManager.getProxy();
 		
 		URL endpoint = new URL(null, stringUrl, new URLStreamHandler() {
 			
@@ -103,9 +94,9 @@ public abstract class SOAPRequest {
 	            URLConnection connection = null;
 	            
 	            // set the proxy if needed
-	            if (proxy == null) {
+	            if (proxy == null)
 	                connection = clone.openConnection();
-	            } else
+	            else
 	                connection = clone.openConnection(proxy);
 	            
 	            connection.setConnectTimeout(30000);
@@ -117,6 +108,14 @@ public abstract class SOAPRequest {
 		return endpoint;
 	}
 	
+	/**
+	 * Get an https connection which ignores certificates
+	 * @param url
+	 * @return
+	 * @throws KeyManagementException
+	 * @throws NoSuchAlgorithmException
+	 * @throws IOException
+	 */
 	private HttpsURLConnection avoidCertificates(String url) 
 			throws KeyManagementException, NoSuchAlgorithmException, IOException {
 
@@ -128,19 +127,19 @@ public abstract class SOAPRequest {
 		TrustManager[] trustAll
 		= new TrustManager[] {new TrustAllCertificates()};
 
-		sslContext.init(null, trustAll, new java.security.SecureRandom() );
+		sslContext.init(null, trustAll, new java.security.SecureRandom());
 
 		// Set trust all certificates context to HttpsURLConnection
 		HttpsURLConnection
 		.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
 
 		// Open HTTPS connection
-		URL link = new URL( url );
+		URL link = new URL(url);
 
 		httpsConnection = (HttpsURLConnection) link.openConnection();
 
 		// Trust all hosts
-		httpsConnection.setHostnameVerifier(new TrustAllHosts() );
+		httpsConnection.setHostnameVerifier(new TrustAllHosts());
 
 		// Connect
 		httpsConnection.connect();
@@ -257,7 +256,6 @@ public abstract class SOAPRequest {
 	 * @return
 	 * @throws SOAPException
 	 */
-
 	public SOAPMessage createTemplateSOAPMessage(String prefix) throws SOAPException {
 		
 		// create the soap message
@@ -614,6 +612,10 @@ public abstract class SOAPRequest {
 		}
 		
 		return stream;
+	}
+	
+	public IDcfUser getUser() {
+		return user;
 	}
 	
 	/**

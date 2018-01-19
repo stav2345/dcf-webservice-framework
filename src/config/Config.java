@@ -24,6 +24,7 @@ public class Config {
 	
 	private static final String ENV_CONFIG_PATH = "config" + System.getProperty("file.separator") + "env.xml";
 	private static final String ENV_TYPE = "Environment.Production";
+	private static final String CONSOLE_LEVEL = "Console.Level";
 	
 	public static final String PROXY_HOST_NAME = "Proxy.ManualHostName";
 	public static final String PROXY_PORT = "Proxy.ManualPort";
@@ -87,6 +88,18 @@ public class Config {
 	}
 	
 	/**
+	 * Check if the application should put in the log
+	 * the diagnostic
+	 * @return
+	 */
+	public ConsoleLevel getConsoleLevel() {
+		
+		String level = getValue(ENV_CONFIG_PATH, CONSOLE_LEVEL);
+		
+		return ConsoleLevel.fromString(level);
+	}
+	
+	/**
 	 * Read the application properties from the xml file
 	 * @return
 	 */
@@ -97,9 +110,7 @@ public class Config {
 		try(InputStream stream = new FileInputStream(filename)) {
 			properties.loadFromXML(stream);
 		}
-		catch (IOException e) {
-			System.err.println("The " + filename + " file was not found. Please check!");
-		}
+		catch (IOException e) {}
 
 		return properties;
 	}

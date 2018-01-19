@@ -9,7 +9,7 @@ import soap.GetResourcesList;
  * @author avonva
  *
  */
-public class DcfResourcesList extends ArrayList<IDcfResourceReference> implements IDcfResourcesList {
+public class DcfResourcesList extends ArrayList<IDcfResourceReference> implements IDcfResourcesList<IDcfResourceReference> {
 
 	/**
 	 * 
@@ -36,10 +36,5 @@ public class DcfResourcesList extends ArrayList<IDcfResourceReference> implement
 	@Override
 	public IDcfResourceReference create() {
 		return new DcfResourceReference();
-	}
-	
-	@Override
-	public boolean addElem(IDcfResourceReference elem) {
-		return super.add(elem);
 	}
 }

@@ -10,7 +10,7 @@ import soap.GetDatasetsList;
  * @author avonva
  *
  */
-public class DcfDatasetsList extends ArrayList<IDcfDataset> implements IDcfDatasetsList {
+public class DcfDatasetsList extends ArrayList<IDcfDataset> implements IDcfDatasetsList<IDcfDataset> {
 	
 	/**
 	 * 
@@ -113,10 +113,5 @@ public class DcfDatasetsList extends ArrayList<IDcfDataset> implements IDcfDatas
 	@Override
 	public IDcfDataset create() {
 		return new DcfDataset();
-	}
-	
-	@Override
-	public boolean addElem(IDcfDataset elem) {
-		return super.add(elem);
 	}
 }

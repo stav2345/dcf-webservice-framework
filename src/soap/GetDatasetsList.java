@@ -7,6 +7,7 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
 import config.Config;
+import dataset.IDcfDataset;
 import dataset.IDcfDatasetsList;
 import response_parser.GetDatasetsListParser;
 import user.IDcfUser;
@@ -18,7 +19,7 @@ import user.IDcfUser;
  * @author avonva
  *
  */
-public class GetDatasetsList extends SOAPRequest {
+public class GetDatasetsList<T extends IDcfDataset> extends SOAPRequest {
 
 	// web service link of the getDatasetList service
 	private static final String URL = "https://dcf-elect.efsa.europa.eu/elect2/";
@@ -26,14 +27,14 @@ public class GetDatasetsList extends SOAPRequest {
 	private static final String TEST_URL = "https://dcf-01.efsa.test/dcf-dp-ws/elect2/?wsdl";
 	
 	private String dataCollectionCode;
-	private IDcfDatasetsList output;
+	private IDcfDatasetsList<T> output;
 	
 	/**
 	 * Initialize the get dataset list request with the data collection
 	 * that is required.
 	 * @param dataCollectionCode
 	 */
-	public GetDatasetsList(IDcfUser user, String dataCollectionCode, IDcfDatasetsList output) {
+	public GetDatasetsList(IDcfUser user, String dataCollectionCode, IDcfDatasetsList<T> output) {
 		super(user, LIST_NAMESPACE);
 		this.dataCollectionCode = dataCollectionCode;
 		this.output = output;
@@ -43,19 +44,24 @@ public class GetDatasetsList extends SOAPRequest {
 	 * Send the request and get the dataset list
 	 * @throws SOAPException
 	 */
-	public IDcfDatasetsList getList() throws MySOAPException {
+	@SuppressWarnings("unchecked")
+	public IDcfDatasetsList<T> getList() throws MySOAPException {
 		
-		IDcfDatasetsList datasets = null;
+		SOAPConsole.log("GetDatasetsList: dcCode=" + dataCollectionCode, getUser());
+		
+		IDcfDatasetsList<T> datasets = null;
 		
 		Config config = new Config();
 		
 		Object response = makeRequest(config.isProductionEnvironment() ? URL : TEST_URL);
 		
+		SOAPConsole.log("GetDatasetsList:", response);
+		
 		// get the list from the response if possible
 		if (response != null) {
-			datasets = (IDcfDatasetsList) response;
+			datasets = (IDcfDatasetsList<T>) response;
 		}
-		
+
 		return datasets;
 	}
 
@@ -82,7 +88,7 @@ public class GetDatasetsList extends SOAPRequest {
 	public Object processResponse(SOAPMessage soapResponse) throws SOAPException {
 
 		// parse the dom document and return the contents
-		GetDatasetsListParser parser = new GetDatasetsListParser(output);
+		GetDatasetsListParser<T> parser = new GetDatasetsListParser<>(output);
 		SOAPBody body = soapResponse.getSOAPPart().getEnvelope().getBody();
 		return parser.parse(body);
 	}

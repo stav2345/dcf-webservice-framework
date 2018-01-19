@@ -39,6 +39,8 @@ public class Ping extends SOAPRequest {
 	 */
 	public boolean ping() throws MySOAPException {
 
+		SOAPConsole.log("Ping", getUser());
+		
 		boolean check;
 		
 		try {
@@ -47,6 +49,8 @@ public class Ping extends SOAPRequest {
 		} catch (SOAPException e) {
 			throw new MySOAPException(e);
 		}
+		
+		SOAPConsole.log("Ping:", check);
 
 		return check;
 	}

@@ -11,18 +11,18 @@ import catalogue.IDcfCatalogue;
 import catalogue.IDcfCataloguesList;
 import utils.TimeUtils;
 
-public class GetCataloguesListParser {
+public class GetCataloguesListParser<T extends IDcfCatalogue> {
 
 	// date format of the catalogues
 	public static final String ISO_8601_24H_FULL_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
 	
-	private IDcfCataloguesList output;
+	private IDcfCataloguesList<T> output;
 	
-	public GetCataloguesListParser(IDcfCataloguesList output) {
+	public GetCataloguesListParser(IDcfCataloguesList<T> output) {
 		this.output = output;
 	}
 	
-	public IDcfCataloguesList parse(Document cdata) {
+	public IDcfCataloguesList<T> parse(Document cdata) {
 		
 		// get all the catalogues nodes from the CDATA field (which is text, but XML formatted)
 		NodeList cataloguesNodes = cdata.getElementsByTagName("catalogue");
@@ -31,7 +31,7 @@ public class GetCataloguesListParser {
 		for (int i = 0; i < cataloguesNodes.getLength(); i++) {
 
 			// create a catalogue builder to build the catalogue step by step
-			IDcfCatalogue catalogue = output.create();
+			T catalogue = output.create();
 
 			// get the current catalogue node
 			Node catalogueNode = cataloguesNodes.item(i);
@@ -45,7 +45,7 @@ public class GetCataloguesListParser {
 			catalogue = addProperties(catalogue, catalogueNode.getLastChild());
 
 			// add the catalogue into the output array
-			output.addElem(catalogue);
+			output.add(catalogue);
 		}
 		
 		return output;
@@ -59,7 +59,7 @@ public class GetCataloguesListParser {
 	 * (i.e. catalogueDesc, catalogueVersion)
 	 * @return the modified catalogue
 	 */
-	private IDcfCatalogue addProperties(IDcfCatalogue catalogue, 
+	private T addProperties(T catalogue, 
 			Node node) {
 
 		// get the children of the parent node

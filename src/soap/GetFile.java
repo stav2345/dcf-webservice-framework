@@ -31,6 +31,13 @@ public abstract class GetFile extends SOAPRequest {
 		this.resourceId = resourceId;
 	}
 	
+	public Object getFile() throws MySOAPException {
+		SOAPConsole.log("GetFile: resourceId=" + resourceId, getUser());
+		Object response = makeRequest(getUrl());
+		SOAPConsole.log("GetFile:", response);
+		return response;
+	}
+	
 	/**
 	 * Get the url for making get file requests
 	 * @return

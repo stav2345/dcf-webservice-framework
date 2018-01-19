@@ -52,9 +52,12 @@ public class GetAck extends SOAPRequest {
 	 */
 	public DcfAck getAck() throws MySOAPException {
 		
-		Config config = new Config();
+		SOAPConsole.log("GetAck: messageId=" + messageId, getUser());
 		
+		Config config = new Config();
 		Object response = makeRequest(config.isProductionEnvironment() ? URL : TEST_URL);
+		
+		SOAPConsole.log("GetAck:", response);
 		
 		if (response == null)
 			return null;

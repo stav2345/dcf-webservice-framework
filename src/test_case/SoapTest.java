@@ -195,7 +195,7 @@ public class SoapTest {
 		
 		System.out.print("Testing GetXsdFile...");
 		GetXsdFile request = new GetXsdFile(user, fileId);
-		Document xsd = request.getFile();
+		Document xsd = request.getXsdFile();
 		
 		if (xsd == null)
 			System.err.println("FAILED: Xsd file not found!");
