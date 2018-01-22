@@ -189,15 +189,15 @@ It returns a MessageResponse object which contains the detail of the DCF respons
 Get a list containing all the metadata of the tables of a data collection with the data collection configurations.
 
 		DcfDCTablesList output = new DcfDCTablesList();
-		GetDataCollectionTables req = new GetDataCollectionTables(user, output, resourceId);
+		GetDataCollectionTables req = new GetDataCollectionTables(user, output, "resourceId");  // set the id you prefer
 		req.getTables();
 
-## How to extends the DcfUser class
+# How to extends the DcfUser class
 If your application needs an extended concept of 'user', you can extend the DcfUser class to still be able to call the dcf web services maintaining your implementation. In particular, make sure that your class either inherits from the DcfUser class, or implements the IDcfUser interface.
 
 	public class CustomUser extends DcfUser
 
-### How to use the DcfUser class
+## How to use the DcfUser class
 
 	DcfUser user = new DcfUser();
 		
@@ -208,9 +208,9 @@ If your application needs an extended concept of 'user', you can extend the DcfU
 
 If you want you can extend the DcfUser class in order to make it a singleton. This has the advantage that the user credentials can be accessed everywhere in your application. Use this approach only if only one user at a time is active in the local application.
 
-## How to extend a DCF class (a class which contains the result of a web service call)
+# How to extend a DCF class (a class which contains the result of a web service call)
 
-### Simple objects
+## Simple objects
 It is sufficient to extend the base class provided by the library. While calling a web service, you will be asked to provide the output object which will be filled with the web service information. This object must implement the related interface or extend the base class.
 
 For example, image we want to extend the base class for Dcf datasets:
@@ -233,7 +233,7 @@ If you want to provide a complete new implementation, then you can simply implem
 	
 However, note that this approach will not provide you any already created method which is present in the DcfDataset class.
 
-### Lists
+## Lists
 Lists are more complicated. In particular, it is necessary to implement a method which instantiate the objects of the lists and add them to the list (add and create methods).
 The custom list should either implement the **IDcfList** interface or extend the base class provided by the library, as for the objects. In your custom list you will need to implement the add and create methods, in order to specify which are your custom elements of the list.
 
