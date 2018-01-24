@@ -10,6 +10,8 @@ import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -28,6 +30,8 @@ import user.IDcfUser;
  */
 public class GetAck extends SOAPRequest {
 
+	private static final Logger LOGGER = LogManager.getLogger(GetAck.class);
+	
 	private static final String URL = "https://dcf-elect.efsa.europa.eu/elect2/";
 	private static final String NAMESPACE = "http://dcf-elect.efsa.europa.eu/";
 	private static final String TEST_URL = "https://dcf-01.efsa.test/dcf-dp-ws/elect2/?wsdl";
@@ -77,7 +81,7 @@ public class GetAck extends SOAPRequest {
 		ParserConfigurationException, SAXException, IOException {
 		
 		if (response == null) {
-			System.err.println("Cannot get attachment. Make request first!");
+			LOGGER.error("Cannot get attachment. Make request first!");
 			return null;
 		}
 		
@@ -92,7 +96,7 @@ public class GetAck extends SOAPRequest {
 	public InputStream getRawAttachment() throws MySOAPException {
 		
 		if (response == null) {
-			System.err.println("Cannot get attachment. Make request first!");
+			LOGGER.error("Cannot get attachment. Make request first!");
 			return null;
 		}
 		
@@ -125,7 +129,7 @@ public class GetAck extends SOAPRequest {
 		FileState state = extractState(soapResponse);
 		
 		if (state == null) {
-			System.err.println("No state found for message: " + messageId);
+			LOGGER.error("No state found for message: " + messageId);
 			return null;
 		}
 		
@@ -137,7 +141,7 @@ public class GetAck extends SOAPRequest {
 			log = extractAcklog(soapResponse);
 			
 			if (log == null) {
-				System.err.println("No log found for message: " + messageId);
+				LOGGER.error("No log found for message: " + messageId);
 				return null;
 			}
 		}

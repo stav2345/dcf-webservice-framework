@@ -1,35 +1,27 @@
 package soap;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
 import config.Config;
-import config.ConsoleLevel;
 import user.IDcfUser;
 
 public class SOAPConsole {
 
+	private static final Logger LOGGER = LogManager.getLogger(SOAPConsole.class);
+	
 	public static void log(String action, IDcfUser user) {
 		
 		Config config = new Config();
 		
-		ConsoleLevel level = config.getConsoleLevel();
-		
-		if (level == ConsoleLevel.NONE)
-			return;
-		
 		String env = config.isProductionEnvironment() ? "production" : "test";
 		
-		System.out.println("#WebServiceRequest#" + action + " required from user " + user.getUsername() 
+		LOGGER.info("WebServiceRequest#" + action + " required from user=" + user.getUsername() 
 			+ " in " + env + " environment");
 	}
 	
 	public static void log(String action, Object object) {
-		
-		Config config = new Config();
-		
-		ConsoleLevel level = config.getConsoleLevel();
-		
-		if (level != ConsoleLevel.VERBOSE)
-			return;
-		
-		System.out.println("#WebServiceResponse#" + action + " " + object);
+		LOGGER.info("WebServiceResponse#" + action + " response received");
+		LOGGER.debug("WebServiceResponse#" + action + " response=" + object);
 	}
 }

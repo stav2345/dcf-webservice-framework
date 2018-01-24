@@ -26,6 +26,10 @@ public class MySOAPException extends SOAPException {
 				getError() == SOAPError.FORBIDDEN;
 	}
 	
+	public boolean isSendMessageFailed() {
+		return getError() == SOAPError.MESSAGE_SEND_FAILED;
+	}
+	
 	public SOAPError getError() {
 		
 		SOAPError error;
@@ -36,6 +40,8 @@ public class MySOAPException extends SOAPException {
 			error = SOAPError.UNAUTHORIZED;
 		else if (message.contains("403"))
 			error = SOAPError.FORBIDDEN;
+		else if (message.contains("Message send failed"))
+			error = SOAPError.MESSAGE_SEND_FAILED;
 		else
 			error = SOAPError.NO_CONNECTION;
 		

@@ -36,6 +36,8 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.soap.SOAPPart;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -57,6 +59,8 @@ import zip_manager.ZipManager;
  */
 public abstract class SOAPRequest {
 
+	private static final Logger LOGGER = LogManager.getLogger(SOAPRequest.class);
+	
 	private IDcfUser user;
 	private String namespace;
 	private SOAPError error;  // error, if occurred
@@ -217,7 +221,8 @@ public abstract class SOAPRequest {
 			} catch (MalformedURLException | ProxyConfigException e) {
 				e.printStackTrace();
 				
-				System.err.println("ERROR OCCURRED. Proceeding with NO_PROXY.");
+				LOGGER.error("ERROR OCCURRED. Proceeding with NO_PROXY.", e);
+				
 				// get the response with no proxy
 				response = soapConnection.call(request, url);
 			}
@@ -424,7 +429,7 @@ public abstract class SOAPRequest {
 
 		// if no attachment => errors in processing response, return null
 		if (part == null) {
-			System.err.println("SOAPRequest#writeXmlIntoFile: No attachment found!");
+			LOGGER.error("SOAPRequest#writeXmlIntoFile: No attachment found!");
 			return null;
 		}
 		
@@ -475,7 +480,7 @@ public abstract class SOAPRequest {
 		InputStream stream = attachmentPart.getRawContent();
 		
 		if (stream == null) {
-			System.err.println("No raw contents in the attachment found");
+			LOGGER.error("No raw contents in the attachment found");
 			return null;
 		}
 		

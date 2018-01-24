@@ -3,6 +3,8 @@ package soap;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -19,6 +21,8 @@ import user.IDcfUser;
  * @param <T>
  */
 public abstract class GetList<T> extends SOAPRequest {
+	
+	private static final Logger LOGGER = LogManager.getLogger(GetList.class);
 	
 	private String url;
 	private String testUrl;
@@ -59,7 +63,7 @@ public abstract class GetList<T> extends SOAPRequest {
 				getEnvelope().getBody().getElementsByTagName("return");
 
 		if (returnNodes.getLength() == 0) {
-			System.err.println("GetList: no return node was found in the soap response");
+			LOGGER.error("GetList: no return node was found in the soap response");
 			return null;
 		}
 		
@@ -70,7 +74,7 @@ public abstract class GetList<T> extends SOAPRequest {
 		Document cdata = getCData(returnNode);
 		
 		if (cdata == null) {
-			System.err.println("GetList: no cdata was found in the soap response");
+			LOGGER.error("GetList: no cdata was found in the soap response");
 			return null;
 		}
 		

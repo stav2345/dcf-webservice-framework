@@ -115,12 +115,6 @@ public class Ping extends SOAPRequest {
 		}
 		
 		// is it correct or not ?
-		boolean check = response.equals(PING_CORRECT_VALUE);
-		
-		// If the ping was not successful
-		if (!check)
-			System.err.println("NO CONNECTION - DCF does not respond");
-		
-		return check;
+		return response.equals(PING_CORRECT_VALUE);
 	}
 }

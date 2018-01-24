@@ -1,13 +1,17 @@
 package response_parser;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import resource.IDcfResourcesList;
 import resource.IDcfResourceReference;
+import resource.IDcfResourcesList;
 
 public class GetResourcesListParser<T extends IDcfResourceReference> {
+	
+	private static final Logger LOGGER = LogManager.getLogger(GetResourcesListParser.class);
 	
 	private static final String RESOURCE_REF_NODE = "resourceReference";
 	private static final String RESOURCE_TYPE_NODE = "resourceType";
@@ -67,7 +71,7 @@ public class GetResourcesListParser<T extends IDcfResourceReference> {
 		}
 		
 		if (reference.isIncomplete()) {
-			System.err.println("Missing reference value for " + reference);
+			LOGGER.warn("Missing reference value for " + reference);
 		}
 		
 		return reference;

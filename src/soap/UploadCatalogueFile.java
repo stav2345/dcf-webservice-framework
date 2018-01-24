@@ -12,6 +12,9 @@ import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
 import config.Config;
 import log.UploadCatalogueFileParser;
 import user.IDcfUser;
@@ -26,6 +29,8 @@ import user.IDcfUser;
  */
 public class UploadCatalogueFile extends SOAPRequest {
 
+	private static final Logger LOGGER = LogManager.getLogger(UploadCatalogueFile.class);
+	
 	private static final String NAMESPACE = "http://ws.catalog.dc.efsa.europa.eu/";
 	private static final String URL = "https://dcf-cms.efsa.europa.eu/catalogues";
 	private static final String TEST_URL = "https://dcf-01.efsa.test/dc-catalog-public-ws/catalogues/?wsdl";
@@ -128,9 +133,7 @@ public class UploadCatalogueFile extends SOAPRequest {
 		
 		// if errors the log code is not returned
 		if (logCode == null)
-			System.err.println("UploadCatalogueFile: cannot find the log code in the soap response");
-		else
-			System.out.println ("UploadCatalogueFile: found log code " + logCode);
+			LOGGER.error("UploadCatalogueFile: cannot find the log code in the soap response");
 
 		return logCode;
 	}
