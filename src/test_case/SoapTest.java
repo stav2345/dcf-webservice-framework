@@ -9,11 +9,17 @@ import org.w3c.dom.Document;
 
 import ack.DcfAck;
 import catalogue.DcfCataloguesList;
+import catalogue.IDcfCatalogue;
+import data_collection.DcfDCTable;
 import data_collection.DcfDCTablesList;
 import data_collection.DcfDataCollectionsList;
+import data_collection.IDcfDCTableLists;
+import data_collection.IDcfDataCollection;
 import dataset.DcfDatasetsList;
+import dataset.IDcfDataset;
 import message.MessageResponse;
 import resource.DcfResourcesList;
+import resource.IDcfResourceReference;
 import soap.ExportCatalogueFile;
 import soap.GetAck;
 import soap.GetCataloguesList;
@@ -50,21 +56,27 @@ public class SoapTest {
 		DcfUser user = new DcfUser();
 		
 		user.login(username, password);
+		
 		testGetDCConfig(user, "05_220");
-//		testPing(user);
-//		testAck(user);
-//		testGetCataloguesList(user);
-//		testGetDCList(user);
-//		testGetDatasetList(user, "TSE.TEST");
-//		testGetResourceList(user, "TSE.TEST");
-//		testGetDataset(user, "11753");
-//		testGetXsdFile(user, "03_868");
-//		testExportCatalogue(user, "ABUNDANCE");
-//		testExportLog(user, "20180103_001_WS");
-//		testExportCatalogueLastInternalVersion(user, "MTX");
-//		
-//		testSendMessage(user);
-//		testUploadCatalogueFile(user);
+		testPing(user);
+		testAck(user);
+		testGetCataloguesList(user);
+		testGetDCList(user);
+		testGetDatasetList(user, "TSE.TEST");
+		testGetResourceList(user, "TSE.TEST");
+		testGetDataset(user, "11753");
+		testGetXsdFile(user, "03_868");
+		testExportCatalogue(user, "ABUNDANCE");
+		testExportLog(user, "20180103_001_WS");
+		testExportCatalogueLastInternalVersion(user, "MTX");
+		
+		testSendMessage(user);
+		
+		try {
+			testUploadCatalogueFile(user);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private static void testPing(DcfUser user) throws MySOAPException {
@@ -98,7 +110,7 @@ public class SoapTest {
 		
 		DcfCataloguesList output = new DcfCataloguesList();
 		
-		GetCataloguesList request = new GetCataloguesList(user, output);
+		GetCataloguesList<IDcfCatalogue> request = new GetCataloguesList<>(user, output);
 		DcfCataloguesList list = (DcfCataloguesList) request.getList();
 		
 		if (list.isEmpty()) {
@@ -120,7 +132,7 @@ public class SoapTest {
 		
 		DcfDataCollectionsList output = new DcfDataCollectionsList();
 		
-		GetDataCollectionsList request = new GetDataCollectionsList(user, output);
+		GetDataCollectionsList<IDcfDataCollection> request = new GetDataCollectionsList<>(user, output);
 		DcfDataCollectionsList list = (DcfDataCollectionsList) request.getList();
 
 		if (list.isEmpty()) {
@@ -141,7 +153,7 @@ public class SoapTest {
 		DcfDatasetsList output = new DcfDatasetsList();
 		
 		System.out.print("Testing GetDatasetList...");
-		GetDatasetsList request = new GetDatasetsList(user, dcCode, output);
+		GetDatasetsList<IDcfDataset> request = new GetDatasetsList<>(user, dcCode, output);
 		request.getList();
 
 		if (output.isEmpty()) {
@@ -163,7 +175,7 @@ public class SoapTest {
 		
 		DcfResourcesList output = new DcfResourcesList();
 		
-		GetResourcesList request = new GetResourcesList(user, dcCode, output);
+		GetResourcesList<IDcfResourceReference> request = new GetResourcesList<>(user, dcCode, output);
 		DcfResourcesList list = (DcfResourcesList) request.getList();
 
 		if (list.isEmpty()) {
@@ -278,8 +290,8 @@ public class SoapTest {
 		
 		System.out.print("Testing GetDCConfig...");
 		
-		DcfDCTablesList output = new DcfDCTablesList();
-		GetDataCollectionTables req = new GetDataCollectionTables(user, output, resourceId);
+		IDcfDCTableLists<DcfDCTable> output = new DcfDCTablesList();
+		GetDataCollectionTables<DcfDCTable> req = new GetDataCollectionTables<>(user, output, resourceId);
 		req.getTables();
 		
 		System.out.println(output);
