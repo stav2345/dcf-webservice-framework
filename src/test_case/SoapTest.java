@@ -17,6 +17,7 @@ import data_collection.IDcfDCTableLists;
 import data_collection.IDcfDataCollection;
 import dataset.DcfDatasetsList;
 import dataset.IDcfDataset;
+import dcf_log.LogDownloader;
 import message.MessageResponse;
 import resource.DcfResourcesList;
 import resource.IDcfResourceReference;
@@ -34,6 +35,7 @@ import soap.Ping;
 import soap.SendMessage;
 import soap.UploadCatalogueFile;
 import user.DcfUser;
+import user.IDcfUser;
 
 public class SoapTest {
 
@@ -59,6 +61,7 @@ public class SoapTest {
 		
 		testGetDCConfig(user, "05_220");
 		testPing(user);
+		testDownloadLog(user, "20180103_001_WS");
 		testAck(user);
 		testGetCataloguesList(user);
 		testGetDCList(user);
@@ -90,6 +93,16 @@ public class SoapTest {
 			System.err.print("WARNING: got TRXKO");
 		else
 			System.out.println("OK");
+	}
+	
+	private static void testDownloadLog(IDcfUser user, String logCode) throws SOAPException {
+		LogDownloader downloader = new LogDownloader(user);
+		File file = downloader.getLog(logCode, 2000, 10);
+
+		if (file != null)
+			System.out.println("OK " + file);
+		else
+			System.err.println("No log retrieved");
 	}
 
 	private static void testAck(DcfUser user) throws MySOAPException {
