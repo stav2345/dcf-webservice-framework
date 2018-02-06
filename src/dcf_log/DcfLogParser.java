@@ -179,8 +179,7 @@ public class DcfLogParser implements IDcfLogParser {
 			NodeList validationErrors = nodes.item(0).getChildNodes();
 
 			for (int i = 0; i < validationErrors.getLength(); ++i) {
-				// TODO which is the name of the node?
-				//if (validationError.item(i).getNodeName().equals(MACRO_OP_LOG))
+				if (validationErrors.item(i).getNodeName().equals(VALIDATION_ERROR))
 					errors.add(getValidationError(validationErrors.item(i)));
 			}
 		}
