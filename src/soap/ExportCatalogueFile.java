@@ -8,7 +8,7 @@ import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
-import config.Config;
+import config.Environment;
 import user.IDcfUser;
 
 /**
@@ -38,8 +38,8 @@ public class ExportCatalogueFile extends SOAPRequest {
 	/**
 	 * Initialize the export file action
 	 */
-	public ExportCatalogueFile(IDcfUser user) {
-		super(user, NAMESPACE);
+	public ExportCatalogueFile(IDcfUser user, Environment env) {
+		super(user, env, NAMESPACE);
 	}
 	
 	public File exportCatalogue(String catalogueCode) throws SOAPException {
@@ -63,7 +63,7 @@ public class ExportCatalogueFile extends SOAPRequest {
 	 * @throws SOAPException 
 	 */
 	public File exportLog(String code) 
-			throws SOAPException {
+			throws DetailedSOAPException {
 		
 		SOAPConsole.log("ExportCatalogueFile: export log=" + code, getUser());
 		
@@ -110,7 +110,7 @@ public class ExportCatalogueFile extends SOAPRequest {
 	 * @throws SOAPException 
 	 */
 	public Object exportXml(String code, String exportType, 
-			String fileType) throws SOAPException {
+			String fileType) throws DetailedSOAPException {
 		
 		this.catalogueCode = code;
 		this.exportType = exportType;
@@ -126,9 +126,8 @@ public class ExportCatalogueFile extends SOAPRequest {
 	 * @return
 	 * @throws SOAPException 
 	 */
-	private Object export() throws SOAPException {
-		Config config = new Config();
-		return makeRequest(config.isProductionEnvironment() ? URL : TEST_URL);
+	private Object export() throws DetailedSOAPException {
+		return makeRequest(getEnvironment() == Environment.PRODUCTION ? URL : TEST_URL);
 	}
 
 	@Override

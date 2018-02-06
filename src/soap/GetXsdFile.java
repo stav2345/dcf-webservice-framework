@@ -1,14 +1,15 @@
 package soap;
 
+import java.io.File;
 import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPMessage;
 
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+import config.Environment;
 import user.IDcfUser;
 
 /**
@@ -18,34 +19,24 @@ import user.IDcfUser;
  */
 public class GetXsdFile extends GetFile {
 
-	public GetXsdFile(IDcfUser user, String resourceId) {
-		super(user, resourceId);
+	public GetXsdFile(IDcfUser user, Environment env, String resourceId) {
+		super(user, env, resourceId);
 	}
 
 	/**
 	 * Get the xsd file
 	 * @return
 	 * @throws SOAPException
+	 * @throws ParserConfigurationException 
+	 * @throws IOException 
+	 * @throws SAXException 
 	 */
-	public Document getXsdFile() throws SOAPException {
-		Object response = getFile();
+	public Document getXsdFile() throws SOAPException, SAXException, IOException, ParserConfigurationException {
+		
+		File response = getFile();
 		if (response == null)
 			return null;
 		
-		return (Document) response;
-	}
-
-	@Override
-	public Object processResponse(SOAPMessage soapResponse) throws SOAPException {
-		
-		// get the xsd file
-		try {
-			Document xsd = getXsdAttachment(soapResponse);
-			return xsd;
-		} catch (ClassCastException | ClassNotFoundException | InstantiationException 
-				| IllegalAccessException | IOException | ParserConfigurationException | SAXException e) {
-			e.printStackTrace();
-		}
-		return null;
+		return fileToXsd(response);
 	}
 }

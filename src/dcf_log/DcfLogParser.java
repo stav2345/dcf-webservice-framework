@@ -1,7 +1,9 @@
 package dcf_log;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -17,7 +19,7 @@ import org.xml.sax.SAXException;
  * @author avonva
  *
  */
-public class DcfLogParser {
+public class DcfLogParser implements IDcfLogParser {
 	
 	private static final Logger LOGGER = LogManager.getLogger(DcfLogParser.class);
 
@@ -43,13 +45,13 @@ public class DcfLogParser {
 			saxParser = factory.newSAXParser();
 		} catch (ParserConfigurationException | SAXException e) {
 			e.printStackTrace();
-			LOGGER.error("Cannot parse dcf log", e);
+			LOGGER.error("Cannot instantiate sax parser", e);
 		}
 
 		// create the parser handler
 		handler = new LogParserHandler();
 	}
-
+	
 	/**
 	 * Parse the log document and retrieve all the operation log nodes
 	 * @param file
@@ -57,9 +59,21 @@ public class DcfLogParser {
 	 * @throws SAXException
 	 * @throws IOException
 	 */
-	public DcfLog parse(File file) throws SAXException, IOException {
+	public DcfLog parse(File file) throws IOException {
 		
-		saxParser.parse(file, handler);
+		try(InputStream input = new FileInputStream(file);) {
+			return this.parse(input);
+		}
+	}
+
+	public DcfLog parse(InputStream input) throws IOException {
+		
+		try {
+			saxParser.parse(input, handler);
+		} catch (SAXException e) {
+			e.printStackTrace();
+			throw new IOException(e);  // follow interface
+		}
 		
 		return handler.getDcfLog();
 	}

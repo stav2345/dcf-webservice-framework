@@ -7,6 +7,7 @@ import javax.xml.soap.SOAPMessage;
 
 import org.w3c.dom.Document;
 
+import config.Environment;
 import data_collection.IDcfDataCollection;
 import data_collection.IDcfDataCollectionsList;
 import response_parser.GetDataCollectionsListParser;
@@ -26,13 +27,13 @@ public class GetDataCollectionsList<T extends IDcfDataCollection> extends GetLis
 
 	private IDcfDataCollectionsList<T> output;
 	
-	public GetDataCollectionsList(IDcfUser user, IDcfDataCollectionsList<T> output) {
-		super(user, URL, TEST_URL, NAMESPACE);
+	public GetDataCollectionsList(IDcfUser user, Environment env, IDcfDataCollectionsList<T> output) {
+		super(user, env, URL, TEST_URL, NAMESPACE);
 		this.output = output;
 	}
 
 	@Override
-	public IDcfList<T> getList() throws MySOAPException {
+	public IDcfList<T> getList() throws DetailedSOAPException {
 		SOAPConsole.log("GetDataCollectionsList", getUser());
 		
 		IDcfList<T> response = super.getList();

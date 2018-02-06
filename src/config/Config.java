@@ -24,7 +24,6 @@ public class Config {
 	
 	private static final String ENV_CONFIG_PATH = "config" + System.getProperty("file.separator") + "env.xml";
 	private static final String ENV_TYPE = "Environment.Production";
-	private static final String CONSOLE_LEVEL = "Console.Level";
 	
 	public static final String PROXY_HOST_NAME = "Proxy.ManualHostName";
 	public static final String PROXY_PORT = "Proxy.ManualPort";
@@ -76,27 +75,20 @@ public class Config {
 		return ProxyMode.fromString(mode);
 	}
 	
-	public boolean isProductionEnvironment() {
-		
+	public Environment getEnvironment() {
 		String production = getValue(ENV_CONFIG_PATH, ENV_TYPE);
 		
 		if (production == null)
-			return false;
+			return Environment.TEST;
 		
-		return production.equalsIgnoreCase("YES") ||
-				production.equalsIgnoreCase("Y");
+		boolean isProd = production.equalsIgnoreCase("YES")
+				|| production.equalsIgnoreCase("Y");
+		
+		return isProd ? Environment.PRODUCTION : Environment.TEST;
 	}
 	
-	/**
-	 * Check if the application should put in the log
-	 * the diagnostic
-	 * @return
-	 */
-	public ConsoleLevel getConsoleLevel() {
-		
-		String level = getValue(ENV_CONFIG_PATH, CONSOLE_LEVEL);
-		
-		return ConsoleLevel.fromString(level);
+	public boolean isProductionEnvironment() {
+		return getEnvironment() == Environment.PRODUCTION;
 	}
 	
 	/**

@@ -1,12 +1,15 @@
 package soap;
 
+import java.io.File;
+import java.io.IOException;
+
 import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPConnection;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
-import config.Config;
+import config.Environment;
 import user.IDcfUser;
 
 /**
@@ -14,7 +17,7 @@ import user.IDcfUser;
  * @author avonva
  *
  */
-public abstract class GetFile extends SOAPRequest {
+public class GetFile extends SOAPRequest {
 
 	private static final String NAMESPACE = "http://dcf-elect.efsa.europa.eu/";
 	private static final String URL = "https://dcf-elect.efsa.europa.eu/elect2";
@@ -26,25 +29,29 @@ public abstract class GetFile extends SOAPRequest {
 	 * Make a get file request for a specific resource
 	 * @param resourceId
 	 */
-	public GetFile(IDcfUser user, String resourceId) {
-		super(user, NAMESPACE);
+	public GetFile(IDcfUser user, Environment env, String resourceId) {
+		super(user, env, NAMESPACE);
 		this.resourceId = resourceId;
 	}
 	
-	public Object getFile() throws MySOAPException {
+	public File getFile() throws SOAPException, IOException {
+		
 		SOAPConsole.log("GetFile: resourceId=" + resourceId, getUser());
-		Object response = makeRequest(getUrl());
-		SOAPConsole.log("GetFile:", response);
-		return response;
+		
+		SOAPMessage response = (SOAPMessage) makeRequest(getUrl());
+		File file = writeAttachment(response);
+		
+		SOAPConsole.log("GetFile:", file);
+		
+		return file;
 	}
 	
 	/**
 	 * Get the url for making get file requests
 	 * @return
 	 */
-	public static String getUrl() {
-		Config config = new Config();
-		return config.isProductionEnvironment() ? URL : TEST_URL;
+	public String getUrl() {
+		return getEnvironment() == Environment.PRODUCTION ? URL : TEST_URL;
 	}
 	
 	@Override
@@ -63,5 +70,10 @@ public abstract class GetFile extends SOAPRequest {
 		soapMsg.saveChanges();
 
 		return soapMsg;
+	}
+
+	@Override
+	public Object processResponse(SOAPMessage soapResponse) throws SOAPException {
+		return soapResponse;
 	}
 }

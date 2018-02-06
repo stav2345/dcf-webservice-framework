@@ -6,13 +6,10 @@ package dcf_log;
  *
  */
 public enum DcfResponse {
-	ERR,    // generic error
 	
 	OK,     // all ok
 
 	AP,     // the dcf received the request but it was rejected
-
-	FORBIDDEN,  // if the current action is forbidden
 	
 	ERROR;  // operation failed due to connection problems or similar
 }

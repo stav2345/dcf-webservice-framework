@@ -44,7 +44,7 @@ import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import config.Config;
+import config.Environment;
 import http.HttpManager;
 import proxy.ProxyConfigException;
 import sun.net.www.protocol.http.AuthCacheImpl;
@@ -64,15 +64,21 @@ public abstract class SOAPRequest {
 	private IDcfUser user;
 	private String namespace;
 	private SOAPError error;  // error, if occurred
+	private Environment env;
 
 	/**
 	 * Set the url where we make the request and the namespace of the request
 	 * @param url
 	 * @param namespace
 	 */
-	public SOAPRequest(IDcfUser user, String namespace) {
+	public SOAPRequest(IDcfUser user, Environment env, String namespace) {
 		this.user = user;
+		this.env = env;
 		this.namespace = namespace;
+	}
+	
+	public Environment getEnvironment() {
+		return env;
 	}
 	
 	/**
@@ -181,18 +187,16 @@ public abstract class SOAPRequest {
 	 * Create the request and get the response. Process the response and return the results.
 	 * @param soapConnection
 	 * @return
-	 * @throws MySOAPException
+	 * @throws DetailedSOAPException
 	 */
-	public Object makeRequest(String url) throws MySOAPException {
+	public Object makeRequest(String url) throws DetailedSOAPException {
 		
 		final boolean isHttps = url.toLowerCase().startsWith("https");
 		
 		HttpsURLConnection httpsConnection = null;
 		
-		Config config = new Config();
-		
 		// if https with test => skip certificates
-		if (isHttps && !config.isProductionEnvironment()) {
+		if (isHttps && env == Environment.TEST) {
 			try {
 				httpsConnection = avoidCertificates(url);
 			} catch (KeyManagementException | NoSuchAlgorithmException | IOException e) {
@@ -241,7 +245,7 @@ public abstract class SOAPRequest {
 		catch (SOAPException e) {
 			
 			// parse error codes
-			throw new MySOAPException(e);
+			throw new DetailedSOAPException(e);
 		}
 	}
 	
@@ -392,22 +396,12 @@ public abstract class SOAPRequest {
 	 * @return
 	 * @throws SOAPException
 	 */
-	public AttachmentPart getFirstAttachmentPart(SOAPMessage message) throws MySOAPException {
+	public AttachmentPart getFirstAttachmentPart(SOAPMessage message) throws DetailedSOAPException {
 
 		// get the attachment
 		Iterator<?> iter = message.getAttachments();
 		
 		if (!iter.hasNext()) {
-			System.err.println("No attachment found! Got the following response:");
-			try {
-				message.writeTo(System.err);
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (SOAPException e) {
-				e.printStackTrace();
-				throw new MySOAPException(e);
-			}
-			
 			return null;
 		}
 
@@ -429,7 +423,7 @@ public abstract class SOAPRequest {
 
 		// if no attachment => errors in processing response, return null
 		if (part == null) {
-			LOGGER.error("SOAPRequest#writeXmlIntoFile: No attachment found!");
+			LOGGER.info("No attachment found!");
 			return null;
 		}
 		
@@ -515,7 +509,7 @@ public abstract class SOAPRequest {
 		AttachmentPart part = getFirstAttachmentPart(response);
 		
 		if (part == null)
-			throw new SOAPException("No xsd attachment found");
+			return null;
 		
 		InputStream stream = part.getRawContent();
 		
@@ -523,20 +517,20 @@ public abstract class SOAPRequest {
         DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
         Document doc = docBuilder.parse(stream); 
-		
-		/*// load the schema from the input stream
-		XSImplementationImpl impl = new XSImplementationImpl();
-		XSLoader schemaLoader = impl.createXSLoader(null);
-		
-		LSInput input = new DOMInputImpl();
-		input.setByteStream(stream);
-		
-		XSModel model = schemaLoader.load(input);
-		
-		// delete the temporary file
-		//file.delete();
-		*/
 		stream.close();
+		
+		return doc;
+	}
+	
+	protected Document fileToXsd(File file) throws SAXException, IOException, ParserConfigurationException {
+
+		if (!file.exists())
+			return null;
+		
+        // parse the document
+        DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
+        Document doc = docBuilder.parse(file); 
 		
 		return doc;
 	}
@@ -548,11 +542,17 @@ public abstract class SOAPRequest {
 	 * @throws SOAPException
 	 * @throws IOException
 	 */
-	public void writeAttachment(SOAPMessage response, File file) 
+	public File writeAttachment(SOAPMessage response) 
 			throws SOAPException, IOException {
+		
+		File file =  FileUtils.createTempFile("attachment_" 
+				+ System.currentTimeMillis(), "");
 		
 		// get the attachment
 		AttachmentPart attachment = getFirstAttachmentPart(response);
+		
+		if (attachment == null)
+			return null;
 		
 		// read attachment and write it
 		InputStream inputStream = attachment.getRawContent();
@@ -568,6 +568,8 @@ public abstract class SOAPRequest {
 		
 		outputStream.close();
 		inputStream.close();
+		
+		return file;
 	}
 	
 	/**
@@ -600,7 +602,7 @@ public abstract class SOAPRequest {
 	/*
 	 * get the attachment raw format
 	 */
-	public InputStream getFirstRawAttachment(SOAPMessage message) throws MySOAPException {
+	public InputStream getFirstRawAttachment(SOAPMessage message) throws DetailedSOAPException {
 		
 		AttachmentPart part = getFirstAttachmentPart(message);
 		
@@ -613,7 +615,7 @@ public abstract class SOAPRequest {
 			stream = part.getRawContent();
 		} catch (SOAPException e) {
 			e.printStackTrace();
-			throw new MySOAPException(e);
+			throw new DetailedSOAPException(e);
 		}
 		
 		return stream;

@@ -10,7 +10,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import config.Config;
+import config.Environment;
 import response_parser.IDcfList;
 import user.IDcfUser;
 
@@ -34,8 +34,8 @@ public abstract class GetList<T> extends SOAPRequest {
 	 * @param testUrl
 	 * @param namespace
 	 */
-	public GetList(IDcfUser user, String url, String testUrl, String namespace) {
-		super (user, namespace);
+	public GetList(IDcfUser user, Environment env, String url, String testUrl, String namespace) {
+		super (user, env, namespace);
 		this.url = url;
 		this.testUrl = testUrl;
 	}
@@ -44,15 +44,12 @@ public abstract class GetList<T> extends SOAPRequest {
 	 * Get the list of T elements
 	 * @return
 	 * @throws DOMException
-	 * @throws MySOAPException 
+	 * @throws DetailedSOAPException 
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	public IDcfList<T> getList() throws MySOAPException {
-		
-		Config config = new Config();
-		
-		return (IDcfList<T>) makeRequest(config.isProductionEnvironment() ? url : testUrl);
+	public IDcfList<T> getList() throws DetailedSOAPException {
+		return (IDcfList<T>) makeRequest(getEnvironment() == Environment.PRODUCTION ? url : testUrl);
 	}
 	
 	@Override

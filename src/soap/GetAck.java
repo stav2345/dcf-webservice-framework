@@ -20,7 +20,7 @@ import org.xml.sax.SAXException;
 import ack.DcfAck;
 import ack.DcfAckLog;
 import ack.FileState;
-import config.Config;
+import config.Environment;
 import user.IDcfUser;
 
 /**
@@ -37,15 +37,14 @@ public class GetAck extends SOAPRequest {
 	private static final String TEST_URL = "https://dcf-01.efsa.test/dcf-dp-ws/elect2/?wsdl";
 	
 	private String messageId;
-	
 	private SOAPMessage response;
 	
 	/**
 	 * Get an ack for the chosen message
 	 * @param messageId
 	 */
-	public GetAck(IDcfUser user, String messageId) {
-		super(user, NAMESPACE);
+	public GetAck(IDcfUser user, Environment env, String messageId) {
+		super(user, env, NAMESPACE);
 		this.messageId = messageId;
 	}
 	
@@ -54,12 +53,11 @@ public class GetAck extends SOAPRequest {
 	 * @return
 	 * @throws SOAPException
 	 */
-	public DcfAck getAck() throws MySOAPException {
+	public DcfAck getAck() throws DetailedSOAPException {
 		
 		SOAPConsole.log("GetAck: messageId=" + messageId, getUser());
-		
-		Config config = new Config();
-		Object response = makeRequest(config.isProductionEnvironment() ? URL : TEST_URL);
+
+		Object response = makeRequest(getEnvironment() == Environment.PRODUCTION ? URL : TEST_URL);
 		
 		SOAPConsole.log("GetAck:", response);
 		
@@ -93,7 +91,7 @@ public class GetAck extends SOAPRequest {
 	 * @return
 	 * @throws SOAPException
 	 */
-	public InputStream getRawAttachment() throws MySOAPException {
+	public InputStream getRawAttachment() throws DetailedSOAPException {
 		
 		if (response == null) {
 			LOGGER.error("Cannot get attachment. Make request first!");

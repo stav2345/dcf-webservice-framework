@@ -40,9 +40,9 @@ public class DcfLogBuilder {
 	 * Initialize the dcf log builder memory
 	 */
 	public DcfLogBuilder() {
-		macroOpLogs = new ArrayList<String>();
-		logNodes = new ArrayList<LogNode>();
-		validationErrors = new ArrayList<LogNode>();
+		macroOpLogs = new ArrayList<>();
+		logNodes = new ArrayList<>();
+		validationErrors = new ArrayList<>();
 	}
 	
 	/**
@@ -50,7 +50,7 @@ public class DcfLogBuilder {
 	 * @param date
 	 * @return
 	 */
-	private Timestamp getTimestamp(String date) {
+	public Timestamp getTimestamp(String date) {
 		
 		SimpleDateFormat format = new SimpleDateFormat(ISO_8601_24H_FULL_FORMAT);
 	    
@@ -97,7 +97,7 @@ public class DcfLogBuilder {
 	    try {
 	    	this.macroOpResult = DcfResponse.valueOf(macroOpResult);
 	    } catch (IllegalArgumentException e) {
-	    	this.macroOpResult = DcfResponse.ERR;
+	    	this.macroOpResult = DcfResponse.ERROR;
 	    }
 	}
 	public void setMacroOpLogs(Collection<String> macroOpLogs) {

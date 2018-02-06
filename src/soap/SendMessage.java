@@ -13,7 +13,7 @@ import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
-import config.Config;
+import config.Environment;
 import message.MessageResponse;
 import response_parser.SendMessageParser;
 import user.IDcfUser;
@@ -29,29 +29,34 @@ public class SendMessage extends SOAPRequest {
 	private static final String TEST_URL = "https://dcf-01.efsa.test/dcf-dp-ws/elect2/?wsdl";
 	private static final String NAMESPACE = "http://dcf-elect.efsa.europa.eu/";
 	
-	private File file;
+	private String messageName;
+	private String message;
 	
 	/**
 	 * Send the {@code file} to the dcf
 	 * as message.
 	 * @param file
 	 */
-	public SendMessage(IDcfUser user, File file) {
-		super(user, NAMESPACE);
-		this.file = file;
+	public SendMessage(IDcfUser user, Environment env) {
+		super(user, env, NAMESPACE);
 	}
 	
 	/**
 	 * Send a dataset to the dcf
 	 * @param filename
+	 * @throws IOException 
 	 */
-	public MessageResponse send() throws MySOAPException {
+	public MessageResponse send(File file) throws DetailedSOAPException, IOException {
 		
 		SOAPConsole.log("SendMessage: file=" + file, getUser());
+
+		if (!file.exists())
+			throw new IOException("The file=" + file + " does not exist");
 		
-		Config config = new Config();
-		
-		Object response = makeRequest(config.isProductionEnvironment() ? URL : TEST_URL);
+		this.messageName = file.getName();
+		this.message = prepareMessage(file);
+	
+		Object response = makeRequest(getEnvironment() == Environment.PRODUCTION ? URL : TEST_URL);
 		
 		SOAPConsole.log("SendMessage:", response);
 		
@@ -59,6 +64,23 @@ public class SendMessage extends SOAPRequest {
 			return null;
 		
 		return (MessageResponse) response;
+	}
+	
+	/**
+	 * Create the message from the file
+	 * @param file
+	 * @return
+	 * @throws IOException
+	 */
+	private String prepareMessage(File file) throws IOException {
+		
+		// add attachment to fileHandler node
+		Path path = Paths.get(file.getAbsolutePath());
+		
+		// read the file as byte array and encode it in base64
+		byte[] data = Files.readAllBytes(path);
+		byte[] encodedData = Base64.getEncoder().encode(data);
+		return new String(encodedData);
 	}
 
 	@Override
@@ -75,20 +97,10 @@ public class SendMessage extends SOAPRequest {
 		
 		SOAPElement fileHandler = trxFileMessage.addChildElement("fileHandler");
 
+		// set attachment
 		SOAPElement arg = trxFileMessage.addChildElement("fileName");
-		arg.setTextContent(this.file.getName());
-
-		// add attachment to fileHandler node
-		Path path = Paths.get(this.file.getAbsolutePath());
-		
-		// read the file as byte array and encode it in base64
-		try {
-			byte[] data = Files.readAllBytes(path);
-			byte[] encodedData = Base64.getEncoder().encode(data);
-			fileHandler.setValue(new String(encodedData));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		arg.setTextContent(this.messageName);
+		fileHandler.setValue(this.message);
 		
 		// save the changes in the message and return it
 		request.saveChanges();

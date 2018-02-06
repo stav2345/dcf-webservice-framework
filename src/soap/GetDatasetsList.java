@@ -6,7 +6,7 @@ import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
-import config.Config;
+import config.Environment;
 import dataset.IDcfDataset;
 import dataset.IDcfDatasetsList;
 import response_parser.GetDatasetsListParser;
@@ -34,8 +34,8 @@ public class GetDatasetsList<T extends IDcfDataset> extends SOAPRequest {
 	 * that is required.
 	 * @param dataCollectionCode
 	 */
-	public GetDatasetsList(IDcfUser user, String dataCollectionCode, IDcfDatasetsList<T> output) {
-		super(user, LIST_NAMESPACE);
+	public GetDatasetsList(IDcfUser user, Environment env, String dataCollectionCode, IDcfDatasetsList<T> output) {
+		super(user, env, LIST_NAMESPACE);
 		this.dataCollectionCode = dataCollectionCode;
 		this.output = output;
 	}
@@ -45,15 +45,13 @@ public class GetDatasetsList<T extends IDcfDataset> extends SOAPRequest {
 	 * @throws SOAPException
 	 */
 	@SuppressWarnings("unchecked")
-	public IDcfDatasetsList<T> getList() throws MySOAPException {
+	public IDcfDatasetsList<T> getList() throws DetailedSOAPException {
 		
 		SOAPConsole.log("GetDatasetsList: dcCode=" + dataCollectionCode, getUser());
 		
 		IDcfDatasetsList<T> datasets = null;
-		
-		Config config = new Config();
-		
-		Object response = makeRequest(config.isProductionEnvironment() ? URL : TEST_URL);
+
+		Object response = makeRequest(getEnvironment() == Environment.PRODUCTION ? URL : TEST_URL);
 		
 		SOAPConsole.log("GetDatasetsList:", response);
 		

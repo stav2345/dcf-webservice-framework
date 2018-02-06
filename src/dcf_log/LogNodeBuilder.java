@@ -27,7 +27,7 @@ public class LogNodeBuilder {
 	    try {
 	    	this.result = DcfResponse.valueOf( result );
 	    } catch (IllegalArgumentException e) {
-	    	this.result = DcfResponse.ERR;
+	    	this.result = DcfResponse.ERROR;
 	    }
 
 		return this;

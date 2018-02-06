@@ -194,7 +194,7 @@ public class LogParserHandler extends DefaultHandler {
 		if (!validationErrorsBlock)
 			return;
 		
-		validationBuilder.setResult(DcfResponse.ERR);
+		validationBuilder.setResult(DcfResponse.ERROR);
 		validationBuilder.setName(VALIDATION_ERROR);
 		validationBuilder.addOpLog(getValue());
 	}

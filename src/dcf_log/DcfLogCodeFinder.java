@@ -13,7 +13,7 @@ import org.w3c.dom.Node;
  * @author avonva
  *
  */
-public class LogCodeFinder {
+public class DcfLogCodeFinder {
 	
 	private SOAPMessage message;
 	
@@ -22,7 +22,7 @@ public class LogCodeFinder {
 	 * @param message the message to be analyzed. Note that the message
 	 * should be a log message! Otherwise errors are thrown.
 	 */
-	public LogCodeFinder( SOAPMessage message ) {
+	public DcfLogCodeFinder( SOAPMessage message ) {
 		
 		this.message = message;
 	}

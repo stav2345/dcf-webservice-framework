@@ -8,11 +8,11 @@ import javax.xml.soap.SOAPException;
  * @author avonva
  *
  */
-public class MySOAPException extends SOAPException {
+public class DetailedSOAPException extends SOAPException {
 
 	private static final long serialVersionUID = 1L;
 
-	public MySOAPException(SOAPException e) {
+	public DetailedSOAPException(SOAPException e) {
 		super(e);
 		e.printStackTrace();
 	}

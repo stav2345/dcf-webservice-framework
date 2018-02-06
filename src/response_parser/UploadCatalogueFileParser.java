@@ -1,4 +1,4 @@
-package log;
+package response_parser;
 
 import java.util.Iterator;
 

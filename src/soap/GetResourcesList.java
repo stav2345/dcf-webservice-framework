@@ -8,6 +8,7 @@ import javax.xml.soap.SOAPMessage;
 
 import org.w3c.dom.Document;
 
+import config.Environment;
 import resource.IDcfResourcesList;
 import resource.IDcfResourceReference;
 import response_parser.GetResourcesListParser;
@@ -30,14 +31,14 @@ public class GetResourcesList<T extends IDcfResourceReference> extends GetList<T
 	
 	private IDcfResourcesList<T> output;
 	
-	public GetResourcesList(IDcfUser user, String dataCollectionCode, IDcfResourcesList<T> output) {
-		super(user, URL, TEST_URL, NAMESPACE);
+	public GetResourcesList(IDcfUser user, Environment env, String dataCollectionCode, IDcfResourcesList<T> output) {
+		super(user, env, URL, TEST_URL, NAMESPACE);
 		this.dataCollectionCode = dataCollectionCode;
 		this.output = output;
 	}
 	
 	@Override
-	public IDcfList<T> getList() throws MySOAPException {
+	public IDcfList<T> getList() throws DetailedSOAPException {
 		SOAPConsole.log("GetResourcesList: dcCode=" + dataCollectionCode, getUser());
 		IDcfList<T> response = super.getList();
 		

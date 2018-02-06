@@ -2,7 +2,8 @@ package user;
 
 import javax.xml.soap.SOAPException;
 
-import soap.MySOAPException;
+import config.Environment;
+import soap.DetailedSOAPException;
 import soap.Ping;
 
 public class DcfUser implements IDcfUser {
@@ -25,9 +26,9 @@ public class DcfUser implements IDcfUser {
 	 * @param username
 	 * @param password
 	 * @return
-	 * @throws MySOAPException 
+	 * @throws DetailedSOAPException 
 	 */
-	public boolean verifiedLogin(String username, String password) throws MySOAPException {
+	public boolean verifiedLogin(Environment env, String username, String password) throws DetailedSOAPException {
 		
 		this.login(username, password);
 
@@ -35,12 +36,12 @@ public class DcfUser implements IDcfUser {
 
 		// try a ping request to check credentials
 		try {
-			Ping request = new Ping(this);
+			Ping request = new Ping(this, env);
 			logged = request.ping();
 		} catch (SOAPException e) {
 			e.printStackTrace();
 			
-			MySOAPException exception = new MySOAPException(e);
+			DetailedSOAPException exception = new DetailedSOAPException(e);
 			
 			if (exception.isUnauthorized()) {
 				logged = false;
@@ -82,5 +83,19 @@ public class DcfUser implements IDcfUser {
 	 */
 	public boolean isLoggedIn() {
 		return username != null && password != null;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		
+		if (!(obj instanceof IDcfUser))
+			return super.equals(obj);
+		
+		return username.equals(((IDcfUser)obj).getUsername());
+	}
+	
+	@Override
+	public String toString() {
+		return this.username;
 	}
 }

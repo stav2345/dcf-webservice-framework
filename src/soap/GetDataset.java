@@ -8,7 +8,7 @@ import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
-import config.Config;
+import config.Environment;
 import user.IDcfUser;
 
 /**
@@ -28,8 +28,8 @@ public class GetDataset extends SOAPRequest {
 	 * Make a get file request for a specific dataset
 	 * @param datasetId
 	 */
-	public GetDataset(IDcfUser user, String datasetId) {
-		super(user, NAMESPACE);
+	public GetDataset(IDcfUser user, Environment env, String datasetId) {
+		super(user, env, NAMESPACE);
 		this.datasetId = datasetId;
 	}
 	
@@ -38,13 +38,11 @@ public class GetDataset extends SOAPRequest {
 	 * @return
 	 * @throws SOAPException
 	 */
-	public File getDatasetFile() throws MySOAPException {
+	public File getDatasetFile() throws DetailedSOAPException {
 		
 		SOAPConsole.log("GetDataset: datasetId=" + datasetId, getUser());
-		
-		Config config = new Config();
-		
-		Object response = makeRequest(config.isProductionEnvironment() ? URL : TEST_URL);
+
+		Object response = makeRequest(getEnvironment() == Environment.PRODUCTION ? URL : TEST_URL);
 		
 		SOAPConsole.log("GetDataset:", response);
 		

@@ -7,9 +7,8 @@ import javax.xml.soap.SOAPException;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import config.Environment;
 import soap.ExportCatalogueFile;
-import soap.UploadCatalogueFile;
-import user.DcfUser;
 import user.IDcfUser;
 
 /**
@@ -20,29 +19,24 @@ import user.IDcfUser;
  * @author avonva
  *
  */
-public class LogDownloader {
+public class DcfLogDownloader implements IDcfLogDownloader {
 
-	private static final Logger LOGGER = LogManager.getLogger(LogDownloader.class);
-	
-	private IDcfUser user;  // user who requested the log download
-	
-	/**
-	 * Initialise the log download process.
-	 * @param user the user who required the download of the log. The user
-	 * must be logged in to perform the download.
-	 */
-	public LogDownloader(IDcfUser user) {
-		this.user = user;
-	}
-	
+	private static final Logger LOGGER = LogManager.getLogger(DcfLogDownloader.class);
+
 	/**
 	 * Download a log without polling strategy
 	 * @param logCode the code of the log to download
 	 * @throws SOAPException
 	 */
-	public File getLog(String logCode) throws SOAPException {
-		ExportCatalogueFile req = new ExportCatalogueFile(user);
-		return req.exportLog(logCode);
+	public File getLog(IDcfUser user, Environment env, String logCode) throws SOAPException {
+		
+		ExportCatalogueFile req = new ExportCatalogueFile(user, env);
+		File log = req.exportLog(logCode);
+		
+		if (log != null)
+			LOGGER.info("Log successfully downloaded, file=" + log);
+		
+		return log;
 	}
 	
 	/**
@@ -51,8 +45,8 @@ public class LogDownloader {
 	 * @param interAttemptsTime waiting time before trying again to download the log
 	 * @throws SOAPException 
 	 */
-	public File getLog(String logCode, long interAttemptsTime) throws SOAPException {
-		return getLog(logCode, interAttemptsTime, -1);
+	public File getLog(IDcfUser user, Environment env, String logCode, long interAttemptsTime) throws SOAPException {
+		return getLog(user, env, logCode, interAttemptsTime, -1);
 	}
 	
 	/**
@@ -62,7 +56,7 @@ public class LogDownloader {
 	 * @param maxAttempts max number of allowed attempts (prevents DOS)
 	 * @throws SOAPException 
 	 */
-	public File getLog(String logCode, long interAttemptsTime, int maxAttempts) throws SOAPException {
+	public File getLog(IDcfUser user, Environment env, String logCode, long interAttemptsTime, int maxAttempts) throws SOAPException {
 		
 		// if maxAttempts is > 0 then a limit is applied
 		boolean isLimited = maxAttempts > 0;
@@ -83,7 +77,7 @@ public class LogDownloader {
 			
 			LOGGER.info(diagnostic);
 
-			log = getLog(logCode);
+			log = getLog(user, env, logCode);
 			
 			if(log == null)
 				LOGGER.info("Log=" + logCode + " not available yet in DCF");
@@ -108,47 +102,5 @@ public class LogDownloader {
 		}
 		
 		return log;
-	}
-	
-	/**
-	 * Get the xml message to reserve a catalogue. We need the catalogue code and
-	 * the descriptions, which is the reason why we are reserving the catalogue
-	 * @param code
-	 * @param description
-	 * @param opType, can be reserveMinor or reserveMajor
-	 * @return
-	 */
-	public static String getReserveMessage ( String code, String description ) {
-
-		String op = "unreserve";
-		
-		String message = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-				+ "<message xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" "
-				+ "xsi:noNamespaceSchemaLocation=\"file:///D:/cat_xsd/UploadCatalogue.xsd\">"
-				+ "<updateCatalogue catalogueCode=\"" + code + "\">"
-				+ "<" + op + ">"
-				+ "<reservationNote>" + description + "</reservationNote>"
-				+ "</" + op + ">"
-				+ "</updateCatalogue>"
-				+ "</message>";
-
-		return message;
-	}
-	
-	public static void main(String[] args) throws SOAPException {
-		
-		DcfUser user = new DcfUser();
-		user.login("avonva", "Ab123456");
-		
-		System.out.println("up");
-		
-		UploadCatalogueFile upf = new UploadCatalogueFile(user);
-		String logCode = upf.send(getReserveMessage("ACTION", "test for log downloader"));
-		
-		System.out.println("Log code " + logCode);
-		
-		LogDownloader downloader = new LogDownloader(user);
-		File file = downloader.getLog(logCode, 2000, 10);
-		System.out.println(file);
 	}
 }

@@ -9,7 +9,7 @@ import javax.xml.soap.SOAPMessage;
 
 import org.w3c.dom.Node;
 
-import config.Config;
+import config.Environment;
 import user.IDcfUser;
 
 /**
@@ -28,26 +28,25 @@ public class Ping extends SOAPRequest {
 	private static final String TEST_URL = "https://dcf-01.efsa.test/dcf-dp-ws/elect2/?wsdl";
 	private static final String NAMESPACE = "http://dcf-elect.efsa.europa.eu/";
 	
-	public Ping(IDcfUser user) {
-		super(user, NAMESPACE);
+	public Ping(IDcfUser user, Environment env) {
+		super(user, env, NAMESPACE);
 	}
 
 	/**
 	 * Make a ping
 	 * @return
-	 * @throws MySOAPException 
+	 * @throws DetailedSOAPException 
 	 */
-	public boolean ping() throws MySOAPException {
+	public boolean ping() throws DetailedSOAPException {
 
 		SOAPConsole.log("Ping", getUser());
 		
 		boolean check;
 		
 		try {
-			Config config = new Config();
-			check = (boolean) makeRequest(config.isProductionEnvironment() ? URL : TEST_URL);
+			check = (boolean) makeRequest(getEnvironment() == Environment.PRODUCTION ? URL : TEST_URL);
 		} catch (SOAPException e) {
-			throw new MySOAPException(e);
+			throw new DetailedSOAPException(e);
 		}
 		
 		SOAPConsole.log("Ping:", check);

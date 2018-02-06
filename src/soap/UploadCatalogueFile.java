@@ -15,8 +15,8 @@ import javax.xml.soap.SOAPMessage;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import config.Config;
-import log.UploadCatalogueFileParser;
+import config.Environment;
+import response_parser.UploadCatalogueFileParser;
 import user.IDcfUser;
 
 /**
@@ -27,7 +27,7 @@ import user.IDcfUser;
  * @author avonva
  *
  */
-public class UploadCatalogueFile extends SOAPRequest {
+public class UploadCatalogueFile extends SOAPRequest implements IUploadCatalogueFile {
 
 	private static final Logger LOGGER = LogManager.getLogger(UploadCatalogueFile.class);
 	
@@ -42,8 +42,8 @@ public class UploadCatalogueFile extends SOAPRequest {
 	 * @param user
 	 * @param file
 	 */
-	public UploadCatalogueFile(IDcfUser user) {
-		super(user, NAMESPACE);
+	public UploadCatalogueFile(IDcfUser user, Environment env) {
+		super(user, env, NAMESPACE);
 	}
 	
 	/**
@@ -52,7 +52,7 @@ public class UploadCatalogueFile extends SOAPRequest {
 	 * @throws SOAPException 
 	 * @throws IOException 
 	 */
-	public String send(File file) throws SOAPException, IOException {
+	public String send(File file) throws DetailedSOAPException, IOException {
 		
 		// read the file into a string
 		String data = new String(Files.readAllBytes(Paths.get(file.getAbsolutePath())));
@@ -64,19 +64,16 @@ public class UploadCatalogueFile extends SOAPRequest {
 	 * Upload an .xml file contained in a string to dcf
 	 * @param attachment
 	 * @return
-	 * @throws MySOAPException
+	 * @throws DetailedSOAPException
 	 */
-	public String send(String attachment) throws MySOAPException {
+	public String send(String attachment) throws DetailedSOAPException {
 		
 		SOAPConsole.log("UploadCatalogueFile: attachment=" + attachment, getUser());
 		
 		this.attachment = attachment;
 		
-		Config config = new Config();
-		
 		// return the log code got from dcf
-		Object response = makeRequest(config.isProductionEnvironment() 
-				? URL : TEST_URL);
+		Object response = makeRequest(getEnvironment() == Environment.PRODUCTION ? URL : TEST_URL);
 		
 		SOAPConsole.log("UploadCatalogueFile:", response);
 		

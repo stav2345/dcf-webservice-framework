@@ -10,6 +10,7 @@ import org.w3c.dom.Document;
 
 import catalogue.IDcfCatalogue;
 import catalogue.IDcfCataloguesList;
+import config.Environment;
 import response_parser.GetCataloguesListParser;
 import response_parser.IDcfList;
 import user.IDcfUser;
@@ -27,13 +28,13 @@ public class GetCataloguesList<T extends IDcfCatalogue> extends GetList<T> {
 	
 	private IDcfCataloguesList<T> output;
 	
-	public GetCataloguesList(IDcfUser user, IDcfCataloguesList<T> output) {
-		super(user, URL, TEST_URL, NAMESPACE);
+	public GetCataloguesList(IDcfUser user, Environment env, IDcfCataloguesList<T> output) {
+		super(user, env, URL, TEST_URL, NAMESPACE);
 		this.output = output;
 	}
 	
 	@Override
-	public IDcfList<T> getList() throws MySOAPException {
+	public IDcfList<T> getList() throws DetailedSOAPException {
 		
 		SOAPConsole.log("GetCataloguesList", getUser());
 
