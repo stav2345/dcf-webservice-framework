@@ -115,6 +115,9 @@ public class DcfLogBuilder {
 	public void addValidationErrorNode (LogNode node) {
 		this.validationErrors.add(node);
 	}
+	public void setValidationErrors(Collection<LogNode> validationErrors) {
+		this.validationErrors = validationErrors;
+	}
 	
 	/**
 	 * Build the log document

@@ -40,8 +40,18 @@ public class LogNodeBuilder {
 		opLogs.add( opLog );
 		return this;
 	}
+	
+	public void setOpLogs(Collection<String> opLogs) {
+		this.opLogs = opLogs;
+	}
 
 	public LogNode build() {
 		return new LogNode( name, result, opLogs );
+	}
+	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "name=" + name + "; result=" + result + "; opLogs=" + opLogs;
 	}
 }
