@@ -68,6 +68,7 @@ public class PendingRequest implements IPendingRequest {
 	 */
 	public PendingRequest() {
 		this.priority = PendingRequestPriority.HIGH;
+		this.status = PendingRequestStatus.WAITING;
 		this.pendingRequestListeners = new ArrayList<>();
 	}
 	
@@ -85,7 +86,6 @@ public class PendingRequest implements IPendingRequest {
 		this.user = user;
 		this.logCode = logCode;
 		this.environment = environment;
-		this.status = PendingRequestStatus.WAITING;
 	}
 
 	@Override
