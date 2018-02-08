@@ -15,8 +15,9 @@ import org.apache.log4j.Logger;
 import config.Environment;
 import dcf_log.DcfLog;
 import dcf_log.DcfResponse;
-import dcf_log.IDcfLogDownloader;
 import dcf_log.IDcfLogParser;
+import soap.ExportCatalogueFile;
+import soap_interface.IExportCatalogueFile;
 import user.IDcfUser;
 
 /**
@@ -26,6 +27,9 @@ import user.IDcfUser;
 public class PendingRequest implements IPendingRequest {
 	
 	private static final Logger LOGGER = LogManager.getLogger(PendingRequest.class);
+	
+	private IExportCatalogueFile exportCatFile;
+	private boolean paused;
 	
 	// type of the pending request (RESERVE, UNRESERVE, PUBLISH, UPLOAD_DATA)
 	private String type;
@@ -53,6 +57,8 @@ public class PendingRequest implements IPendingRequest {
 	
 	// additional data of the request
 	private Map<String, String> data;
+	
+	private long restartTime;  // when the request will be restarted
 	
 	// external listeners
 	private Collection<PendingRequestListener> pendingRequestListeners;
@@ -83,13 +89,13 @@ public class PendingRequest implements IPendingRequest {
 	}
 
 	@Override
-	public DcfResponse start(IDcfLogDownloader downloader, IDcfLogParser parser) throws SOAPException, IOException {
+	public DcfResponse start(IDcfLogParser parser) throws SOAPException, IOException {
 		
 		LOGGER.info("Starting pending request=" + this);
 		
 		this.setStatus(PendingRequestStatus.DOWNLOADING);
 		
-		File logFile = getLog(downloader);
+		File logFile = downloadLog(priority);
 
 		// if it was in high priority but no log found
 		if (priority == PendingRequestPriority.HIGH && logFile == null) {
@@ -100,7 +106,7 @@ public class PendingRequest implements IPendingRequest {
 			this.priority = PendingRequestPriority.LOW;
 			this.setStatus(PendingRequestStatus.QUEUED);
 			
-			logFile = getLog(downloader);
+			logFile = downloadLog(priority);
 		}
 
 		if (logFile == null) {
@@ -131,12 +137,107 @@ public class PendingRequest implements IPendingRequest {
 	 * was found in the available time, otherwise null
 	 * @throws SOAPException 
 	 */
-	private File getLog(IDcfLogDownloader downloader) throws SOAPException {
+	private File downloadLog(PendingRequestPriority priority) throws SOAPException {
 		
 		File log = null;
 		
 		// 12 attempts, one every 10 seconds -> 2 minutes total
-		int maxAttempts = 12;
+		int maxAttempts = priority == PendingRequestPriority.HIGH ? 12 : -1;
+		long interAttemptsTime = getInterAttemptsTime(priority);
+
+		if (priority == PendingRequestPriority.LOW)
+			restartTime = System.currentTimeMillis() + getInterAttemptsTime(priority);
+		else
+			restartTime = -1;
+		
+		log = this.downloadLog(user, environment, logCode, interAttemptsTime, maxAttempts);
+		
+		if (log != null)
+			restartTime = -1;
+		
+		return log;
+	}
+	
+	/**
+	 * Download a log without polling strategy
+	 * @param logCode the code of the log to download
+	 * @throws SOAPException
+	 */
+	private File downloadLog(IDcfUser user, Environment env, String logCode) throws SOAPException {
+		
+		if (exportCatFile == null)
+			exportCatFile = new ExportCatalogueFile(user, env);
+		
+		File log = exportCatFile.exportLog(logCode);
+		
+		if (log != null)
+			LOGGER.info("Log successfully downloaded, file=" + log);
+
+		return log;
+	}
+	
+	/**
+	 * Download a log from DCF with a polling strategy
+	 * @param logCode the code of the log to download
+	 * @param interAttemptsTime waiting time before trying again to download the log
+	 * @param maxAttempts max number of allowed attempts (prevents DOS)
+	 * @throws SOAPException 
+	 */
+	private synchronized File downloadLog(IDcfUser user, Environment env, String logCode, 
+			long interAttemptsTime, int maxAttempts) throws SOAPException {
+		
+		// if maxAttempts is > 0 then a limit is applied
+		boolean isLimited = maxAttempts > 0;
+		
+		File log = null;
+		
+		// number of tried attempts
+		int attemptsCount = 1;
+		
+		// polling
+		while(true) {
+
+			String diagnostic = "Getting log=" + logCode + ", attempt n°=" + attemptsCount;
+			
+			// add maximum number of attempts if limited attempts
+			if(isLimited)
+				diagnostic += "/" + maxAttempts;
+			
+			LOGGER.info(diagnostic);
+
+			log = downloadLog(user, env, logCode);
+			
+			if(log == null)
+				LOGGER.info("Log=" + logCode + " not available yet in DCF");
+
+			// if the log was found or no another attempt is available
+			if(log != null || (isLimited && attemptsCount >= maxAttempts))
+				break;
+			
+			LOGGER.info("Waiting " + (interAttemptsTime/1000.00) 
+					+ " seconds and then retry to download log=" + logCode);
+			
+			// wait inter attempts time
+			try {
+				paused = true;
+				this.wait(interAttemptsTime);
+			} catch(InterruptedException e) {}
+			
+			paused = false;
+			
+			// go to the next attempt
+			attemptsCount++;
+		}
+		
+		return log;
+	}
+	
+	/**
+	 * Get inter attempt time based on priority
+	 * @return
+	 */
+	private long getInterAttemptsTime(PendingRequestPriority priority) {
+		
 		long interAttemptsTime = 10000; 
 		
 		// set inter attempts time according to the priority
@@ -150,10 +251,7 @@ public class PendingRequest implements IPendingRequest {
 		default:
 			break;
 		}
-
-		log = downloader.getLog(user, environment, logCode, interAttemptsTime, maxAttempts);
-		
-		return log;
+		return interAttemptsTime;
 	}
 	
 	/**
@@ -168,8 +266,6 @@ public class PendingRequest implements IPendingRequest {
 		
 		PendingRequestStatusChangedEvent event = new PendingRequestStatusChangedEvent(
 				this, oldStatus, newStatus);
-
-		LOGGER.info("New status=" + event);
 		
 		// notify listeners
 		for (PendingRequestListener listener : pendingRequestListeners) {
@@ -238,6 +334,25 @@ public class PendingRequest implements IPendingRequest {
 	@Override
 	public String getType() {
 		return type;
+	}
+	
+	public boolean isPaused() {
+		return this.paused;
+	}
+	
+	@Override
+	public long getRestartTime() {
+		return restartTime;
+	}
+
+	@Override
+	public synchronized void restart() {
+		
+		if (!this.isPaused())
+			return;
+		
+		restartTime = System.currentTimeMillis();
+		this.notify();
 	}
 
 	@Override

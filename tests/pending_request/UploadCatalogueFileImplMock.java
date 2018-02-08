@@ -5,11 +5,11 @@ import java.util.Map;
 
 import config.Environment;
 import soap.DetailedSOAPException;
-import soap.IUploadCatalogueFileImpl;
 import soap.UploadCatalogueFileAction;
 import soap.UploadCatalogueFileImpl;
 import soap.UploadCatalogueFileImpl.PublishLevel;
 import soap.UploadCatalogueFileImpl.ReserveLevel;
+import soap_interface.IUploadCatalogueFileImpl;
 import user.IDcfUser;
 
 public class UploadCatalogueFileImplMock implements IUploadCatalogueFileImpl {

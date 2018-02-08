@@ -25,4 +25,7 @@ public class DcfLogDownloaderMock implements IDcfLogDownloader {
 		return new File("Log.xml");
 	}
 
+	@Override
+	public void skipWait() {}
+
 }

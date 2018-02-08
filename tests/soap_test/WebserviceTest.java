@@ -353,7 +353,7 @@ public class WebserviceTest {
 		
 		IPendingRequest request = ucf.publish(user, env, PublishLevel.MINOR, "not-existing-code");
 
-		DcfResponse response = request.start(new DcfLogDownloader(), new DcfLogParser());
+		DcfResponse response = request.start(new DcfLogParser());
 		
 		assertNotNull(response);
 	}
@@ -366,7 +366,7 @@ public class WebserviceTest {
 		
 		IPendingRequest request = ucf.publish(user, env, PublishLevel.MINOR, "ACTION");
 
-		DcfResponse response = request.start(new DcfLogDownloader(), new DcfLogParser());
+		DcfResponse response = request.start(new DcfLogParser());
 		
 		assertNotNull(response);
 	}
@@ -379,7 +379,7 @@ public class WebserviceTest {
 		
 		IPendingRequest request = ucf.publish(user, env, PublishLevel.MAJOR, "not-existing-code");
 
-		DcfResponse response = request.start(new DcfLogDownloader(), new DcfLogParser());
+		DcfResponse response = request.start(new DcfLogParser());
 		
 		assertNotNull(response);
 	}
@@ -392,7 +392,7 @@ public class WebserviceTest {
 		
 		IPendingRequest request = ucf.publish(user, env, PublishLevel.MAJOR, "ACTION");
 
-		DcfResponse response = request.start(new DcfLogDownloader(), new DcfLogParser());
+		DcfResponse response = request.start(new DcfLogParser());
 		
 		assertNotNull(response);
 	}
@@ -406,7 +406,7 @@ public class WebserviceTest {
 		IPendingRequest request = ucf.reserve(user, env, ReserveLevel.MINOR, 
 				"not-existing-code", "JUnit test case DCF webservices");
 
-		DcfResponse response = request.start(new DcfLogDownloader(), new DcfLogParser());
+		DcfResponse response = request.start(new DcfLogParser());
 
 		assertNotNull(response);
 	}
@@ -420,7 +420,7 @@ public class WebserviceTest {
 		IPendingRequest request = ucf.reserve(user, env, ReserveLevel.MINOR, 
 				"ACTION", "JUnit test case DCF webservices");
 
-		DcfResponse response = request.start(new DcfLogDownloader(), new DcfLogParser());
+		DcfResponse response = request.start(new DcfLogParser());
 
 		assertNotNull(response);
 	}
@@ -434,7 +434,7 @@ public class WebserviceTest {
 		IPendingRequest request = ucf.reserve(user, env, ReserveLevel.MAJOR, 
 				"not-existing-code", "JUnit test case DCF webservices");
 
-		DcfResponse response = request.start(new DcfLogDownloader(), new DcfLogParser());
+		DcfResponse response = request.start(new DcfLogParser());
 		
 		assertNotNull(response);
 	}
@@ -448,7 +448,7 @@ public class WebserviceTest {
 		IPendingRequest request = ucf.reserve(user, env, ReserveLevel.MAJOR, 
 				"ACTION", "JUnit test case DCF webservices");
 
-		DcfResponse response = request.start(new DcfLogDownloader(), new DcfLogParser());
+		DcfResponse response = request.start(new DcfLogParser());
 		
 		assertNotNull(response);
 	}
@@ -462,7 +462,7 @@ public class WebserviceTest {
 		IPendingRequest request = ucf.unreserve(user, env, 
 				"not-existing-code", "JUnit test case DCF webservices");
 
-		DcfResponse response = request.start(new DcfLogDownloader(), new DcfLogParser());
+		DcfResponse response = request.start(new DcfLogParser());
 		
 		assertNotNull(response);
 	}
@@ -476,7 +476,7 @@ public class WebserviceTest {
 		IPendingRequest request = ucf.unreserve(user, env, 
 				"ACTION", "JUnit test case DCF webservices");
 
-		DcfResponse response = request.start(new DcfLogDownloader(), new DcfLogParser());
+		DcfResponse response = request.start(new DcfLogParser());
 		
 		assertNotNull(response);
 	}

@@ -16,6 +16,7 @@ import pending_request.PendingRequestListener;
 import pending_request.PendingRequestStatusChangedEvent;
 import soap.UploadCatalogueFileImpl.PublishLevel;
 import soap.UploadCatalogueFileImpl.ReserveLevel;
+import soap_interface.IUploadCatalogueFileImpl;
 import user.IDcfUser;
 
 /**

@@ -9,7 +9,6 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 
-import dcf_log.IDcfLogDownloader;
 import dcf_log.IDcfLogParser;
 import soap.DetailedSOAPException;
 
@@ -24,16 +23,14 @@ public class PendingRequestThread extends Thread {
 	
 	private boolean finished;
 	private IPendingRequest request;
-	private IDcfLogDownloader downloader;
 	private IDcfLogParser parser;
 	
 	/**
 	 * Prepare the launcher with a single {@link IPendingRequest} which need to be started
 	 * @param requests
 	 */
-	public PendingRequestThread(IPendingRequest request, IDcfLogDownloader downloader, IDcfLogParser parser) {
+	public PendingRequestThread(IPendingRequest request, IDcfLogParser parser) {
 		this.request = request;
-		this.downloader = downloader;
 		this.parser = parser;
 		this.finished = false;
 	}
@@ -78,7 +75,7 @@ public class PendingRequestThread extends Thread {
 		// start procedure if no connection error is found
 		while(!done) {
 			try {
-				request.start(downloader, parser);  // start the request
+				request.start(parser);  // start the request
 				done = true;
 			}
 			catch(DetailedSOAPException e) {

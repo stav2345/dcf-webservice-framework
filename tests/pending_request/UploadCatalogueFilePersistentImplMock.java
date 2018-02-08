@@ -6,11 +6,11 @@ import java.util.Map;
 
 import config.Environment;
 import pending_request.IPendingRequest;
-import soap.IUploadCatalogueFileImpl;
 import soap.DetailedSOAPException;
 import soap.UploadCatalogueFileAction;
 import soap.UploadCatalogueFileImpl.PublishLevel;
 import soap.UploadCatalogueFileImpl.ReserveLevel;
+import soap_interface.IUploadCatalogueFileImpl;
 import user.IDcfUser;
 
 public class UploadCatalogueFilePersistentImplMock implements IUploadCatalogueFileImpl {

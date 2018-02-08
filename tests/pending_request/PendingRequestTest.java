@@ -11,9 +11,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import config.Environment;
-import dcf_log.DcfResponse;
-import dcf_log.DcfLogDownloader;
 import dcf_log.DcfLogParser;
+import dcf_log.DcfResponse;
 import soap.UploadCatalogueFileImpl;
 import soap.UploadCatalogueFileImpl.PublishLevel;
 import soap.UploadCatalogueFileImpl.ReserveLevel;
@@ -44,7 +43,7 @@ public class PendingRequestTest {
 		
 		IPendingRequest request = ucf.publish(user, env, PublishLevel.MINOR, "ACTION");
 
-		DcfResponse response = request.start(new DcfLogDownloader(), new DcfLogParser());
+		DcfResponse response = request.start(new DcfLogParser());
 		
 		assertNotNull(response);
 	}
@@ -57,7 +56,7 @@ public class PendingRequestTest {
 		
 		IPendingRequest request = ucf.publish(user, env, PublishLevel.MAJOR, "ACTION");
 
-		DcfResponse response = request.start(new DcfLogDownloader(), new DcfLogParser());
+		DcfResponse response = request.start(new DcfLogParser());
 		
 		assertNotNull(response);
 	}
@@ -69,7 +68,7 @@ public class PendingRequestTest {
 		
 		IPendingRequest request = ucf.reserve(user, env, ReserveLevel.MINOR, "ACTION", "Test upload catalogue file");
 
-		DcfResponse response = request.start(new DcfLogDownloader(), new DcfLogParser());
+		DcfResponse response = request.start(new DcfLogParser());
 
 		assertNotNull(response);
 	}
@@ -81,7 +80,7 @@ public class PendingRequestTest {
 		
 		IPendingRequest request = ucf.reserve(user, env, ReserveLevel.MAJOR, "ACTION", "Test upload catalogue file");
 
-		DcfResponse response = request.start(new DcfLogDownloader(), new DcfLogParser());
+		DcfResponse response = request.start(new DcfLogParser());
 		
 		assertNotNull(response);
 	}
@@ -93,7 +92,7 @@ public class PendingRequestTest {
 		
 		IPendingRequest request = ucf.unreserve(user, env, "ACTION", "Test upload catalogue file");
 
-		DcfResponse response = request.start(new DcfLogDownloader(), new DcfLogParser());
+		DcfResponse response = request.start(new DcfLogParser());
 		
 		assertNotNull(response);
 	}

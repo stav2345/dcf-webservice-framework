@@ -9,6 +9,7 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
 import config.Environment;
+import soap_interface.IExportCatalogueFile;
 import user.IDcfUser;
 
 /**
@@ -18,7 +19,7 @@ import user.IDcfUser;
  * @author avonva
  *
  */
-public class ExportCatalogueFile extends SOAPRequest {
+public class ExportCatalogueFile extends SOAPRequest implements IExportCatalogueFile {
 	
 	private static final String NAMESPACE = "http://ws.catalog.dc.efsa.europa.eu/";
 	private static final String URL = "https://dcf-cms.efsa.europa.eu/catalogues";
@@ -42,7 +43,7 @@ public class ExportCatalogueFile extends SOAPRequest {
 		super(user, env, NAMESPACE);
 	}
 	
-	public File exportCatalogue(String catalogueCode) throws SOAPException {
+	public File exportCatalogue(String catalogueCode) throws DetailedSOAPException {
 		
 		SOAPConsole.log("ExportCatalogueFile: export last published version of catalogue=" + catalogueCode, getUser());
 		

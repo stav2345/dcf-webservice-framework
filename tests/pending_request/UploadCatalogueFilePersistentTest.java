@@ -12,7 +12,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import config.Environment;
-import dcf_log.DcfLogDownloaderMock;
 import dcf_log.DcfLogParserMock;
 import soap.UploadCatalogueFileImpl.ReserveLevel;
 import soap.UploadCatalogueFilePersistentImpl;
@@ -61,7 +60,7 @@ public class UploadCatalogueFilePersistentTest {
 		
 		
 		// start the request
-		storedReq.start(new DcfLogDownloaderMock(), new DcfLogParserMock());
+		storedReq.start(new DcfLogParserMock());
 		
 		// at the end of the process the request must be automatically
 		// removed from the database
@@ -96,7 +95,7 @@ public class UploadCatalogueFilePersistentTest {
 		
 		
 		// start the request from the one retrieved from reserve
-		req.start(new DcfLogDownloaderMock(), new DcfLogParserMock());
+		req.start(new DcfLogParserMock());
 		
 		// at the end of the process the request must be automatically
 		// removed from the database

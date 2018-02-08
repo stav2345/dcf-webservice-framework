@@ -6,6 +6,7 @@ import java.util.Map;
 import config.Environment;
 import pending_request.IPendingRequest;
 import pending_request.PendingRequest;
+import soap_interface.IUploadCatalogueFileImpl;
 import user.IDcfUser;
 
 /**

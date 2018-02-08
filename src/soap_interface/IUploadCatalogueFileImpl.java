@@ -1,10 +1,12 @@
-package soap;
+package soap_interface;
 
 import java.io.IOException;
 import java.util.Map;
 
 import config.Environment;
 import pending_request.IPendingRequest;
+import soap.DetailedSOAPException;
+import soap.UploadCatalogueFileAction;
 import soap.UploadCatalogueFileImpl.PublishLevel;
 import soap.UploadCatalogueFileImpl.ReserveLevel;
 import user.IDcfUser;

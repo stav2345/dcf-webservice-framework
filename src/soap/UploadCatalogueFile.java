@@ -17,6 +17,7 @@ import org.apache.log4j.Logger;
 
 import config.Environment;
 import response_parser.UploadCatalogueFileParser;
+import soap_interface.IUploadCatalogueFile;
 import user.IDcfUser;
 
 /**

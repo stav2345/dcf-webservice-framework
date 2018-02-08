@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 
 import config.Environment;
 import soap.ExportCatalogueFile;
+import soap_interface.IExportCatalogueFile;
 import user.IDcfUser;
 
 /**
@@ -23,6 +24,18 @@ public class DcfLogDownloader implements IDcfLogDownloader {
 
 	private static final Logger LOGGER = LogManager.getLogger(DcfLogDownloader.class);
 
+	private IExportCatalogueFile exportCatFile;  // soap object
+	private boolean waiting;
+	
+	public DcfLogDownloader() {
+		this.waiting = true;
+	}
+	
+	public DcfLogDownloader(IExportCatalogueFile exportCatFile) {
+		this.exportCatFile = exportCatFile;
+		this.waiting = true;
+	}
+	
 	/**
 	 * Download a log without polling strategy
 	 * @param logCode the code of the log to download
@@ -30,12 +43,14 @@ public class DcfLogDownloader implements IDcfLogDownloader {
 	 */
 	public File getLog(IDcfUser user, Environment env, String logCode) throws SOAPException {
 		
-		ExportCatalogueFile req = new ExportCatalogueFile(user, env);
-		File log = req.exportLog(logCode);
+		if (exportCatFile == null)
+			exportCatFile = new ExportCatalogueFile(user, env);
+		
+		File log = exportCatFile.exportLog(logCode);
 		
 		if (log != null)
 			LOGGER.info("Log successfully downloaded, file=" + log);
-		
+
 		return log;
 	}
 	
@@ -56,7 +71,8 @@ public class DcfLogDownloader implements IDcfLogDownloader {
 	 * @param maxAttempts max number of allowed attempts (prevents DOS)
 	 * @throws SOAPException 
 	 */
-	public File getLog(IDcfUser user, Environment env, String logCode, long interAttemptsTime, int maxAttempts) throws SOAPException {
+	public synchronized File getLog(IDcfUser user, Environment env, String logCode, 
+			long interAttemptsTime, int maxAttempts) throws SOAPException {
 		
 		// if maxAttempts is > 0 then a limit is applied
 		boolean isLimited = maxAttempts > 0;
@@ -91,16 +107,26 @@ public class DcfLogDownloader implements IDcfLogDownloader {
 			
 			// wait inter attempts time
 			try {
-				Thread.sleep(interAttemptsTime);
-			} catch(InterruptedException e) {
-				e.printStackTrace();
-				LOGGER.error("Cannot sleep thread=" + this, e);
-			}
+				waiting = true;
+				this.wait(interAttemptsTime);
+			} catch(InterruptedException e) {}
+			
+			waiting = false;
 			
 			// go to the next attempt
 			attemptsCount++;
 		}
 		
 		return log;
+	}
+
+	public boolean isWaiting() {
+		return waiting;
+	}
+	
+	@Override
+	public synchronized void skipWait() {
+		if(this.isWaiting())
+			this.notify();
 	}
 }

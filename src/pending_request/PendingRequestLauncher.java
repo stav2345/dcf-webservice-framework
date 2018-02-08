@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.xml.soap.SOAPException;
 
-import dcf_log.IDcfLogDownloader;
 import dcf_log.IDcfLogParser;
 
 /**
@@ -21,16 +20,14 @@ public class PendingRequestLauncher {
 	
 	private List<PendingRequestThread> pool;
 	private Collection<PendingRequestListener> listeners;
-	private IDcfLogDownloader downloader;
 	private IDcfLogParser parser;
 	private boolean started;
 	
 	/**
 	 * Prepare the launcher
 	 */
-	public PendingRequestLauncher(IDcfLogDownloader downloader, IDcfLogParser parser) {
+	public PendingRequestLauncher(IDcfLogParser parser) {
 		this.listeners = new ArrayList<>();
-		this.downloader = downloader;
 		this.parser = parser;
 		this.pool = new ArrayList<>();
 	}
@@ -78,7 +75,7 @@ public class PendingRequestLauncher {
 			req.addPendingRequestListener(listener);
 		
 		// prepare the single request launcher
-		PendingRequestThread launcher = new PendingRequestThread(req, downloader, parser);
+		PendingRequestThread launcher = new PendingRequestThread(req, parser);
 		
 		// add the launcher to the pool
 		pool.add(launcher);
