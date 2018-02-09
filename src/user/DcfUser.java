@@ -1,7 +1,5 @@
 package user;
 
-import javax.xml.soap.SOAPException;
-
 import config.Environment;
 import soap.DetailedSOAPException;
 import soap.Ping;
@@ -38,27 +36,29 @@ public class DcfUser implements IDcfUser {
 		try {
 			Ping request = new Ping(this, env);
 			logged = request.ping();
-		} catch (SOAPException e) {
+		} catch (DetailedSOAPException e) {
 			e.printStackTrace();
 			
-			DetailedSOAPException exception = new DetailedSOAPException(e);
-			
-			if (exception.isUnauthorized()) {
+			if (e.isUnauthorized()) {
 				logged = false;
 			}
 			else {
-				throw exception;
+				throw e;
 			}
 		}
 		
 
 		// if wrong credential => remove them 
 		if ( !logged ) {
-			this.username = null;
-			this.password = null;
+			logout();
 		}
 
 		return logged;
+	}
+	
+	public void logout() {
+		this.username = null;
+		this.password = null;
 	}
 	
 	/**

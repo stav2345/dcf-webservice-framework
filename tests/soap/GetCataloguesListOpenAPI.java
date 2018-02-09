@@ -6,9 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringReader;
-import java.net.Authenticator;
 import java.net.MalformedURLException;
-import java.net.PasswordAuthentication;
 import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
@@ -29,8 +27,10 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.soap.AttachmentPart;
 import javax.xml.soap.MessageFactory;
+import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPConnection;
 import javax.xml.soap.SOAPConnectionFactory;
+import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
@@ -41,14 +41,18 @@ import org.apache.log4j.Logger;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import catalogue.DcfCataloguesList;
+import catalogue.IDcfCatalogue;
+import catalogue.IDcfCataloguesList;
 import config.Environment;
 import http.HttpManager;
 import proxy.ProxyConfigException;
-import sun.net.www.protocol.http.AuthCacheImpl;
-import sun.net.www.protocol.http.AuthCacheValue;
+import response_parser.GetCataloguesListParser;
+import response_parser.IDcfList;
 import user.IDcfUser;
 import utils.FileUtils;
 import zip_manager.ZipManager;
@@ -57,28 +61,34 @@ import zip_manager.ZipManager;
  * Abstract class used to create soap requests and to process soap responses.
  * @author avonva
  */
-public abstract class SOAPRequest {
+public class GetCataloguesListOpenAPI<T extends IDcfCatalogue> {
 
-	private static final Logger LOGGER = LogManager.getLogger(SOAPRequest.class);
+	private static final Logger LOGGER = LogManager.getLogger(GetCataloguesListOpenAPI.class);
 	
 	private IDcfUser user;
 	private String namespace;
 	private SOAPError error;  // error, if occurred
 	private Environment env;
 
+	private IDcfCataloguesList<T> output;
+
 	/**
 	 * Set the url where we make the request and the namespace of the request
 	 * @param url
 	 * @param namespace
 	 */
-	public SOAPRequest(IDcfUser user, Environment env, String namespace) {
-		this.user = user;
+	public GetCataloguesListOpenAPI(Environment env, IDcfCataloguesList<T> output) {
 		this.env = env;
-		this.namespace = namespace;
+		this.namespace = "http://ws.catalog.dc.efsa.europa.eu/";
+		this.output = output;
 	}
 	
 	public Environment getEnvironment() {
 		return env;
+	}
+	
+	public IDcfList<T> getList() throws DetailedSOAPException {
+		return (IDcfList<T>) makeRequest("https://openscaie-dev.azure-api.net/catalogues");
 	}
 	
 	/**
@@ -225,7 +235,7 @@ public abstract class SOAPRequest {
 			} catch (MalformedURLException | ProxyConfigException e) {
 				e.printStackTrace();
 				
-				LOGGER.error("ERROR OCCURRED. Proceeding without using proxy", e);
+				LOGGER.error("ERROR OCCURRED. Proceeding with NO_PROXY.", e);
 				
 				// get the response with no proxy
 				response = soapConnection.call(request, url);
@@ -274,28 +284,7 @@ public abstract class SOAPRequest {
 		
 		// add the content type header
 		soapMsg.getMimeHeaders().addHeader("Content-Type", "text/xml;charset=UTF-8");
-		
-		// reset the cache of the authentication
-		AuthCacheValue.setAuthCache(new AuthCacheImpl());
-		
-		// set the username and password for the https connection
-		// in order to be able to authenticate me to the DCF
-		Authenticator myAuth = new Authenticator() {
-			
-			@Override
-			protected PasswordAuthentication getPasswordAuthentication() {
-
-				if (user.getUsername() == null 
-						|| user.getPassword() == null)
-					return null;
-				
-				return new PasswordAuthentication(user.getUsername(), 
-						user.getPassword().toCharArray());
-			}
-		};
-		
-		// set the default authenticator
-		Authenticator.setDefault(myAuth);
+		soapMsg.getMimeHeaders().addHeader("Ocp-Apim-Subscription-Key", "842d0d2edbeb4b1db69b841e535d2f4f");
 
 		// create the envelope and name it
 		SOAPEnvelope envelope = soapPart.getEnvelope();
@@ -625,18 +614,63 @@ public abstract class SOAPRequest {
 		return user;
 	}
 	
-	/**
-	 * Create the request message which will be sent to the web service
-	 * @param con
-	 * @return
-	 */
-	public abstract SOAPMessage createRequest(SOAPConnection con) throws SOAPException;
+	public SOAPMessage createRequest(SOAPConnection con) throws SOAPException {
 
-	/**
-	 * Process the web service response and return something if needed
-	 * @param soapResponse the response returned after sending the soap request
-	 * @return a processed object. It can be whatever you want, be aware that you
-	 * need to cast it to specify its type.
-	 */
-	public abstract Object processResponse(SOAPMessage soapResponse) throws SOAPException;
+		// create the standard structure and get the message
+		SOAPMessage soapMsg = createTemplateSOAPMessage ("ws");
+
+		// get the body of the message
+		SOAPBody soapBody = soapMsg.getSOAPPart().getEnvelope().getBody();
+
+		// create the xml message structure to get the dataset list
+		SOAPElement soapElem = soapBody.addChildElement("getCatalogueList", "ws");
+
+		// set that we want an XML file as output
+		SOAPElement arg = soapElem.addChildElement("arg2");
+		arg.setTextContent("XML");
+
+		// save the changes in the message and return it
+		soapMsg.saveChanges();
+
+		return soapMsg;
+	}
+
+	public Object processResponse(SOAPMessage soapResponse) throws SOAPException {
+
+		// get the children of the body
+		NodeList returnNodes = soapResponse.getSOAPPart().
+				getEnvelope().getBody().getElementsByTagName("return");
+
+		if (returnNodes.getLength() == 0) {
+			LOGGER.error("GetList: no return node was found in the soap response");
+			return null;
+		}
+		
+		// get return node
+		Node returnNode = returnNodes.item(0);
+		
+		// return the parsed cdata field
+		Document cdata = getCData(returnNode);
+		
+		if (cdata == null) {
+			LOGGER.error("GetList: no cdata was found in the soap response");
+			return null;
+		}
+		
+		return getList(cdata);
+	}
+	
+	public IDcfCataloguesList<T> getList(Document cdata) {
+		GetCataloguesListParser<T> parser = new GetCataloguesListParser<>(output);
+		return parser.parse(cdata);
+	}
+	
+	public static void main(String[] args) throws DetailedSOAPException {
+		IDcfCataloguesList<IDcfCatalogue> output = new DcfCataloguesList();
+		GetCataloguesListOpenAPI<IDcfCatalogue> request = new GetCataloguesListOpenAPI<>(Environment.PRODUCTION, output);
+		
+		request.getList();
+		
+		System.out.println(output);
+	}
 }
