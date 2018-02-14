@@ -34,8 +34,8 @@ public class DcfUser implements IDcfUser {
 
 		// try a ping request to check credentials
 		try {
-			Ping request = new Ping(this, env);
-			logged = request.ping();
+			Ping request = new Ping();
+			logged = request.ping(env, this);
 		} catch (DetailedSOAPException e) {
 			e.printStackTrace();
 			

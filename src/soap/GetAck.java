@@ -38,26 +38,21 @@ public class GetAck extends SOAPRequest {
 	
 	private String messageId;
 	private SOAPMessage response;
-	
-	/**
-	 * Get an ack for the chosen message
-	 * @param messageId
-	 */
-	public GetAck(IDcfUser user, Environment env, String messageId) {
-		super(user, env, NAMESPACE);
-		this.messageId = messageId;
-	}
+
 	
 	/**
 	 * Get the ack of the message
 	 * @return
 	 * @throws SOAPException
 	 */
-	public DcfAck getAck() throws DetailedSOAPException {
+	public DcfAck getAck(Environment env, IDcfUser user, String messageId) throws DetailedSOAPException {
 		
-		SOAPConsole.log("GetAck: messageId=" + messageId, getUser());
+		this.messageId = messageId;
+		
+		SOAPConsole.log("GetAck: messageId=" + messageId, user);
 
-		Object response = makeRequest(getEnvironment() == Environment.PRODUCTION ? URL : TEST_URL);
+		String url = env == Environment.PRODUCTION ? URL : TEST_URL;
+		Object response = makeRequest(env, user, NAMESPACE, url);
 		
 		SOAPConsole.log("GetAck:", response);
 		
@@ -102,10 +97,10 @@ public class GetAck extends SOAPRequest {
 	}
 	
 	@Override
-	public SOAPMessage createRequest(SOAPConnection con) throws SOAPException {
+	public SOAPMessage createRequest(IDcfUser user, String namespace, SOAPConnection con) throws SOAPException {
 		
 		// create the standard structure and get the message
-		SOAPMessage request = createTemplateSOAPMessage("dcf");
+		SOAPMessage request = createTemplateSOAPMessage(user, namespace, "dcf");
 
 		SOAPBody soapBody = request.getSOAPPart().getEnvelope().getBody();
 		

@@ -44,9 +44,9 @@ public class DcfLogDownloader implements IDcfLogDownloader {
 	public File getLog(IDcfUser user, Environment env, String logCode) throws SOAPException {
 		
 		if (exportCatFile == null)
-			exportCatFile = new ExportCatalogueFile(user, env);
+			exportCatFile = new ExportCatalogueFile();
 		
-		File log = exportCatFile.exportLog(logCode);
+		File log = exportCatFile.exportLog(env, user, logCode);
 		
 		if (log != null)
 			LOGGER.info("Log successfully downloaded, file=" + log);

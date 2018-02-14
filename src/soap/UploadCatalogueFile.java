@@ -39,26 +39,17 @@ public class UploadCatalogueFile extends SOAPRequest implements IUploadCatalogue
 	private String attachment;
 	
 	/**
-	 * Upload data to DCF
-	 * @param user
-	 * @param file
-	 */
-	public UploadCatalogueFile(IDcfUser user, Environment env) {
-		super(user, env, NAMESPACE);
-	}
-	
-	/**
 	 * Upload a file to DCF
 	 * @return the code of the log which tracks the request
 	 * @throws SOAPException 
 	 * @throws IOException 
 	 */
-	public String send(File file) throws DetailedSOAPException, IOException {
+	public String send(Environment env, IDcfUser user, File file) throws DetailedSOAPException, IOException {
 		
 		// read the file into a string
 		String data = new String(Files.readAllBytes(Paths.get(file.getAbsolutePath())));
 
-		return this.send(data);
+		return this.send(env, user, data);
 	}
 	
 	/**
@@ -67,14 +58,16 @@ public class UploadCatalogueFile extends SOAPRequest implements IUploadCatalogue
 	 * @return
 	 * @throws DetailedSOAPException
 	 */
-	public String send(String attachment) throws DetailedSOAPException {
+	public String send(Environment env, IDcfUser user, String attachment) throws DetailedSOAPException {
 		
-		SOAPConsole.log("UploadCatalogueFile: attachment=" + attachment, getUser());
+		SOAPConsole.log("UploadCatalogueFile: attachment=" + attachment, user);
 		
 		this.attachment = attachment;
 		
+		String url = env == Environment.PRODUCTION ? URL : TEST_URL;
+		
 		// return the log code got from dcf
-		Object response = makeRequest(getEnvironment() == Environment.PRODUCTION ? URL : TEST_URL);
+		Object response = makeRequest(env, user, NAMESPACE, url);
 		
 		SOAPConsole.log("UploadCatalogueFile:", response);
 		
@@ -88,10 +81,10 @@ public class UploadCatalogueFile extends SOAPRequest implements IUploadCatalogue
 	 * Create the reserve request message
 	 */
 	@Override
-	public SOAPMessage createRequest(SOAPConnection con) throws SOAPException {
+	public SOAPMessage createRequest(IDcfUser user, String namespace, SOAPConnection con) throws SOAPException {
 
 		// create the standard structure and get the message
-		SOAPMessage soapMsg = createTemplateSOAPMessage ("ws");
+		SOAPMessage soapMsg = createTemplateSOAPMessage(user, namespace, "ws");
 		
 		// get the body of the message
 		SOAPBody soapBody = soapMsg.getSOAPPart().getEnvelope().getBody();

@@ -168,8 +168,8 @@ public class UploadCatalogueFileImpl implements IUploadCatalogueFileImpl {
 	public IPendingRequest uploadCatalogueFile(IDcfUser user, Environment env, 
 			String attachment, String uploadCatalogueFileType, Map<String, String> requestData) throws DetailedSOAPException {
 		
-		UploadCatalogueFile ucf = new UploadCatalogueFile(user, env);
-		String logCode = ucf.send(attachment);
+		UploadCatalogueFile ucf = new UploadCatalogueFile();
+		String logCode = ucf.send(env, user, attachment);
 		PendingRequest pr = new PendingRequest(uploadCatalogueFileType, user, logCode, env);
 		pr.setData(requestData);
 		return pr;

@@ -27,16 +27,15 @@ public class GetDataCollectionsList<T extends IDcfDataCollection> extends GetLis
 
 	private IDcfDataCollectionsList<T> output;
 	
-	public GetDataCollectionsList(IDcfUser user, Environment env, IDcfDataCollectionsList<T> output) {
-		super(user, env, URL, TEST_URL, NAMESPACE);
-		this.output = output;
+	public GetDataCollectionsList() {
+		super(URL, TEST_URL, NAMESPACE);
 	}
 
-	@Override
-	public IDcfList<T> getList() throws DetailedSOAPException {
-		SOAPConsole.log("GetDataCollectionsList", getUser());
+	public IDcfList<T> getList(Environment env, IDcfUser user, IDcfDataCollectionsList<T> output) throws DetailedSOAPException {
+		SOAPConsole.log("GetDataCollectionsList", user);
 		
-		IDcfList<T> response = super.getList();
+		this.output = output;
+		IDcfList<T> response = super.getList(env, user);
 		
 		SOAPConsole.log("GetDataCollectionsList:", response);
 		
@@ -51,10 +50,10 @@ public class GetDataCollectionsList<T extends IDcfDataCollection> extends GetLis
 	}
 
 	@Override
-	public SOAPMessage createRequest(SOAPConnection con) throws SOAPException {
+	public SOAPMessage createRequest(IDcfUser user, String namespace, SOAPConnection con) throws SOAPException {
 
 		// create the standard structure and get the message
-		SOAPMessage soapMsg = createTemplateSOAPMessage("dcf");
+		SOAPMessage soapMsg = createTemplateSOAPMessage(user, namespace, "dcf");
 
 		// get the body of the message
 		SOAPBody soapBody = soapMsg.getSOAPPart().getEnvelope().getBody();

@@ -60,26 +60,7 @@ import zip_manager.ZipManager;
 public abstract class SOAPRequest {
 
 	private static final Logger LOGGER = LogManager.getLogger(SOAPRequest.class);
-	
-	private IDcfUser user;
-	private String namespace;
 	private SOAPError error;  // error, if occurred
-	private Environment env;
-
-	/**
-	 * Set the url where we make the request and the namespace of the request
-	 * @param url
-	 * @param namespace
-	 */
-	public SOAPRequest(IDcfUser user, Environment env, String namespace) {
-		this.user = user;
-		this.env = env;
-		this.namespace = namespace;
-	}
-	
-	public Environment getEnvironment() {
-		return env;
-	}
 	
 	/**
 	 * Use the proxy if present
@@ -189,7 +170,7 @@ public abstract class SOAPRequest {
 	 * @return
 	 * @throws DetailedSOAPException
 	 */
-	public Object makeRequest(String url) throws DetailedSOAPException {
+	public Object makeRequest(Environment env, IDcfUser user, String namespace, String url) throws DetailedSOAPException {
 		
 		final boolean isHttps = url.toLowerCase().startsWith("https");
 		
@@ -212,7 +193,7 @@ public abstract class SOAPRequest {
 			SOAPConnection soapConnection = connectionFactory.createConnection();
 	
 			// create the request message
-			SOAPMessage request = createRequest(soapConnection);
+			SOAPMessage request = createRequest(user, namespace, soapConnection);
 	
 			SOAPMessage response;
 			try {
@@ -265,7 +246,8 @@ public abstract class SOAPRequest {
 	 * @return
 	 * @throws SOAPException
 	 */
-	public SOAPMessage createTemplateSOAPMessage(String prefix) throws SOAPException {
+	public SOAPMessage createTemplateSOAPMessage(IDcfUser user, 
+			String namespace, String prefix) throws SOAPException {
 		
 		// create the soap message
 		MessageFactory msgFactory = MessageFactory.newInstance();
@@ -621,16 +603,12 @@ public abstract class SOAPRequest {
 		return stream;
 	}
 	
-	public IDcfUser getUser() {
-		return user;
-	}
-	
 	/**
 	 * Create the request message which will be sent to the web service
 	 * @param con
 	 * @return
 	 */
-	public abstract SOAPMessage createRequest(SOAPConnection con) throws SOAPException;
+	public abstract SOAPMessage createRequest(IDcfUser user, String namespace, SOAPConnection con) throws SOAPException;
 
 	/**
 	 * Process the web service response and return something if needed

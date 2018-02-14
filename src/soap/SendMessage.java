@@ -33,30 +33,23 @@ public class SendMessage extends SOAPRequest {
 	private String message;
 	
 	/**
-	 * Send the {@code file} to the dcf
-	 * as message.
-	 * @param file
-	 */
-	public SendMessage(IDcfUser user, Environment env) {
-		super(user, env, NAMESPACE);
-	}
-	
-	/**
 	 * Send a dataset to the dcf
 	 * @param filename
 	 * @throws IOException 
 	 */
-	public MessageResponse send(File file) throws DetailedSOAPException, IOException {
+	public MessageResponse send(Environment env, IDcfUser user, File file) throws DetailedSOAPException, IOException {
 		
-		SOAPConsole.log("SendMessage: file=" + file, getUser());
+		SOAPConsole.log("SendMessage: file=" + file, user);
 
 		if (!file.exists())
 			throw new IOException("The file=" + file + " does not exist");
 		
 		this.messageName = file.getName();
 		this.message = prepareMessage(file);
+		
+		String url = env == Environment.PRODUCTION ? URL : TEST_URL;
 	
-		Object response = makeRequest(getEnvironment() == Environment.PRODUCTION ? URL : TEST_URL);
+		Object response = makeRequest(env, user, NAMESPACE, url);
 		
 		SOAPConsole.log("SendMessage:", response);
 		
@@ -84,10 +77,10 @@ public class SendMessage extends SOAPRequest {
 	}
 
 	@Override
-	public SOAPMessage createRequest(SOAPConnection con) throws SOAPException {
+	public SOAPMessage createRequest(IDcfUser user, String namespace, SOAPConnection con) throws SOAPException {
 		
 		// create the standard structure and get the message
-		SOAPMessage request = createTemplateSOAPMessage("dcf");
+		SOAPMessage request = createTemplateSOAPMessage(user, namespace, "dcf");
 
 		SOAPBody soapBody = request.getSOAPPart().getEnvelope().getBody();
 		

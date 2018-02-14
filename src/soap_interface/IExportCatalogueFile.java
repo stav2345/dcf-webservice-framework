@@ -4,7 +4,9 @@ import java.io.File;
 
 import javax.xml.soap.SOAPException;
 
+import config.Environment;
 import soap.DetailedSOAPException;
+import user.IDcfUser;
 
 public interface IExportCatalogueFile {
 
@@ -15,7 +17,7 @@ public interface IExportCatalogueFile {
 	 * null if not found.
 	 * @throws SOAPException
 	 */
-	public File exportCatalogue(String catalogueCode) throws DetailedSOAPException;
+	public File exportCatalogue(Environment env, IDcfUser user, String catalogueCode) throws DetailedSOAPException;
 	
 	/**
 	 * Download a log file related to an upload catalogue file operation.
@@ -24,7 +26,7 @@ public interface IExportCatalogueFile {
 	 * if not found.
 	 * @throws SOAPException 
 	 */
-	public File exportLog(String code) throws DetailedSOAPException;
+	public File exportLog(Environment env, IDcfUser user, String code) throws DetailedSOAPException;
 	
 	
 	/**
@@ -34,5 +36,5 @@ public interface IExportCatalogueFile {
 	 * null if not found
 	 * @throws SOAPException
 	 */
-	public File exportLastInternalVersion(String catalogueCode) throws SOAPException;
+	public File exportLastInternalVersion(Environment env, IDcfUser user, String catalogueCode) throws SOAPException;
 }

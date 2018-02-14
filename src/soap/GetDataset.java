@@ -25,24 +25,18 @@ public class GetDataset extends SOAPRequest {
 	private String datasetId;
 	
 	/**
-	 * Make a get file request for a specific dataset
-	 * @param datasetId
-	 */
-	public GetDataset(IDcfUser user, Environment env, String datasetId) {
-		super(user, env, NAMESPACE);
-		this.datasetId = datasetId;
-	}
-	
-	/**
 	 * Get an handle to the downloaded dataset
 	 * @return
 	 * @throws SOAPException
 	 */
-	public File getDatasetFile() throws DetailedSOAPException {
+	public File getDatasetFile(Environment env, IDcfUser user, String datasetId) throws DetailedSOAPException {
 		
-		SOAPConsole.log("GetDataset: datasetId=" + datasetId, getUser());
+		this.datasetId = datasetId;
+		
+		SOAPConsole.log("GetDataset: datasetId=" + datasetId, user);
 
-		Object response = makeRequest(getEnvironment() == Environment.PRODUCTION ? URL : TEST_URL);
+		String url = env == Environment.PRODUCTION ? URL : TEST_URL;
+		Object response = makeRequest(env, user, NAMESPACE, url);
 		
 		SOAPConsole.log("GetDataset:", response);
 		
@@ -61,10 +55,10 @@ public class GetDataset extends SOAPRequest {
 	}
 	
 	@Override
-	public SOAPMessage createRequest(SOAPConnection con) throws SOAPException {
+	public SOAPMessage createRequest(IDcfUser user, String namespace, SOAPConnection con) throws SOAPException {
 
 		// create the standard structure and get the message
-		SOAPMessage soapMsg = createTemplateSOAPMessage ("dcf");
+		SOAPMessage soapMsg = createTemplateSOAPMessage(user, namespace, "dcf");
 		SOAPBody soapBody = soapMsg.getSOAPPart().getEnvelope().getBody();
 		SOAPElement soapElem = soapBody.addChildElement("getDataset", "dcf");
 

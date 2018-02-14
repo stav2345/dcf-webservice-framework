@@ -31,16 +31,17 @@ public class GetResourcesList<T extends IDcfResourceReference> extends GetList<T
 	
 	private IDcfResourcesList<T> output;
 	
-	public GetResourcesList(IDcfUser user, Environment env, String dataCollectionCode, IDcfResourcesList<T> output) {
-		super(user, env, URL, TEST_URL, NAMESPACE);
-		this.dataCollectionCode = dataCollectionCode;
-		this.output = output;
+	public GetResourcesList() {
+		super(URL, TEST_URL, NAMESPACE);
 	}
 	
-	@Override
-	public IDcfList<T> getList() throws DetailedSOAPException {
-		SOAPConsole.log("GetResourcesList: dcCode=" + dataCollectionCode, getUser());
-		IDcfList<T> response = super.getList();
+	public IDcfList<T> getList(Environment env, IDcfUser user, String dataCollectionCode, IDcfResourcesList<T> output) throws DetailedSOAPException {
+		
+		this.dataCollectionCode = dataCollectionCode;
+		this.output = output;
+		
+		SOAPConsole.log("GetResourcesList: dcCode=" + dataCollectionCode, user);
+		IDcfList<T> response = super.getList(env, user);
 		
 		SOAPConsole.log("GetResourcesList:", response);
 		
@@ -54,10 +55,10 @@ public class GetResourcesList<T extends IDcfResourceReference> extends GetList<T
 	}
 
 	@Override
-	public SOAPMessage createRequest(SOAPConnection con) throws SOAPException {
+	public SOAPMessage createRequest(IDcfUser user, String namespace, SOAPConnection con) throws SOAPException {
 		
 		// create the standard structure and get the message
-		SOAPMessage request = createTemplateSOAPMessage("dcf");
+		SOAPMessage request = createTemplateSOAPMessage(user, namespace, "dcf");
 
 		SOAPBody soapBody = request.getSOAPPart().getEnvelope().getBody();
 		

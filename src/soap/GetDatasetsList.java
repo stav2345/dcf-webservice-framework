@@ -10,6 +10,7 @@ import config.Environment;
 import dataset.IDcfDataset;
 import dataset.IDcfDatasetsList;
 import response_parser.GetDatasetsListParser;
+import soap_interface.IGetDatasetsList;
 import user.IDcfUser;
 
 /**
@@ -19,7 +20,7 @@ import user.IDcfUser;
  * @author avonva
  *
  */
-public class GetDatasetsList<T extends IDcfDataset> extends SOAPRequest {
+public class GetDatasetsList<T extends IDcfDataset> extends SOAPRequest implements IGetDatasetsList<T> {
 
 	// web service link of the getDatasetList service
 	private static final String URL = "https://dcf-elect.efsa.europa.eu/elect2/";
@@ -30,28 +31,23 @@ public class GetDatasetsList<T extends IDcfDataset> extends SOAPRequest {
 	private IDcfDatasetsList<T> output;
 	
 	/**
-	 * Initialize the get dataset list request with the data collection
-	 * that is required.
-	 * @param dataCollectionCode
-	 */
-	public GetDatasetsList(IDcfUser user, Environment env, String dataCollectionCode, IDcfDatasetsList<T> output) {
-		super(user, env, LIST_NAMESPACE);
-		this.dataCollectionCode = dataCollectionCode;
-		this.output = output;
-	}
-	
-	/**
 	 * Send the request and get the dataset list
 	 * @throws SOAPException
 	 */
 	@SuppressWarnings("unchecked")
-	public IDcfDatasetsList<T> getList() throws DetailedSOAPException {
+	public IDcfDatasetsList<T> getList(Environment env, IDcfUser user, 
+			String dataCollectionCode, IDcfDatasetsList<T> output) throws DetailedSOAPException {
 		
-		SOAPConsole.log("GetDatasetsList: dcCode=" + dataCollectionCode, getUser());
+		SOAPConsole.log("GetDatasetsList: dcCode=" + dataCollectionCode, user);
+		
+		this.dataCollectionCode = dataCollectionCode;
+		this.output = output;
 		
 		IDcfDatasetsList<T> datasets = null;
 
-		Object response = makeRequest(getEnvironment() == Environment.PRODUCTION ? URL : TEST_URL);
+		String url = env == Environment.PRODUCTION ? URL : TEST_URL;
+		
+		Object response = makeRequest(env, user, LIST_NAMESPACE, url);
 		
 		SOAPConsole.log("GetDatasetsList:", response);
 		
@@ -64,10 +60,10 @@ public class GetDatasetsList<T extends IDcfDataset> extends SOAPRequest {
 	}
 
 	@Override
-	public SOAPMessage createRequest(SOAPConnection con) throws SOAPException {
+	public SOAPMessage createRequest(IDcfUser user, String namespace, SOAPConnection con) throws SOAPException {
 		
 		// create the standard structure and get the message
-		SOAPMessage request = createTemplateSOAPMessage("dcf");
+		SOAPMessage request = createTemplateSOAPMessage(user, namespace, "dcf");
 
 		SOAPBody soapBody = request.getSOAPPart().getEnvelope().getBody();
 		

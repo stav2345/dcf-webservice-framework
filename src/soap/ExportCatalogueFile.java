@@ -36,19 +36,12 @@ public class ExportCatalogueFile extends SOAPRequest implements IExportCatalogue
 	private String exportType;
 	private String fileType;
 	
-	/**
-	 * Initialize the export file action
-	 */
-	public ExportCatalogueFile(IDcfUser user, Environment env) {
-		super(user, env, NAMESPACE);
-	}
 	
-	public File exportCatalogue(String catalogueCode) throws DetailedSOAPException {
+	public File exportCatalogue(Environment env, IDcfUser user, String catalogueCode) throws DetailedSOAPException {
 		
-		SOAPConsole.log("ExportCatalogueFile: export last published version of catalogue=" + catalogueCode, getUser());
+		SOAPConsole.log("ExportCatalogueFile: export last published version of catalogue=" + catalogueCode, user);
 		
-		Object log = exportXml(catalogueCode, EXPORT_TYPE_CATALOGUE, 
-				XML_FILE_TYPE);
+		Object log = exportXml(env, user, catalogueCode, EXPORT_TYPE_CATALOGUE, XML_FILE_TYPE);
 		
 		if (log != null)
 			return (File) log;
@@ -63,13 +56,11 @@ public class ExportCatalogueFile extends SOAPRequest implements IExportCatalogue
 	 * @return a File object which points to the log file
 	 * @throws SOAPException 
 	 */
-	public File exportLog(String code) 
-			throws DetailedSOAPException {
+	public File exportLog(Environment env, IDcfUser user, String code) throws DetailedSOAPException {
 		
-		SOAPConsole.log("ExportCatalogueFile: export log=" + code, getUser());
+		SOAPConsole.log("ExportCatalogueFile: export log=" + code, user);
 		
-		Object log = exportXml(code, EXPORT_TYPE_LOG, 
-				XML_FILE_TYPE);
+		Object log = exportXml(env, user, code, EXPORT_TYPE_LOG, XML_FILE_TYPE);
 		
 		if (log != null)
 			return (File) log;
@@ -84,13 +75,13 @@ public class ExportCatalogueFile extends SOAPRequest implements IExportCatalogue
 	 * @return a File object which points to the downloaded catalogue .xml file
 	 * @throws SOAPException
 	 */
-	public File exportLastInternalVersion(String catalogueCode) 
+	public File exportLastInternalVersion(Environment env, IDcfUser user, String catalogueCode) 
 			throws SOAPException {
 		
 		SOAPConsole.log("ExportCatalogueFile: export last internal version of catalogue=" 
-				+ catalogueCode, getUser());
+				+ catalogueCode, user);
 		
-		Object lastVersion = exportXml(catalogueCode, 
+		Object lastVersion = exportXml(env, user, catalogueCode, 
 				EXPORT_TYPE_INTERNAL_VERSION, 
 				XML_FILE_TYPE);
 		
@@ -110,14 +101,14 @@ public class ExportCatalogueFile extends SOAPRequest implements IExportCatalogue
 	 * @return an object containing the xml structure
 	 * @throws SOAPException 
 	 */
-	public Object exportXml(String code, String exportType, 
+	public Object exportXml(Environment env, IDcfUser user, String code, String exportType, 
 			String fileType) throws DetailedSOAPException {
 		
 		this.catalogueCode = code;
 		this.exportType = exportType;
 		this.fileType = fileType;
 		
-		Object result = export();
+		Object result = export(env, user);
 
 		return result;
 	}
@@ -127,15 +118,18 @@ public class ExportCatalogueFile extends SOAPRequest implements IExportCatalogue
 	 * @return
 	 * @throws SOAPException 
 	 */
-	private Object export() throws DetailedSOAPException {
-		return makeRequest(getEnvironment() == Environment.PRODUCTION ? URL : TEST_URL);
+	private Object export(Environment env, IDcfUser user) throws DetailedSOAPException {
+		
+		String url = env == Environment.PRODUCTION ? URL : TEST_URL;
+		
+		return makeRequest(env, user, NAMESPACE, url);
 	}
 
 	@Override
-	public SOAPMessage createRequest(SOAPConnection con) throws SOAPException {
+	public SOAPMessage createRequest(IDcfUser user, String namespace, SOAPConnection con) throws SOAPException {
 
 		// create the standard structure and get the message
-		SOAPMessage request = createTemplateSOAPMessage("ws");
+		SOAPMessage request = createTemplateSOAPMessage(user, namespace, "ws");
 
 		// get the body of the message
 		SOAPBody soapBody = request.getSOAPPart().getEnvelope().getBody();
