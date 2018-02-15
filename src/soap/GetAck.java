@@ -21,6 +21,7 @@ import ack.DcfAck;
 import ack.DcfAckLog;
 import ack.FileState;
 import config.Environment;
+import soap_interface.IGetAck;
 import user.IDcfUser;
 
 /**
@@ -28,7 +29,7 @@ import user.IDcfUser;
  * @author avonva
  *
  */
-public class GetAck extends SOAPRequest {
+public class GetAck extends SOAPRequest implements IGetAck {
 
 	private static final Logger LOGGER = LogManager.getLogger(GetAck.class);
 	

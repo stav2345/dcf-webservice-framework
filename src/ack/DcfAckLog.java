@@ -16,7 +16,7 @@ import soap.GetAck;
  * @author avonva
  *
  */
-public class DcfAckLog {
+public class DcfAckLog implements IDcfAckLog {
 
 	private InputStream rawLog;
 	private Document log;

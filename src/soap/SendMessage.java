@@ -16,6 +16,7 @@ import javax.xml.soap.SOAPMessage;
 import config.Environment;
 import message.MessageResponse;
 import response_parser.SendMessageParser;
+import soap_interface.ISendMessage;
 import user.IDcfUser;
 
 /**
@@ -23,7 +24,7 @@ import user.IDcfUser;
  * @author avonva
  *
  */
-public class SendMessage extends SOAPRequest {
+public class SendMessage extends SOAPRequest implements ISendMessage {
 
 	private static final String URL = "https://dcf-elect.efsa.europa.eu/elect2/";
 	private static final String TEST_URL = "https://dcf-01.efsa.test/dcf-dp-ws/elect2/?wsdl";

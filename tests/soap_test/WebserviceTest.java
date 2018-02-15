@@ -85,8 +85,8 @@ public class WebserviceTest {
 
 		DcfUser user = new DcfUser();
 		user.login("wrong-username", "wrong-pwd");
-		Ping ping = new Ping(user, env);
-		ping.ping();
+		Ping ping = new Ping();
+		ping.ping(env, user);
 	}
 	
 	@Category(PingTests.class)
@@ -95,8 +95,8 @@ public class WebserviceTest {
 
 		DcfUser user = new DcfUser();
 		user.login("wrong-username", "Ab123456");
-		Ping ping = new Ping(user, env);
-		ping.ping();
+		Ping ping = new Ping();
+		ping.ping(env, user);
 	}
 	
 	/* careful use, it might block dcf account
@@ -113,8 +113,8 @@ public class WebserviceTest {
 	@Category(PingTests.class)
 	@Test
 	public void ping() throws DetailedSOAPException {
-		Ping ping = new Ping(user, env);
-		boolean ok = ping.ping();
+		Ping ping = new Ping();
+		boolean ok = ping.ping(env, user);
 		assertEquals(ok, true);
 	}
 	
@@ -139,22 +139,22 @@ public class WebserviceTest {
 	@Category(SendMessageTests.class)
 	@Test(expected = IOException.class)
 	public void sendNotExistingMessage() throws DetailedSOAPException, IOException {
-		SendMessage request = new SendMessage(user, env);
-		request.send(new File("not-existing-file.xml"));
+		SendMessage request = new SendMessage();
+		request.send(env, user, new File("not-existing-file.xml"));
 	}
 	
 	@Category(SendMessageTests.class)
 	@Test
 	public void sendExistingMessage() throws DetailedSOAPException, IOException {
-		SendMessage request = new SendMessage(user, env);
+		SendMessage request = new SendMessage();
 		File file = new File("test-files" + System.getProperty("file.separator") + "submit.xml");
-		request.send(file);
+		request.send(env, user, file);
 	}
 
 	@Category(GetAckTests.class)
 	public void getNotExistingAck() throws DetailedSOAPException {
-		GetAck request = new GetAck(user, env, "1920392302");
-		DcfAck ack = request.getAck();
+		GetAck request = new GetAck();
+		DcfAck ack = request.getAck(env, user, "1920392302");
 		assertEquals(ack, null);
 	}
 	
@@ -162,8 +162,8 @@ public class WebserviceTest {
 	@Test
 	public void getExistingAck() throws DetailedSOAPException {
 
-		GetAck request = new GetAck(user, env, "12632");
-		DcfAck ack = request.getAck();
+		GetAck request = new GetAck();
+		DcfAck ack = request.getAck(env, user, "12632");
 
 		assertNotNull(ack);
 		assertEquals(ack.isReady(), true);
@@ -177,8 +177,8 @@ public class WebserviceTest {
 		
 		DcfCataloguesList output = new DcfCataloguesList();
 		
-		GetCataloguesList<IDcfCatalogue> request = new GetCataloguesList<>(user, env, output);
-		request.getList();
+		GetCataloguesList<IDcfCatalogue> request = new GetCataloguesList<>();
+		request.getList(env, user, output);
 		
 		assertNotNull(output);
 		assertEquals(output.isEmpty(), false);
@@ -189,8 +189,8 @@ public class WebserviceTest {
 	public void getDCList() throws DetailedSOAPException {
 		
 		DcfDataCollectionsList output = new DcfDataCollectionsList();
-		GetDataCollectionsList<IDcfDataCollection> request = new GetDataCollectionsList<>(user, env, output);
-		request.getList();
+		GetDataCollectionsList<IDcfDataCollection> request = new GetDataCollectionsList<>();
+		request.getList(env, user, output);
 		
 		assertNotNull(output);
 	}
@@ -199,8 +199,8 @@ public class WebserviceTest {
 	public void getNotExistingDCDatasetList() throws DetailedSOAPException {
 		
 		DcfDatasetsList output = new DcfDatasetsList();
-		GetDatasetsList<IDcfDataset> request = new GetDatasetsList<>(user, env, "not-existing-code", output);
-		request.getList();
+		GetDatasetsList<IDcfDataset> request = new GetDatasetsList<>();
+		request.getList(env, user, "not-existing-code", output);
 		
 		assertEquals(output.isEmpty(), true);
 	}
@@ -210,8 +210,8 @@ public class WebserviceTest {
 	public void getTSEDatasetList() throws DetailedSOAPException {
 		
 		DcfDatasetsList output = new DcfDatasetsList();
-		GetDatasetsList<IDcfDataset> request = new GetDatasetsList<>(user, env, "TSE.TEST", output);
-		request.getList();
+		GetDatasetsList<IDcfDataset> request = new GetDatasetsList<>();
+		request.getList(env, user, "TSE.TEST", output);
 
 		assertNotNull(output);
 	}
@@ -220,8 +220,8 @@ public class WebserviceTest {
 	public void getNotExistingDCResourceList() throws DetailedSOAPException {
 
 		DcfResourcesList output = new DcfResourcesList();
-		GetResourcesList<IDcfResourceReference> request = new GetResourcesList<>(user, env, "not-existing-code", output);
-		request.getList();
+		GetResourcesList<IDcfResourceReference> request = new GetResourcesList<>();
+		request.getList(env, user, "not-existing-code", output);
 		
 		assertEquals(output.isEmpty(), true);
 	}
@@ -232,8 +232,8 @@ public class WebserviceTest {
 
 		DcfResourcesList output = new DcfResourcesList();
 		
-		GetResourcesList<IDcfResourceReference> request = new GetResourcesList<>(user, env, "TSE.TEST", output);
-		request.getList();
+		GetResourcesList<IDcfResourceReference> request = new GetResourcesList<>();
+		request.getList(env, user, "TSE.TEST", output);
 
 		assertNotNull(output);
 	}
@@ -241,8 +241,8 @@ public class WebserviceTest {
 	@Category(GetDatasetTests.class)
 	public void getNotExistingDataset() throws DetailedSOAPException {
 		
-		GetDataset request = new GetDataset(user, env, "not-existing-code");
-		File file = request.getDatasetFile();
+		GetDataset request = new GetDataset();
+		File file = request.getDatasetFile(env, user, "not-existing-code");
 		assertNull(file);
 	}
 	
@@ -250,8 +250,8 @@ public class WebserviceTest {
 	@Test
 	public void getExistingDataset() throws DetailedSOAPException {
 		
-		GetDataset request = new GetDataset(user, env, "7216");
-		File file = request.getDatasetFile();
+		GetDataset request = new GetDataset();
+		File file = request.getDatasetFile(env, user, "7216");
 		
 		assertNotNull(file);
 		assertEquals(file.exists(), true);
@@ -260,8 +260,8 @@ public class WebserviceTest {
 	@Category(GetXsdFileTests.class)
 	public void getNotExistingXsdFile() throws SOAPException, SAXException, IOException, ParserConfigurationException {
 		
-		GetXsdFile request = new GetXsdFile(user, env, "not-existing-code");
-		Document document = request.getXsdFile();
+		GetXsdFile request = new GetXsdFile();
+		Document document = request.getXsdFile(env, user, "not-existing-code");
 		
 		assertNull(document);
 	}
@@ -270,16 +270,16 @@ public class WebserviceTest {
 	@Test
 	public void getExistingXsdFile() throws SOAPException, SAXException, IOException, ParserConfigurationException {
 		
-		GetXsdFile request = new GetXsdFile(user, env, "38864");
-		Document file = request.getXsdFile();
+		GetXsdFile request = new GetXsdFile();
+		Document file = request.getXsdFile(env, user, "38864");
 		
 		assertNotNull(file);
 	}
 	
 	@Category(ExportCatalogueFileTests.class)
 	public void exportNotExistingCatalogueLastPublishedVersion() throws SOAPException {
-		ExportCatalogueFile request = new ExportCatalogueFile(user, env);
-		File file = request.exportCatalogue("not-existing-code");
+		ExportCatalogueFile request = new ExportCatalogueFile();
+		File file = request.exportCatalogue(env, user, "not-existing-code");
 		assertEquals(file, null);
 	}
 	
@@ -287,8 +287,8 @@ public class WebserviceTest {
 	@Test
 	public void exportCatalogueLastPublishedVersion() throws SOAPException {
 
-		ExportCatalogueFile request = new ExportCatalogueFile(user, env);
-		File file = request.exportCatalogue("ABUNDANCE");
+		ExportCatalogueFile request = new ExportCatalogueFile();
+		File file = request.exportCatalogue(env, user, "ABUNDANCE");
 		
 		assertNotNull(file);
 		assertEquals(file.exists(), true);
@@ -296,8 +296,8 @@ public class WebserviceTest {
 	
 	@Category(ExportCatalogueFileTests.class)
 	public void exportNotExistingCatalogueLastInternalVersion() throws SOAPException {
-		ExportCatalogueFile request = new ExportCatalogueFile(user, env);
-		File file = request.exportLastInternalVersion("not-existing-code");
+		ExportCatalogueFile request = new ExportCatalogueFile();
+		File file = request.exportLastInternalVersion(env, user, "not-existing-code");
 		assertEquals(file, null);
 	}
 	
@@ -305,8 +305,8 @@ public class WebserviceTest {
 	@Test
 	public void exportCatalogueLastInternalVersion() throws SOAPException {
 
-		ExportCatalogueFile request = new ExportCatalogueFile(user, env);
-		File file = request.exportLastInternalVersion("ACTION");
+		ExportCatalogueFile request = new ExportCatalogueFile();
+		File file = request.exportLastInternalVersion(env, user, "ACTION");
 		
 		assertNotNull(file);
 		assertEquals(file.exists(), true);
@@ -314,16 +314,16 @@ public class WebserviceTest {
 	
 	@Category(ExportCatalogueFileTests.class)
 	public void exportNotExistingLog() throws DetailedSOAPException {
-		ExportCatalogueFile request = new ExportCatalogueFile(user, env);
-		File file = request.exportLog("not-existing-code");
+		ExportCatalogueFile request = new ExportCatalogueFile();
+		File file = request.exportLog(env, user, "not-existing-code");
 		assertEquals(file, null);
 	}
 	
 	@Category(ExportCatalogueFileTests.class)
 	@Test
 	public void exportExistingLog() throws SOAPException {
-		ExportCatalogueFile request = new ExportCatalogueFile(user, env);
-		File file = request.exportLog("20180130_001_WS");
+		ExportCatalogueFile request = new ExportCatalogueFile();
+		File file = request.exportLog(env, user, "20180130_001_WS");
 		assertNotNull(file);
 		assertEquals(file.exists(), true);
 	}
@@ -331,8 +331,8 @@ public class WebserviceTest {
 	@Category(UploadCatalogueFileTests.class)
 	@Test(expected = IOException.class)
 	public void uploadNotExistingCatalogueFile() throws SOAPException, IOException {
-		UploadCatalogueFile request = new UploadCatalogueFile(user, env);
-		request.send(new File("not-existing-file.xml"));
+		UploadCatalogueFile request = new UploadCatalogueFile();
+		request.send(env, user, new File("not-existing-file.xml"));
 	}
 	
 	@Category(UploadCatalogueFileTests.class)
@@ -340,8 +340,8 @@ public class WebserviceTest {
 	public void uploadExistingCatalogueFile() throws SOAPException, IOException {
 		
 		File file = new File("test-files" + System.getProperty("file.separator") + "unreserve.xml");
-		UploadCatalogueFile request = new UploadCatalogueFile(user, env);
-		String logCode = request.send(file);
+		UploadCatalogueFile request = new UploadCatalogueFile();
+		String logCode = request.send(env, user, file);
 		assertNotNull(logCode);
 	}
 	
@@ -486,8 +486,8 @@ public class WebserviceTest {
 	public void getNotExistingDCConfig() throws SOAPException, IOException, XMLStreamException {
 		
 		IDcfDCTableLists<DcfDCTable> output = new DcfDCTablesList();
-		GetDataCollectionTables<DcfDCTable> req = new GetDataCollectionTables<>(user, env, output, "not-existing-code");
-		req.getTables();
+		GetDataCollectionTables<DcfDCTable> req = new GetDataCollectionTables<>();
+		req.getTables(env, user, "not-existing-code", output);
 	}
 	
 	@Category(GetDataCollectionConfigTests.class)
@@ -495,8 +495,8 @@ public class WebserviceTest {
 	public void getExistingDCConfig() throws SOAPException, IOException, XMLStreamException {
 		
 		IDcfDCTableLists<DcfDCTable> output = new DcfDCTablesList();
-		GetDataCollectionTables<DcfDCTable> req = new GetDataCollectionTables<>(user, env, output, "05_220");
-		req.getTables();
+		GetDataCollectionTables<DcfDCTable> req = new GetDataCollectionTables<>();
+		req.getTables(env, user, "05_220", output);
 		
 		assertNotNull(output);
 	}

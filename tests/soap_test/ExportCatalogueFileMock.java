@@ -4,8 +4,10 @@ import java.io.File;
 
 import javax.xml.soap.SOAPException;
 
+import config.Environment;
 import soap.DetailedSOAPException;
 import soap_interface.IExportCatalogueFile;
+import user.IDcfUser;
 
 public class ExportCatalogueFileMock implements IExportCatalogueFile {
 	
@@ -27,7 +29,7 @@ public class ExportCatalogueFileMock implements IExportCatalogueFile {
 		this.waitTime = waitTime;
 	}
 	
-	private File export(String file) throws DetailedSOAPException {
+	private File export(Environment env, IDcfUser user, String file) throws DetailedSOAPException {
 		
 		if (result == MockResult.NULL)
 			return null;
@@ -44,19 +46,17 @@ public class ExportCatalogueFileMock implements IExportCatalogueFile {
 	}
 	
 	@Override
-	public File exportCatalogue(String catalogueCode) throws DetailedSOAPException {
-		return export("lastInternalVersion.xml");
+	public File exportCatalogue(Environment env, IDcfUser user, String catalogueCode) throws DetailedSOAPException {
+		return export(env, user, "lastInternalVersion.xml");
 	}
 
 	@Override
-	public File exportLog(String code) throws DetailedSOAPException {
-		return export("log.xml");
+	public File exportLog(Environment env, IDcfUser user, String code) throws DetailedSOAPException {
+		return export(env, user, "log.xml");
 	}
 
 	@Override
-	public File exportLastInternalVersion(String catalogueCode) throws SOAPException {
-		return export("lastInternalVersion.xml");
-	}
-
-	
+	public File exportLastInternalVersion(Environment env, IDcfUser user, String catalogueCode) throws SOAPException {
+		return export(env, user, "lastInternalVersion.xml");
+	}	
 }

@@ -1,5 +1,7 @@
 package ack;
 
+import soap.GetAck;
+
 /**
  * Acknowledge obtained with {@link GetAck}
  * @author avonva
@@ -8,14 +10,14 @@ package ack;
 public class DcfAck {
 
 	private FileState state;
-	private DcfAckLog log;
+	private IDcfAckLog log;
 	
 	/**
 	 * Create an acknowledgement.
 	 * @param state status of the ack
 	 * @param log log of the ack, if present
 	 */
-	public DcfAck(FileState state, DcfAckLog log) {
+	public DcfAck(FileState state, IDcfAckLog log) {
 		this.state = state;
 		this.log = log;
 	}
@@ -24,7 +26,7 @@ public class DcfAck {
 		return state;
 	}
 	
-	public DcfAckLog getLog() {
+	public IDcfAckLog getLog() {
 		return log;
 	}
 	
