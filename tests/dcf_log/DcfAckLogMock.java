@@ -1,5 +1,8 @@
 package dcf_log;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Collection;
 
@@ -113,7 +116,12 @@ public class DcfAckLogMock implements IDcfAckLog {
 
 	@Override
 	public InputStream getRawLog() {
-		// TODO Auto-generated method stub
-		return null;
+		File file = new File("test-files" + System.getProperty("file.separator") + "ack.xml");
+		try {
+			return new FileInputStream(file);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 }
