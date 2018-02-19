@@ -9,6 +9,7 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
 import config.Environment;
+import soap_interface.IGetDataset;
 import user.IDcfUser;
 
 /**
@@ -16,7 +17,7 @@ import user.IDcfUser;
  * @author avonva
  *
  */
-public class GetDataset extends SOAPRequest {
+public class GetDataset extends SOAPRequest implements IGetDataset {
 
 	private static final String NAMESPACE = "http://dcf-elect.efsa.europa.eu/";
 	private static final String URL = "https://dcf-elect.efsa.europa.eu/elect2";
