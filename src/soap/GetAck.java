@@ -122,11 +122,6 @@ public class GetAck extends SOAPRequest implements IGetAck {
 		// get the state from the response
 		FileState state = extractState(soapResponse);
 		
-		if (state == null) {
-			LOGGER.error("No state found for message: " + messageId);
-			return null;
-		}
-		
 		DcfAckLog log = null;
 		
 		// no attachment in these cases
@@ -134,12 +129,10 @@ public class GetAck extends SOAPRequest implements IGetAck {
 			
 			log = extractAcklog(soapResponse);
 			
-			if (log == null) {
-				LOGGER.error("No log found for message: " + messageId);
-				return null;
-			}
+			if (log == null)
+				LOGGER.warn("Ack ready but no log found for message id: " + messageId);
 		}
-		
+
 		// create the ack object
 		DcfAck ack = new DcfAck(state, log);
 		

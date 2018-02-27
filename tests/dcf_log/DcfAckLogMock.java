@@ -124,4 +124,9 @@ public class DcfAckLogMock implements IDcfAckLog {
 			return null;
 		}
 	}
+
+	@Override
+	public String getMessageValResText() {
+		return "This is the message val res text error";
+	}
 }

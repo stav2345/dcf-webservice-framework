@@ -30,6 +30,12 @@ public interface IDcfAckLog {
 	 * @return
 	 */
 	public MessageValResCode getMessageValResCode();
+
+	/**
+	 * Get the error message for discarded messages
+	 * @return
+	 */
+	public String getMessageValResText();
 	
 	/**
 	 * Get the operation res code

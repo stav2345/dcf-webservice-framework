@@ -117,6 +117,14 @@ public class DcfAckLog implements IDcfAckLog {
 		return error;
 	}
 	
+	public String getMessageValResText() {
+		return getFirstNodeText("messageValResText");
+	}
+	
+	public String getDetailedAckResId() {
+		return getFirstNodeText("detailedAckResId");
+	}
+	
 	/**
 	 * Get the retrieved dataset id
 	 * @return

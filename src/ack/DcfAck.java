@@ -8,7 +8,7 @@ import soap.GetAck;
  *
  */
 public class DcfAck {
-
+	
 	private FileState state;
 	private IDcfAckLog log;
 	
@@ -31,11 +31,11 @@ public class DcfAck {
 	}
 	
 	public boolean isReady() {
-		return state == FileState.READY;
+		return state != null && state == FileState.READY;
 	}
 	
 	@Override
 	public String toString() {
-		return "Ack: state=" + state + "; " + log;
+		return "Ack: state=" + state + "; log=" + log;
 	}
 }
