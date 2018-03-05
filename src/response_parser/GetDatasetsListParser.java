@@ -23,6 +23,9 @@ public class GetDatasetsListParser<T extends IDcfDataset> {
 	private static final String WRAPPER_STATUS_NODE = "datasetStatus";
 	private static final String STATUS_NODE = "status";
 	private static final String STEP_NODE = "step";
+	private static final String LAST_MESSAGE_ID = "lastMessageId";
+	private static final String LAST_MODIFYING_MESSAGE_ID = "lastModifyingMessageId";
+	private static final String LAST_VALIDATION_MESSAGE_ID = "lastValidationMessageId";
 	
 	private IDcfDatasetsList<T> output;
 	
@@ -75,6 +78,15 @@ public class GetDatasetsListParser<T extends IDcfDataset> {
 				break;
 			case SENDER_DATASET_ID_NODE:
 				dataset.setSenderId(value);
+				break;
+			case LAST_MESSAGE_ID:
+				dataset.setLastMessageId(value);
+				break;
+			case LAST_MODIFYING_MESSAGE_ID:
+				dataset.setLastModifyingMessageId(value);
+				break;
+			case LAST_VALIDATION_MESSAGE_ID:
+				dataset.setLastValidationMessageId(value);
 				break;
 			case WRAPPER_STATUS_NODE:
 				dataset.setStatus(getStatus(field));

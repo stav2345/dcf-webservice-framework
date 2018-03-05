@@ -13,6 +13,10 @@ public class DcfDataset implements IDcfDataset {
 	private String id;
 	private String senderId;
 	private DcfDatasetStatus status;
+	
+	private String lastMessageId;
+	private String lastModifyingMessageId;
+	private String lastValidationMessageId;
 
 	public void setId(String id) {
 		this.id = id;
@@ -58,5 +62,35 @@ public class DcfDataset implements IDcfDataset {
 		}
 		
 		return super.equals(arg0);
+	}
+
+	@Override
+	public void setLastMessageId(String msgId) {
+		this.lastMessageId = msgId;
+	}
+
+	@Override
+	public void setLastModifyingMessageId(String msgId) {
+		this.lastModifyingMessageId = msgId;
+	}
+
+	@Override
+	public void setLastValidationMessageId(String msgId) {
+		this.lastValidationMessageId = msgId;
+	}
+
+	@Override
+	public String getLastMessageId() {
+		return this.lastMessageId;
+	}
+
+	@Override
+	public String getLastModifyingMessageId() {
+		return this.lastModifyingMessageId;
+	}
+
+	@Override
+	public String getLastValidationMessageId() {
+		return this.lastValidationMessageId;
 	}
 }

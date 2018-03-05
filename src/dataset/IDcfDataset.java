@@ -21,6 +21,26 @@ public interface IDcfDataset {
 	public void setStatus(DcfDatasetStatus status);
 	
 	/**
+	 * Set the last message id involved for this dataset
+	 * @param msgId
+	 */
+	public void setLastMessageId(String msgId);
+	
+	/**
+	 * Set the last message id which modified the content
+	 * of the dataset
+	 * @param msgId
+	 */
+	public void setLastModifyingMessageId(String msgId);
+	
+	/**
+	 * Set the last message id which validated the content
+	 * of the dataset
+	 * @param msgId
+	 */
+	public void setLastValidationMessageId(String msgId);
+	
+	/**
 	 * Get the dataset id
 	 * @return
 	 */
@@ -38,4 +58,21 @@ public interface IDcfDataset {
 	 * @return
 	 */
 	public DcfDatasetStatus getStatus();
+	
+	/**
+	 * Get the last message id involved for this dataset
+	 */
+	public String getLastMessageId();
+	
+	/**
+	 * Get the last message id which modified the content
+	 * of the dataset
+	 */
+	public String getLastModifyingMessageId();
+	
+	/**
+	 * Get the last message id which validated the content
+	 * of the dataset
+	 */
+	public String getLastValidationMessageId();
 }
