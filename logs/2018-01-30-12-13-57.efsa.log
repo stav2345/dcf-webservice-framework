@@ -1,0 +1,90 @@
+2018-01-30 12:12:50,634 INFO s.SOAPConsole [main] WebServiceRequest#SendMessage: file=not-existing-file.xml required from user=avonva in test environment
+2018-01-30 12:12:50,648 INFO s.SOAPConsole [main] WebServiceRequest#GetCataloguesList required from user=avonva in test environment
+2018-01-30 12:12:54,572 INFO s.SOAPConsole [main] WebServiceResponse#GetCataloguesList: response received
+2018-01-30 12:12:54,585 INFO s.SOAPConsole [main] WebServiceRequest#GetFile: resourceId=05_220 required from user=avonva in test environment
+2018-01-30 12:12:55,594 INFO s.SOAPConsole [main] WebServiceResponse#GetFile: response received
+2018-01-30 12:12:55,602 INFO s.SOAPConsole [main] WebServiceRequest#GetFile: resourceId=38864 required from user=avonva in test environment
+2018-01-30 12:12:56,605 INFO s.SOAPConsole [main] WebServiceResponse#GetFile: response received
+2018-01-30 12:12:56,623 INFO s.SOAPConsole [main] WebServiceRequest#ExportCatalogueFile: export last internal version of catalogue=ACTION required from user=avonva in test environment
+2018-01-30 12:13:04,031 INFO d.LogDownloader [main] Getting log=20180103_001_WS, attempt n°=1/10
+2018-01-30 12:13:04,034 INFO s.SOAPConsole [main] WebServiceRequest#ExportCatalogueFile: export log=20180103_001_WS required from user=avonva in test environment
+2018-01-30 12:13:04,868 ERROR s.SOAPRequest [main] SOAPRequest#writeXmlIntoFile: No attachment found!
+2018-01-30 12:13:04,868 INFO d.LogDownloader [main] Log=20180103_001_WS not available yet in DCF
+2018-01-30 12:13:04,868 INFO d.LogDownloader [main] Waiting 2.0 seconds and then retry to download log=20180103_001_WS
+2018-01-30 12:13:06,869 INFO d.LogDownloader [main] Getting log=20180103_001_WS, attempt n°=2/10
+2018-01-30 12:13:06,871 INFO s.SOAPConsole [main] WebServiceRequest#ExportCatalogueFile: export log=20180103_001_WS required from user=avonva in test environment
+2018-01-30 12:13:07,896 ERROR s.SOAPRequest [main] SOAPRequest#writeXmlIntoFile: No attachment found!
+2018-01-30 12:13:07,897 INFO d.LogDownloader [main] Log=20180103_001_WS not available yet in DCF
+2018-01-30 12:13:07,897 INFO d.LogDownloader [main] Waiting 2.0 seconds and then retry to download log=20180103_001_WS
+2018-01-30 12:13:09,898 INFO d.LogDownloader [main] Getting log=20180103_001_WS, attempt n°=3/10
+2018-01-30 12:13:09,905 INFO s.SOAPConsole [main] WebServiceRequest#ExportCatalogueFile: export log=20180103_001_WS required from user=avonva in test environment
+2018-01-30 12:13:10,893 ERROR s.SOAPRequest [main] SOAPRequest#writeXmlIntoFile: No attachment found!
+2018-01-30 12:13:10,893 INFO d.LogDownloader [main] Log=20180103_001_WS not available yet in DCF
+2018-01-30 12:13:10,894 INFO d.LogDownloader [main] Waiting 2.0 seconds and then retry to download log=20180103_001_WS
+2018-01-30 12:13:12,894 INFO d.LogDownloader [main] Getting log=20180103_001_WS, attempt n°=4/10
+2018-01-30 12:13:12,899 INFO s.SOAPConsole [main] WebServiceRequest#ExportCatalogueFile: export log=20180103_001_WS required from user=avonva in test environment
+2018-01-30 12:13:13,900 ERROR s.SOAPRequest [main] SOAPRequest#writeXmlIntoFile: No attachment found!
+2018-01-30 12:13:13,900 INFO d.LogDownloader [main] Log=20180103_001_WS not available yet in DCF
+2018-01-30 12:13:13,901 INFO d.LogDownloader [main] Waiting 2.0 seconds and then retry to download log=20180103_001_WS
+2018-01-30 12:13:15,902 INFO d.LogDownloader [main] Getting log=20180103_001_WS, attempt n°=5/10
+2018-01-30 12:13:15,907 INFO s.SOAPConsole [main] WebServiceRequest#ExportCatalogueFile: export log=20180103_001_WS required from user=avonva in test environment
+2018-01-30 12:13:16,704 ERROR s.SOAPRequest [main] SOAPRequest#writeXmlIntoFile: No attachment found!
+2018-01-30 12:13:16,705 INFO d.LogDownloader [main] Log=20180103_001_WS not available yet in DCF
+2018-01-30 12:13:16,706 INFO d.LogDownloader [main] Waiting 2.0 seconds and then retry to download log=20180103_001_WS
+2018-01-30 12:13:18,706 INFO d.LogDownloader [main] Getting log=20180103_001_WS, attempt n°=6/10
+2018-01-30 12:13:18,713 INFO s.SOAPConsole [main] WebServiceRequest#ExportCatalogueFile: export log=20180103_001_WS required from user=avonva in test environment
+2018-01-30 12:13:19,595 ERROR s.SOAPRequest [main] SOAPRequest#writeXmlIntoFile: No attachment found!
+2018-01-30 12:13:19,595 INFO d.LogDownloader [main] Log=20180103_001_WS not available yet in DCF
+2018-01-30 12:13:19,596 INFO d.LogDownloader [main] Waiting 2.0 seconds and then retry to download log=20180103_001_WS
+2018-01-30 12:13:21,596 INFO d.LogDownloader [main] Getting log=20180103_001_WS, attempt n°=7/10
+2018-01-30 12:13:21,601 INFO s.SOAPConsole [main] WebServiceRequest#ExportCatalogueFile: export log=20180103_001_WS required from user=avonva in test environment
+2018-01-30 12:13:22,712 ERROR s.SOAPRequest [main] SOAPRequest#writeXmlIntoFile: No attachment found!
+2018-01-30 12:13:22,712 INFO d.LogDownloader [main] Log=20180103_001_WS not available yet in DCF
+2018-01-30 12:13:22,712 INFO d.LogDownloader [main] Waiting 2.0 seconds and then retry to download log=20180103_001_WS
+2018-01-30 12:13:24,714 INFO d.LogDownloader [main] Getting log=20180103_001_WS, attempt n°=8/10
+2018-01-30 12:13:24,719 INFO s.SOAPConsole [main] WebServiceRequest#ExportCatalogueFile: export log=20180103_001_WS required from user=avonva in test environment
+2018-01-30 12:13:25,621 ERROR s.SOAPRequest [main] SOAPRequest#writeXmlIntoFile: No attachment found!
+2018-01-30 12:13:25,621 INFO d.LogDownloader [main] Log=20180103_001_WS not available yet in DCF
+2018-01-30 12:13:25,622 INFO d.LogDownloader [main] Waiting 2.0 seconds and then retry to download log=20180103_001_WS
+2018-01-30 12:13:27,622 INFO d.LogDownloader [main] Getting log=20180103_001_WS, attempt n°=9/10
+2018-01-30 12:13:27,627 INFO s.SOAPConsole [main] WebServiceRequest#ExportCatalogueFile: export log=20180103_001_WS required from user=avonva in test environment
+2018-01-30 12:13:28,685 ERROR s.SOAPRequest [main] SOAPRequest#writeXmlIntoFile: No attachment found!
+2018-01-30 12:13:28,686 INFO d.LogDownloader [main] Log=20180103_001_WS not available yet in DCF
+2018-01-30 12:13:28,686 INFO d.LogDownloader [main] Waiting 2.0 seconds and then retry to download log=20180103_001_WS
+2018-01-30 12:13:30,686 INFO d.LogDownloader [main] Getting log=20180103_001_WS, attempt n°=10/10
+2018-01-30 12:13:30,691 INFO s.SOAPConsole [main] WebServiceRequest#ExportCatalogueFile: export log=20180103_001_WS required from user=avonva in test environment
+2018-01-30 12:13:31,579 ERROR s.SOAPRequest [main] SOAPRequest#writeXmlIntoFile: No attachment found!
+2018-01-30 12:13:31,580 INFO d.LogDownloader [main] Log=20180103_001_WS not available yet in DCF
+2018-01-30 12:13:31,592 INFO s.SOAPConsole [main] WebServiceRequest#GetDatasetsList: dcCode=TSE.TEST required from user=avonva in test environment
+2018-01-30 12:13:31,732 INFO s.SOAPConsole [main] WebServiceResponse#GetDatasetsList: response received
+2018-01-30 12:13:31,737 INFO s.SOAPConsole [main] WebServiceRequest#Ping required from user=wrong-username in test environment
+2018-01-30 12:13:32,714 INFO s.SOAPConsole [main] WebServiceRequest#SendMessage: file=test-files\submit.xml required from user=avonva in test environment
+2018-01-30 12:13:41,826 INFO s.SOAPConsole [main] WebServiceResponse#SendMessage: response received
+2018-01-30 12:13:41,858 INFO s.SOAPConsole [main] WebServiceRequest#UploadCatalogueFile: attachment=<?xml version="1.0" encoding="UTF-8"?>
+<message xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="file:///D:/cat_xsd/UploadCatalogue.xsd">
+       <updateCatalogue catalogueCode="YESNO">
+		<unreserve>
+			<reservationNote>Test with DCF webservice framework</reservationNote>
+		</unreserve>      
+       </updateCatalogue>
+</message>
+ required from user=avonva in test environment
+2018-01-30 12:13:49,009 INFO s.SOAPConsole [main] WebServiceResponse#UploadCatalogueFile: response received
+2018-01-30 12:13:49,015 INFO s.SOAPConsole [main] WebServiceRequest#Ping required from user=avonva in test environment
+2018-01-30 12:13:50,017 INFO s.SOAPConsole [main] WebServiceResponse#Ping: response received
+2018-01-30 12:13:50,022 INFO s.SOAPConsole [main] WebServiceRequest#ExportCatalogueFile: export last published version of catalogue=ABUNDANCE required from user=avonva in test environment
+2018-01-30 12:13:51,079 INFO s.SOAPConsole [main] WebServiceRequest#GetResourcesList: dcCode=TSE.TEST required from user=avonva in test environment
+2018-01-30 12:13:52,026 ERROR s.GetList [main] GetList: no return node was found in the soap response
+2018-01-30 12:13:52,027 INFO s.SOAPConsole [main] WebServiceResponse#GetResourcesList: response received
+2018-01-30 12:13:52,038 INFO s.SOAPConsole [main] WebServiceRequest#GetDataCollectionsList required from user=avonva in test environment
+2018-01-30 12:13:53,063 INFO s.SOAPConsole [main] WebServiceResponse#GetDataCollectionsList: response received
+2018-01-30 12:13:53,070 INFO s.SOAPConsole [main] WebServiceRequest#GetAck: messageId=25053 required from user=avonva in test environment
+2018-01-30 12:13:54,069 ERROR s.GetAck [main] No state found for message: 25053
+2018-01-30 12:13:54,070 INFO s.SOAPConsole [main] WebServiceResponse#GetAck: response received
+2018-01-30 12:13:54,078 INFO s.SOAPConsole [main] WebServiceRequest#GetFile: resourceId=not-existing-code required from user=avonva in test environment
+2018-01-30 12:13:55,059 INFO s.SOAPConsole [main] WebServiceResponse#GetFile: response received
+2018-01-30 12:13:55,067 INFO s.SOAPConsole [main] WebServiceRequest#ExportCatalogueFile: export log=20180103_001_WS required from user=avonva in test environment
+2018-01-30 12:13:56,176 ERROR s.SOAPRequest [main] SOAPRequest#writeXmlIntoFile: No attachment found!
+2018-01-30 12:13:56,188 INFO s.SOAPConsole [main] WebServiceRequest#GetDataset: datasetId=11753 required from user=avonva in test environment
+2018-01-30 12:13:56,299 INFO s.SOAPConsole [main] WebServiceResponse#GetDataset: response received
+2018-01-30 12:13:56,302 INFO s.SOAPConsole [main] WebServiceRequest#Ping required from user=wrong-username in test environment

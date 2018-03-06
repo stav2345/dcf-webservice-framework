@@ -1,0 +1,12 @@
+2018-01-30 15:36:05,613 INFO p.PendingRequest [Thread-4] Starting pending request=logCode=LOG_1b9d0723-2c9c-49cc-8071-b8a926f8aef6_WS; status=WAITING; priority=HIGH; environment=TEST; requestor=avonva; requestType=UNRESERVE; data={reserveNote=second pending request, catalogue=MTX}
+2018-01-30 15:36:05,613 INFO p.PendingRequest [Thread-3] Starting pending request=logCode=LOG_937acde4-5b2c-433a-ac72-2f9609161151_WS; status=WAITING; priority=HIGH; environment=TEST; requestor=avonva; requestType=UNRESERVE; data={reserveNote=first pending request, catalogue=ACTION}
+2018-01-30 15:36:05,621 INFO d.LogDownloader [Thread-3] Getting log=LOG_937acde4-5b2c-433a-ac72-2f9609161151_WS, attempt n°=1/12
+2018-01-30 15:36:05,621 INFO d.LogDownloader [Thread-4] Getting log=LOG_1b9d0723-2c9c-49cc-8071-b8a926f8aef6_WS, attempt n°=1/12
+2018-01-30 15:36:05,669 INFO s.SOAPConsole [Thread-4] WebServiceRequest#ExportCatalogueFile: export log=LOG_1b9d0723-2c9c-49cc-8071-b8a926f8aef6_WS required from user=avonva in test environment
+2018-01-30 15:36:05,669 INFO s.SOAPConsole [Thread-3] WebServiceRequest#ExportCatalogueFile: export log=LOG_937acde4-5b2c-433a-ac72-2f9609161151_WS required from user=avonva in test environment
+2018-01-30 15:36:13,666 ERROR s.SOAPRequest [Thread-4] SOAPRequest#writeXmlIntoFile: No attachment found!
+2018-01-30 15:36:13,667 INFO d.LogDownloader [Thread-4] Log=LOG_1b9d0723-2c9c-49cc-8071-b8a926f8aef6_WS not available yet in DCF
+2018-01-30 15:36:13,667 INFO d.LogDownloader [Thread-4] Waiting 10.0 seconds and then retry to download log=LOG_1b9d0723-2c9c-49cc-8071-b8a926f8aef6_WS
+2018-01-30 15:36:13,666 ERROR s.SOAPRequest [Thread-3] SOAPRequest#writeXmlIntoFile: No attachment found!
+2018-01-30 15:36:13,669 INFO d.LogDownloader [Thread-3] Log=LOG_937acde4-5b2c-433a-ac72-2f9609161151_WS not available yet in DCF
+2018-01-30 15:36:13,669 INFO d.LogDownloader [Thread-3] Waiting 10.0 seconds and then retry to download log=LOG_937acde4-5b2c-433a-ac72-2f9609161151_WS

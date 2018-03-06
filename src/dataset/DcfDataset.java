@@ -46,6 +46,9 @@ public class DcfDataset implements IDcfDataset {
 	public String toString() {
 		return "Dataset: id=" + id 
 				+ ";senderId=" + senderId 
+				+ ";lastMessageId=" + lastMessageId
+				+ ";lastModifyingMessageId=" + lastModifyingMessageId
+				+ ";lastValidationMessageId=" + lastValidationMessageId
 				+ ";status=" + status;
 	}
 	

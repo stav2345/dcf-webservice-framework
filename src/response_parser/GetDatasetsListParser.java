@@ -19,7 +19,7 @@ import soap.GetDatasetsList;
 public class GetDatasetsListParser<T extends IDcfDataset> {
 
 	private static final String DATASET_ID_NODE = "datasetId";
-	private static final String SENDER_DATASET_ID_NODE = "datasetSenderId";
+	private static final String SENDER_DATASET_ID_NODE = "senderDatasetId";
 	private static final String WRAPPER_STATUS_NODE = "datasetStatus";
 	private static final String STATUS_NODE = "status";
 	private static final String STEP_NODE = "step";

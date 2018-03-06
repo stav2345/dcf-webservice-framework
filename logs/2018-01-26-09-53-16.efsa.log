@@ -1,0 +1,19 @@
+2018-01-26 09:52:59,167 INFO s.SOAPConsole [main] WebServiceRequest#UploadCatalogueFile: attachment=<?xml version="1.0" encoding="UTF-8"?><message xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="file:///D:/cat_xsd/UploadCatalogue.xsd"><updateCatalogue catalogueCode="ACTION"><unreserve><reservationNote>test for log downloader</reservationNote></unreserve></updateCatalogue></message> required from user=avonva in test environment
+2018-01-26 09:53:07,091 INFO s.SOAPConsole [main] WebServiceResponse#UploadCatalogueFile: response received
+2018-01-26 09:53:07,091 INFO d.LogDownloader [main] Getting log=20180126_008_WS, attempt n°=1/10
+2018-01-26 09:53:07,107 INFO s.SOAPConsole [main] WebServiceRequest#ExportCatalogueFile: export log=20180126_008_WS required from user=avonva in test environment
+2018-01-26 09:53:08,328 ERROR s.SOAPRequest [main] SOAPRequest#writeXmlIntoFile: No attachment found!
+2018-01-26 09:53:08,328 INFO d.LogDownloader [main] Log=20180126_008_WS not available yet in DCF
+2018-01-26 09:53:08,328 INFO d.LogDownloader [main] Waiting 2.0 seconds and then retry to download log=20180126_008_WS
+2018-01-26 09:53:10,338 INFO d.LogDownloader [main] Getting log=20180126_008_WS, attempt n°=2/10
+2018-01-26 09:53:10,338 INFO s.SOAPConsole [main] WebServiceRequest#ExportCatalogueFile: export log=20180126_008_WS required from user=avonva in test environment
+2018-01-26 09:53:11,623 ERROR s.SOAPRequest [main] SOAPRequest#writeXmlIntoFile: No attachment found!
+2018-01-26 09:53:11,623 INFO d.LogDownloader [main] Log=20180126_008_WS not available yet in DCF
+2018-01-26 09:53:11,623 INFO d.LogDownloader [main] Waiting 2.0 seconds and then retry to download log=20180126_008_WS
+2018-01-26 09:53:13,631 INFO d.LogDownloader [main] Getting log=20180126_008_WS, attempt n°=3/10
+2018-01-26 09:53:13,631 INFO s.SOAPConsole [main] WebServiceRequest#ExportCatalogueFile: export log=20180126_008_WS required from user=avonva in test environment
+2018-01-26 09:53:14,654 ERROR s.SOAPRequest [main] SOAPRequest#writeXmlIntoFile: No attachment found!
+2018-01-26 09:53:14,654 INFO d.LogDownloader [main] Log=20180126_008_WS not available yet in DCF
+2018-01-26 09:53:14,654 INFO d.LogDownloader [main] Waiting 2.0 seconds and then retry to download log=20180126_008_WS
+2018-01-26 09:53:16,668 INFO d.LogDownloader [main] Getting log=20180126_008_WS, attempt n°=4/10
+2018-01-26 09:53:16,668 INFO s.SOAPConsole [main] WebServiceRequest#ExportCatalogueFile: export log=20180126_008_WS required from user=avonva in test environment

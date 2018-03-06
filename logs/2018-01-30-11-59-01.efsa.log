@@ -1,0 +1,2 @@
+2018-01-30 11:59:01,790 INFO s.SOAPConsole [main] WebServiceRequest#SendMessage: file=not-existing-file.xml required from user=avonva in test environment
+2018-01-30 11:59:01,803 INFO s.SOAPConsole [main] WebServiceRequest#GetCataloguesList required from user=avonva in test environment

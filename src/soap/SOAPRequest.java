@@ -90,8 +90,8 @@ public abstract class SOAPRequest {
 	            else
 	                connection = clone.openConnection(proxy);
 	            
-	            connection.setConnectTimeout(30000);
-	            connection.setReadTimeout(30000);
+	            connection.setConnectTimeout(80000);
+	            connection.setReadTimeout(80000);
 	            return connection;
 	        }
 	    });

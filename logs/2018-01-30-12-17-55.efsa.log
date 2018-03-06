@@ -1,0 +1,41 @@
+2018-01-30 12:17:18,711 INFO s.SOAPConsole [main] WebServiceRequest#SendMessage: file=not-existing-file.xml required from user=avonva in test environment
+2018-01-30 12:17:18,725 INFO s.SOAPConsole [main] WebServiceRequest#GetCataloguesList required from user=avonva in test environment
+2018-01-30 12:17:21,721 INFO s.SOAPConsole [main] WebServiceResponse#GetCataloguesList: response received
+2018-01-30 12:17:21,734 INFO s.SOAPConsole [main] WebServiceRequest#GetFile: resourceId=05_220 required from user=avonva in test environment
+2018-01-30 12:17:22,760 INFO s.SOAPConsole [main] WebServiceResponse#GetFile: response received
+2018-01-30 12:17:22,769 INFO s.SOAPConsole [main] WebServiceRequest#GetFile: resourceId=38864 required from user=avonva in test environment
+2018-01-30 12:17:23,830 INFO s.SOAPConsole [main] WebServiceResponse#GetFile: response received
+2018-01-30 12:17:23,849 INFO s.SOAPConsole [main] WebServiceRequest#ExportCatalogueFile: export last internal version of catalogue=ACTION required from user=avonva in test environment
+2018-01-30 12:17:25,130 INFO d.LogDownloader [main] Getting log=20180130_001_WS, attempt n°=1/10
+2018-01-30 12:17:25,132 INFO s.SOAPConsole [main] WebServiceRequest#ExportCatalogueFile: export log=20180130_001_WS required from user=avonva in test environment
+2018-01-30 12:17:26,222 INFO s.SOAPConsole [main] WebServiceRequest#GetDatasetsList: dcCode=TSE.TEST required from user=avonva in test environment
+2018-01-30 12:17:26,337 INFO s.SOAPConsole [main] WebServiceResponse#GetDatasetsList: response received
+2018-01-30 12:17:26,342 INFO s.SOAPConsole [main] WebServiceRequest#Ping required from user=wrong-username in test environment
+2018-01-30 12:17:27,511 INFO s.SOAPConsole [main] WebServiceRequest#SendMessage: file=test-files\submit.xml required from user=avonva in test environment
+2018-01-30 12:17:37,030 INFO s.SOAPConsole [main] WebServiceResponse#SendMessage: response received
+2018-01-30 12:17:37,041 INFO s.SOAPConsole [main] WebServiceRequest#UploadCatalogueFile: attachment=<?xml version="1.0" encoding="UTF-8"?>
+<message xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="file:///D:/cat_xsd/UploadCatalogue.xsd">
+       <updateCatalogue catalogueCode="YESNO">
+		<unreserve>
+			<reservationNote>Test with DCF webservice framework</reservationNote>
+		</unreserve>      
+       </updateCatalogue>
+</message>
+ required from user=avonva in test environment
+2018-01-30 12:17:44,200 INFO s.SOAPConsole [main] WebServiceResponse#UploadCatalogueFile: response received
+2018-01-30 12:17:44,204 INFO s.SOAPConsole [main] WebServiceRequest#Ping required from user=avonva in test environment
+2018-01-30 12:17:45,223 INFO s.SOAPConsole [main] WebServiceResponse#Ping: response received
+2018-01-30 12:17:45,228 INFO s.SOAPConsole [main] WebServiceRequest#ExportCatalogueFile: export last published version of catalogue=ABUNDANCE required from user=avonva in test environment
+2018-01-30 12:17:46,346 INFO s.SOAPConsole [main] WebServiceRequest#GetResourcesList: dcCode=TSE.TEST required from user=avonva in test environment
+2018-01-30 12:17:47,327 ERROR s.GetList [main] GetList: no return node was found in the soap response
+2018-01-30 12:17:47,327 INFO s.SOAPConsole [main] WebServiceResponse#GetResourcesList: response received
+2018-01-30 12:17:47,337 INFO s.SOAPConsole [main] WebServiceRequest#GetDataCollectionsList required from user=avonva in test environment
+2018-01-30 12:17:48,157 INFO s.SOAPConsole [main] WebServiceResponse#GetDataCollectionsList: response received
+2018-01-30 12:17:48,164 INFO s.SOAPConsole [main] WebServiceRequest#GetAck: messageId=12632 required from user=avonva in test environment
+2018-01-30 12:17:52,369 INFO s.SOAPConsole [main] WebServiceResponse#GetAck: response received
+2018-01-30 12:17:52,386 INFO s.SOAPConsole [main] WebServiceRequest#GetFile: resourceId=not-existing-code required from user=avonva in test environment
+2018-01-30 12:17:53,419 INFO s.SOAPConsole [main] WebServiceResponse#GetFile: response received
+2018-01-30 12:17:53,426 INFO s.SOAPConsole [main] WebServiceRequest#ExportCatalogueFile: export log=20180130_001_WS required from user=avonva in test environment
+2018-01-30 12:17:54,378 INFO s.SOAPConsole [main] WebServiceRequest#GetDataset: datasetId=11753 required from user=avonva in test environment
+2018-01-30 12:17:54,501 INFO s.SOAPConsole [main] WebServiceResponse#GetDataset: response received
+2018-01-30 12:17:54,507 INFO s.SOAPConsole [main] WebServiceRequest#Ping required from user=wrong-username in test environment

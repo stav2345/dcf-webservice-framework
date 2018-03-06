@@ -1,0 +1,6 @@
+2018-01-30 16:12:12,757 INFO p.PendingRequest [Thread-1] Starting pending request=logCode=LOG_92fb2d7c-89c4-4a5d-8b0a-cf2c5ffb4a08_WS; status=WAITING; priority=HIGH; environment=TEST; requestor=avonva; requestType=UNRESERVE; data={reserveNote=first pending request, catalogue=ACTION}
+2018-01-30 16:12:12,758 INFO p.PendingRequest [Thread-2] Starting pending request=logCode=LOG_c1835d1e-e7a1-4b18-a444-49ebe3d73853_WS; status=WAITING; priority=HIGH; environment=TEST; requestor=avonva; requestType=UNRESERVE; data={reserveNote=second pending request, catalogue=MTX}
+2018-01-30 16:12:12,769 INFO d.LogDownloader [Thread-1] Getting log=LOG_92fb2d7c-89c4-4a5d-8b0a-cf2c5ffb4a08_WS, attempt n°=1/12
+2018-01-30 16:12:12,769 INFO d.LogDownloader [Thread-2] Getting log=LOG_c1835d1e-e7a1-4b18-a444-49ebe3d73853_WS, attempt n°=1/12
+2018-01-30 16:12:12,790 INFO s.SOAPConsole [Thread-1] WebServiceRequest#ExportCatalogueFile: export log=LOG_92fb2d7c-89c4-4a5d-8b0a-cf2c5ffb4a08_WS required from user=avonva in test environment
+2018-01-30 16:12:12,790 INFO s.SOAPConsole [Thread-2] WebServiceRequest#ExportCatalogueFile: export log=LOG_c1835d1e-e7a1-4b18-a444-49ebe3d73853_WS required from user=avonva in test environment
