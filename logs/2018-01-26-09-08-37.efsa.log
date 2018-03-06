@@ -1,4 +1,0 @@
-2018-01-26 09:08:33,844 INFO s.SOAPConsole [main] WebServiceRequest#UploadCatalogueFile: attachment=<?xml version="1.0" encoding="UTF-8"?><message xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="file:///D:/cat_xsd/UploadCatalogue.xsd"><updateCatalogue catalogueCode="ABUNDANCE"><unreserve><reservationNote>test for log downloader</reservationNote></unreserve></updateCatalogue></message> required from user=avonva in production environment
-2018-01-26 09:08:36,186 INFO s.SOAPConsole [main] WebServiceResponse#UploadCatalogueFile: response received
-2018-01-26 09:08:36,186 INFO d.LogDownloader [main] Getting log=20180126_002_WS, attempt n°=1/2
-2018-01-26 09:08:36,186 INFO s.SOAPConsole [main] WebServiceRequest#ExportCatalogueFile: export log=20180126_002_WS required from user=avonva in production environment

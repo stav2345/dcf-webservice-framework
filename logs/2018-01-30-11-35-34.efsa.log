@@ -1,3 +1,0 @@
-2018-01-30 11:35:23,872 INFO s.SOAPConsole [main] WebServiceRequest#SendMessage: file=not-existing-file.xml required from user=avonva in test environment
-2018-01-30 11:35:23,883 INFO s.SOAPConsole [main] WebServiceRequest#SendMessage: file=test-files\submit.xml required from user=avonva in test environment
-2018-01-30 11:35:34,259 INFO s.SOAPConsole [main] WebServiceResponse#SendMessage: response received

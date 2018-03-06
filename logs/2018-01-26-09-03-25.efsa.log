@@ -1,4 +1,0 @@
-2018-01-26 09:03:21,367 INFO s.SOAPConsole [main] WebServiceRequest#UploadCatalogueFile: attachment=ofmsao required from user=avonva in production environment
-2018-01-26 09:03:23,906 INFO s.SOAPConsole [main] WebServiceResponse#UploadCatalogueFile: response received
-2018-01-26 09:03:23,906 INFO d.LogDownloader [main] Getting log=20180126_001_WS, attempt n°=1/2
-2018-01-26 09:03:23,906 INFO s.SOAPConsole [main] WebServiceRequest#ExportCatalogueFile: export log=20180126_001_WS required from user=avonva in production environment

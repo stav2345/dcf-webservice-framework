@@ -1,6 +1,0 @@
-2018-01-31 09:24:20,089 INFO p.PendingRequest [Thread-1] Starting pending request=logCode=LOG_aed0f18a-5125-4f59-b816-a3dbb99bfe59_WS; status=WAITING; priority=HIGH; environment=TEST; requestor=avonva; requestType=UNRESERVE; data={reserveNote=first pending request, catalogue=ACTION}
-2018-01-31 09:24:20,094 INFO p.PendingRequest [Thread-1] New status=pendingRequestCode=LOG_aed0f18a-5125-4f59-b816-a3dbb99bfe59_WS; status=WAITING => DOWNLOADING
-2018-01-31 09:24:20,097 INFO p.PendingRequest [Thread-1] New status=pendingRequestCode=LOG_aed0f18a-5125-4f59-b816-a3dbb99bfe59_WS; status=DOWNLOADING => COMPLETED
-2018-01-31 09:24:25,087 INFO p.PendingRequest [Thread-3] Starting pending request=logCode=LOG_0c99b19d-c6ae-4e83-95cb-967841673831_WS; status=WAITING; priority=HIGH; environment=TEST; requestor=avonva; requestType=UNRESERVE; data={reserveNote=second pending request, catalogue=MTX}
-2018-01-31 09:24:25,089 INFO p.PendingRequest [Thread-3] New status=pendingRequestCode=LOG_0c99b19d-c6ae-4e83-95cb-967841673831_WS; status=WAITING => DOWNLOADING
-2018-01-31 09:24:25,091 INFO p.PendingRequest [Thread-3] New status=pendingRequestCode=LOG_0c99b19d-c6ae-4e83-95cb-967841673831_WS; status=DOWNLOADING => COMPLETED

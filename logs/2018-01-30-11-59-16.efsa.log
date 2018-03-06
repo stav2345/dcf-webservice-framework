@@ -1,4 +1,0 @@
-2018-01-30 11:59:13,697 INFO s.SOAPConsole [main] WebServiceRequest#GetFile: resourceId=38864 required from user=avonva in test environment
-2018-01-30 11:59:15,447 INFO s.SOAPConsole [main] WebServiceResponse#GetFile: response received
-2018-01-30 11:59:15,467 INFO s.SOAPConsole [main] WebServiceRequest#GetFile: resourceId=not-existing-code required from user=avonva in test environment
-2018-01-30 11:59:16,492 INFO s.SOAPConsole [main] WebServiceResponse#GetFile: response received
