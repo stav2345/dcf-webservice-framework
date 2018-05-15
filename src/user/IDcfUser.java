@@ -13,4 +13,11 @@ public interface IDcfUser {
 	 * @return
 	 */
 	public String getPassword();
+	
+	/**
+	 * Get the open API token identifying 
+	 * an user without username and password
+	 * @return
+	 */
+	public String getToken();
 }

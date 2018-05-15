@@ -8,6 +8,7 @@ public class DcfUser implements IDcfUser {
 
 	private String username;
 	private String password;
+	private String token;
 	
 	/**
 	 * Login the user
@@ -17,6 +18,14 @@ public class DcfUser implements IDcfUser {
 	public void login(String username, String password) {
 		this.username = username;
 		this.password = password;
+	}
+	
+	/**
+	 * Login the user with the open api token
+	 * @param token
+	 */
+	public void login(String token) {
+		this.token = token;
 	}
 	
 	/**
@@ -46,7 +55,6 @@ public class DcfUser implements IDcfUser {
 				throw e;
 			}
 		}
-		
 
 		// if wrong credential => remove them 
 		if ( !logged ) {
@@ -75,6 +83,11 @@ public class DcfUser implements IDcfUser {
 	 */
 	public String getPassword() {
 		return password;
+	}
+	
+	@Override
+	public String getToken() {
+		return token;
 	}
 	
 	/**

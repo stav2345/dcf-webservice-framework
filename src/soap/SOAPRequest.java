@@ -177,7 +177,7 @@ public abstract class SOAPRequest {
 		HttpsURLConnection httpsConnection = null;
 		
 		// if https with test => skip certificates
-		if (isHttps && env == Environment.TEST) {
+		if (isHttps /*&& env == Environment.TEST*/) {
 			try {
 				httpsConnection = avoidCertificates(url);
 			} catch (KeyManagementException | NoSuchAlgorithmException | IOException e) {
@@ -239,15 +239,13 @@ public abstract class SOAPRequest {
 	}
 	
 	/**
-	 * Create the standard structure of a SOAPMessage, including the
-	 * authentication block
-	 * @param username
-	 * @param password
+	 * Create base soap message with general envelop
+	 * @param namespace
+	 * @param prefix
 	 * @return
 	 * @throws SOAPException
 	 */
-	public SOAPMessage createTemplateSOAPMessage(IDcfUser user, 
-			String namespace, String prefix) throws SOAPException {
+	private SOAPMessage createTemplateSOAPMessage(String namespace, String prefix) throws SOAPException {
 		
 		// create the soap message
 		MessageFactory msgFactory = MessageFactory.newInstance();
@@ -257,6 +255,45 @@ public abstract class SOAPRequest {
 		// add the content type header
 		soapMsg.getMimeHeaders().addHeader("Content-Type", "text/xml;charset=UTF-8");
 		
+		// create the envelope and name it
+		SOAPEnvelope envelope = soapPart.getEnvelope();
+		envelope.addNamespaceDeclaration(prefix, namespace);
+
+		// return the message
+		return soapMsg;
+	}
+	
+	/**
+	 * Create a template SOAP message with token-based authentication
+	 * @param token open API token of EFSA
+	 * @param namespace
+	 * @param prefix
+	 * @return
+	 * @throws SOAPException
+	 */
+	public SOAPMessage createTemplateSOAPMessage(String token, 
+			String namespace, String prefix) throws SOAPException {
+		
+		SOAPMessage msg = createTemplateSOAPMessage(namespace, prefix);
+		
+		msg.getMimeHeaders().addHeader("Ocp-Apim-Subscription-Key", token);
+		
+		return msg;
+	}
+	
+	/**
+	 * Create a template SOAP message with username/password-based authentication
+	 * @param user
+	 * @param namespace
+	 * @param prefix
+	 * @return
+	 * @throws SOAPException
+	 */
+	public SOAPMessage createTemplateSOAPMessage(IDcfUser user, 
+			String namespace, String prefix) throws SOAPException {
+		
+		SOAPMessage msg = createTemplateSOAPMessage(namespace, prefix);
+	
 		// reset the cache of the authentication
 		AuthCacheValue.setAuthCache(new AuthCacheImpl());
 		
@@ -279,12 +316,8 @@ public abstract class SOAPRequest {
 		// set the default authenticator
 		Authenticator.setDefault(myAuth);
 
-		// create the envelope and name it
-		SOAPEnvelope envelope = soapPart.getEnvelope();
-		envelope.addNamespaceDeclaration(prefix, namespace);
-
 		// return the message
-		return soapMsg;
+		return msg;
 	}
 	
 	/**

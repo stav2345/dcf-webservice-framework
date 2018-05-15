@@ -12,6 +12,8 @@ public enum FileState {
 	READY("READY"),
 	WAIT("WAIT"),
 	FAIL("FAIL"),
+	ACCESS_DENIED("ACCESS_DENIED"),
+	EXCEPTION("EXCEPTION"),
 	OTHER("OTHER");
 	
 	private String headerName;
