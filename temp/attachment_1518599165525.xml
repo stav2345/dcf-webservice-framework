@@ -1,0 +1,15 @@
+<transmissionResult xsi:type="macroOperationResultType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <action>Web service</action>
+  <transmissionDateTime>2018-02-14T10:06:04.323+01:00</transmissionDateTime>
+  <uploadedFileName xsi:nil="true"/>
+  <processingDateTime>2018-02-14T10:06:04.556+01:00</processingDateTime>
+  <catalogueCode>ACTION</catalogueCode>
+  <catalogueVersion>2.3.9</catalogueVersion>
+  <catalogueStatus>DRAFT MAJOR RESERVED</catalogueStatus>
+  <macroOperationName>publishMinor</macroOperationName>
+  <macroOperationResult>AP</macroOperationResult>
+  <macroOperationLogs>
+    <operationLog>The status of the catalogue ACTION does not allow the publishMinor operation. File processing is aborted.</operationLog>
+  </macroOperationLogs>
+  <validationErrorLogs/>
+</transmissionResult>

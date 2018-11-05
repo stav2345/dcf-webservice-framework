@@ -34,6 +34,14 @@ public class DcfAck {
 		return state != null && state == FileState.READY;
 	}
 	
+	public boolean hasFault() {
+		return state != null && state == FileState.EXCEPTION;
+	}
+	
+	public boolean isDenied() {
+		return state != null && state == FileState.ACCESS_DENIED;
+	}
+	
 	@Override
 	public String toString() {
 		return "Ack: state=" + state + "; log=" + log;

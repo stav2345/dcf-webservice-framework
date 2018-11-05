@@ -36,8 +36,8 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.soap.SOAPPart;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -177,7 +177,7 @@ public abstract class SOAPRequest {
 		HttpsURLConnection httpsConnection = null;
 		
 		// if https with test => skip certificates
-		if (isHttps && env == Environment.TEST) {
+		if (isHttps /*&& env == Environment.TEST*/) {
 			try {
 				httpsConnection = avoidCertificates(url);
 			} catch (KeyManagementException | NoSuchAlgorithmException | IOException e) {

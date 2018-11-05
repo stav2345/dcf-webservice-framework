@@ -77,13 +77,13 @@ public class Config {
 	
 	public Environment getEnvironment() {
 		String production = getValue(ENV_CONFIG_PATH, ENV_TYPE);
-		
+
 		if (production == null)
 			return Environment.TEST;
 		
 		boolean isProd = production.equalsIgnoreCase("YES")
 				|| production.equalsIgnoreCase("Y");
-		
+
 		return isProd ? Environment.PRODUCTION : Environment.TEST;
 	}
 	

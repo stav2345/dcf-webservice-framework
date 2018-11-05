@@ -289,6 +289,8 @@ public class WebserviceTest {
 
 		ExportCatalogueFile request = new ExportCatalogueFile();
 		File file = request.exportCatalogue(env, user, "ABUNDANCE");
+
+		System.err.println(file.length());
 		
 		assertNotNull(file);
 		assertEquals(file.exists(), true);

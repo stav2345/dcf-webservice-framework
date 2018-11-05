@@ -5,8 +5,8 @@ import java.sql.SQLException;
 
 import javax.xml.soap.SOAPException;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.xml.sax.SAXException;
 
 import dcf_log.IDcfLogParser;

@@ -1,7 +1,6 @@
 package soap;
 
 import java.io.File;
-
 import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPConnection;
 import javax.xml.soap.SOAPElement;
@@ -107,10 +106,9 @@ public class ExportCatalogueFile extends SOAPRequest implements IExportCatalogue
 		this.catalogueCode = code;
 		this.exportType = exportType;
 		this.fileType = fileType;
-		
-		Object result = export(env, user);
 
-		return result;
+		Object obj = export(env, user);
+		return obj;
 	}
 	
 	/**
@@ -122,7 +120,9 @@ public class ExportCatalogueFile extends SOAPRequest implements IExportCatalogue
 		
 		String url = env == Environment.PRODUCTION ? URL : TEST_URL;
 		
-		return makeRequest(env, user, NAMESPACE, url);
+		Object obj = makeRequest(env, user, NAMESPACE, url);
+
+		return obj;
 	}
 
 	@Override

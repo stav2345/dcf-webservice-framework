@@ -1,0 +1,14 @@
+<transmissionResult xsi:type="macroOperationResultType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <action>Web service</action>
+  <transmissionDateTime>2018-02-14T10:04:39.524+01:00</transmissionDateTime>
+  <uploadedFileName xsi:nil="true"/>
+  <processingDateTime>2018-02-14T10:04:46.091+01:00</processingDateTime>
+  <catalogueCode/>
+  <catalogueVersion/>
+  <macroOperationName>publishMajor</macroOperationName>
+  <macroOperationResult>AO</macroOperationResult>
+  <macroOperationLogs>
+    <operationLog>The catalogue not-existing-code does not exist. File processing is aborted.</operationLog>
+  </macroOperationLogs>
+  <validationErrorLogs/>
+</transmissionResult>

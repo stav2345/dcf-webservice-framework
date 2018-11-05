@@ -10,8 +10,8 @@ import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -119,8 +119,15 @@ public class GetAck extends SOAPRequest implements IGetAck {
 	@Override
 	public Object processResponse(SOAPMessage soapResponse) throws SOAPException {
 		
+		boolean hasFault = hasFaultCode(soapResponse);
+		
 		// get the state from the response
-		FileState state = extractState(soapResponse);
+		FileState state;
+		
+		if (hasFault)
+			state = FileState.EXCEPTION;
+		else 
+			state = extractState(soapResponse);
 		
 		DcfAckLog log = null;
 		
@@ -137,6 +144,20 @@ public class GetAck extends SOAPRequest implements IGetAck {
 		DcfAck ack = new DcfAck(state, log);
 		
 		return ack;
+	}
+	
+	/**
+	 * Check if the ack raised an exception
+	 * @param soapResponse
+	 * @return
+	 * @throws SOAPException
+	 */
+	private boolean hasFaultCode(SOAPMessage soapResponse) throws SOAPException {
+		
+		NodeList fault = soapResponse.getSOAPPart()
+				.getEnvelope().getBody().getElementsByTagName("faultcode");
+
+		return (fault.getLength() > 0);
 	}
 	
 	/**

@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Wed Jan 31 08:21:06 CET 2018:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-0161-4b17-319a-000006953810 
+on database directory C:\Users\avonva\Desktop\EclipseWS\DCF webservice framework\mock-database with class loader sun.misc.Launcher$AppClassLoader@4a574795 
+Loaded from file:/C:/Users/avonva/Desktop/EclipseWS/EFSA-RCL/lib/derby/derby.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_111-b14
+user.dir=C:\Users\avonva\Desktop\EclipseWS\DCF webservice framework
+os.name=Windows 7
+os.arch=amd64
+os.version=6.1
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''

@@ -7,8 +7,8 @@ import java.util.List;
 import javax.swing.SwingWorker;
 import javax.xml.soap.SOAPException;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import dcf_log.DcfLogParser;
 import dcf_log.IDcfLogParser;

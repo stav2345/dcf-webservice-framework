@@ -1,0 +1,24 @@
+<transmissionResult xsi:type="updateCatalogueResultType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <action>Web service</action>
+  <transmissionDateTime>2018-01-29T14:32:43.996+01:00</transmissionDateTime>
+  <processingDateTime>2018-01-29T14:32:50.269+01:00</processingDateTime>
+  <uploadedFileName xsi:nil="true"/>
+  <catalogueCode>ACTION</catalogueCode>
+  <catalogueVersion>2.3.7</catalogueVersion>
+  <catalogueStatus>DRAFT MAJOR UNRESERVED</catalogueStatus>
+  <macroOperationName>updateCatalogue</macroOperationName>
+  <macroOperationResult>AP</macroOperationResult>
+  <macroOperationLogs>
+    <operationLog>The catalogue has not been updated</operationLog>
+  </macroOperationLogs>
+  <operations>
+    <operation>
+      <operationName>reserveMinor</operationName>
+      <operationResult>AP</operationResult>
+      <operationLogs>
+        <operationLog>The status of the catalogue does not allow the reserveMinor operation. File processing is aborted.</operationLog>
+      </operationLogs>
+    </operation>
+  </operations>
+  <validationErrorLogs/>
+</transmissionResult>
