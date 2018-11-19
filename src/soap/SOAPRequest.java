@@ -13,6 +13,7 @@ import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLStreamHandler;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
@@ -32,20 +33,17 @@ import javax.xml.soap.SOAPConnection;
 import javax.xml.soap.SOAPConnectionFactory;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPHeader;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.soap.SOAPPart;
+
+import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-
-import com.sun.org.apache.xerces.internal.parsers.DOMParser;
 
 import config.Environment;
 import http.HttpManager;
@@ -378,50 +376,6 @@ public abstract class SOAPRequest {
 	}
 
 	/**
-	 * @author shahaal Dump SOAP Message to console
-	 *
-	 * @param msg
-	 */
-	private void dumpSOAPMessage(InputSource attachment) {
-
-		DOMParser parser = new DOMParser();
-		try {
-			parser.parse(attachment);
-		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Document doc = parser.getDocument();
-
-		// Get the document's root XML node
-		NodeList nl = doc.getChildNodes();
-
-		// Navigate down the hierarchy to get to the CEO node
-		if (nl != null) {
-			int length = nl.getLength();
-			for (int i = 0; i < length; i++) {
-				if (nl.item(i).getNodeType() == Node.ELEMENT_NODE) {
-					Element el = (Element) nl.item(i);
-					if (el.getNodeName().contains("ackDetails") || el.getNodeName().contains("detailedAckResId")) {
-						System.out.println("\nshahaal node name: "
-								+ el.getElementsByTagName("payloadAckDetails").item(0).getTextContent());
-					}
-				}
-			}
-		}
-
-		// shahaal print the soap message
-		// dumpSOAPMessage(message);
-
-		// replace("https://dcf.efsa.europa.eu/dcf-war/downloadResourcesPage/fileName/",
-		// "../config/"));
-
-	}
-
-	/**
 	 * Get the first attachment of the message
 	 * 
 	 * @param message
@@ -577,21 +531,6 @@ public abstract class SOAPRequest {
 	 */
 	public File writeAttachment(SOAPMessage response) throws SOAPException, IOException {
 
-		/*
-		//shahaal
-		SOAPEnvelope env = response.getSOAPPart().getEnvelope();
-		SOAPHeader header = env.getHeader();
-		if (header == null) {
-			header = env.addHeader();
-			System.out.println("shahaal header null");
-		}else {
-			Node node = (Node) header.getElementsByTagName("href").item(0);
-			String token = node.getChildNodes().item(0).getNodeValue();
-			System.out.println("shahaal header "+token);
-		}
-		//
-		*/
-		
 		File file = FileUtils.createTempFile("attachment_" + System.currentTimeMillis(), "");
 
 		// get the attachment part
@@ -600,21 +539,32 @@ public abstract class SOAPRequest {
 		if (attachment == null)
 			return null;
 
-		// shahaal
-		dumpSOAPMessage(new InputSource(attachment.getRawContent()));
-
-		// read attachment and write it
+		// shahaal: here the method replace the oldUrl with the one which point
+		// to the xlst file present under the config folder
+		
+		// url to replace
+		String oldUrl = "https://dcf.efsa.europa.eu/dcf-war/downloadResourcesPage/fileName/";
+		// new url to xlst file in config folder
+		String newUrl = "../config/";
+		
+		// open the input/output stream of the message to be written in the file
 		InputStream inputStream = attachment.getRawContent();
 		OutputStream outputStream = new FileOutputStream(file);
+		
+		//get the message as string
+		String attachmentContent = IOUtils.toString(attachment.getRawContent(), StandardCharsets.UTF_8.name());
+		
+		//replace the new url if the message contains the old one
+		if(attachmentContent.contains(oldUrl))
+			attachmentContent=attachmentContent.replace(oldUrl, newUrl);
+		
+		// get the bytes of the string
+		byte[] strToBytes = attachmentContent.getBytes();
 
-		byte[] buf = new byte[512];
-		int num;
+		// write the bytes on file
+		outputStream.write(strToBytes);
 
-		// write file
-		while ((num = inputStream.read(buf)) != -1) {
-			outputStream.write(buf, 0, num);
-		}
-
+		//close the input/output stream
 		outputStream.close();
 		inputStream.close();
 
