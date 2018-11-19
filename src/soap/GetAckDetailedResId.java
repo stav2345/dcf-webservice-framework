@@ -17,28 +17,27 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import ack.DcfAck;
 import ack.DcfAckDetailedResId;
 import ack.DcfAckLog;
 import ack.FileState;
 import config.Environment;
-import soap_interface.IGetAck;
+import soap_interface.IGetAckDetailedResId;
 import user.IDcfUser;
 
 /**
- * Get acknowledge request
- * @author avonva
+ * Get acknowledge detailed res id
+ * @author shahaal
  *
  */
-public class GetAck extends SOAPRequest implements IGetAck {
+public class GetAckDetailedResId extends SOAPRequest implements IGetAckDetailedResId {
 
-	private static final Logger LOGGER = LogManager.getLogger(GetAck.class);
+	private static final Logger LOGGER = LogManager.getLogger(GetAckDetailedResId.class);
 	
 	private static final String URL = "https://dcf-elect.efsa.europa.eu/elect2/";
 	private static final String NAMESPACE = "http://dcf-elect.efsa.europa.eu/";
 	private static final String TEST_URL = "https://dcf-01.efsa.test/dcf-dp-ws/elect2/?wsdl";
 	
-	private String messageId;
+	private String detailedResId;
 	private SOAPMessage response;
 
 	
@@ -47,33 +46,11 @@ public class GetAck extends SOAPRequest implements IGetAck {
 	 * @return
 	 * @throws SOAPException
 	 */
-	public DcfAck getAck(Environment env, IDcfUser user, String messageId) throws DetailedSOAPException {
-		
-		this.messageId = messageId;
-		
-		SOAPConsole.log("GetAck: messageId=" + messageId, user);
-
-		String url = env == Environment.PRODUCTION ? URL : TEST_URL;
-		Object response = makeRequest(env, user, NAMESPACE, url);
-		
-		SOAPConsole.log("GetAck:", response);
-		
-		if (response == null)
-			return null;
-		
-		return (DcfAck) response;
-	}
-	
-	/**
-	 * Get the ack of the message
-	 * @return
-	 * @throws SOAPException
-	 */
 	public DcfAckDetailedResId getAckDetailedResId(Environment env, IDcfUser user, String detailedResId) throws DetailedSOAPException {
 		
-		this.messageId = detailedResId;
+		this.detailedResId = detailedResId;
 		
-		SOAPConsole.log("GetAckDetailedResId: messageId=" + detailedResId, user);
+		SOAPConsole.log("GetAck: messageId=" + detailedResId, user);
 
 		String url = env == Environment.PRODUCTION ? URL : TEST_URL;
 		Object response = makeRequest(env, user, NAMESPACE, url);
@@ -131,7 +108,7 @@ public class GetAck extends SOAPRequest implements IGetAck {
 		SOAPElement soapElem = soapBody.addChildElement("GetAck", "dcf");
 
 		SOAPElement arg = soapElem.addChildElement("messageId");
-		arg.setTextContent(this.messageId);
+		arg.setTextContent(this.detailedResId);
 
 		// save the changes in the message and return it
 		request.saveChanges();
@@ -160,11 +137,11 @@ public class GetAck extends SOAPRequest implements IGetAck {
 			log = extractAcklog(soapResponse);
 			
 			if (log == null)
-				LOGGER.warn("Ack ready but no log found for message id: " + messageId);
+				LOGGER.warn("Ack ready but no log found for message id: " + detailedResId);
 		}
 
 		// create the ack object
-		DcfAck ack = new DcfAck(state, log);
+		DcfAckDetailedResId ack = new DcfAckDetailedResId(state, log);
 		
 		return ack;
 	}

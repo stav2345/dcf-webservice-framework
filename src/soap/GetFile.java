@@ -2,7 +2,6 @@ package soap;
 
 import java.io.File;
 import java.io.IOException;
-
 import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPConnection;
 import javax.xml.soap.SOAPElement;
@@ -14,7 +13,7 @@ import user.IDcfUser;
 
 /**
  * Generic get file request to the dcf.
- * @author avonva
+ * @author avonva && shahaal
  *
  */
 public class GetFile extends SOAPRequest {
@@ -41,6 +40,7 @@ public class GetFile extends SOAPRequest {
 		SOAPConsole.log("GetFile: resourceId=" + resourceId, user);
 		
 		SOAPMessage response = (SOAPMessage) makeRequest(env, user, NAMESPACE, getUrl(env));
+		
 		File file = writeAttachment(response);
 		
 		SOAPConsole.log("GetFile:", file);

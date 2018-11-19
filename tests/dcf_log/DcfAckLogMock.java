@@ -21,6 +21,7 @@ public class DcfAckLogMock implements IDcfAckLog {
 	private OpResError opResError;
 	private String datasetId;
 	private DcfDatasetStatus datasetStatus;
+	private String detailedAckResId;
 	
 	public DcfAckLogMock(OkCode opResCode, DcfDatasetStatus status) {
 		this.opResCode = opResCode;
@@ -44,11 +45,33 @@ public class DcfAckLogMock implements IDcfAckLog {
 		this.datasetStatus = datasetStatus;
 	}
 	
+	/**
+	 * shahaal
+	 * @param dcCode
+	 * @param messageValResCode
+	 * @param opResCode
+	 * @param datasetId
+	 * @param datasetStatus
+	 */
+	public DcfAckLogMock(String dcCode, String detailedAckResId, OkCode opResCode, 
+			String datasetId, DcfDatasetStatus datasetStatus) {
+		this.dcCode = dcCode;
+		this.detailedAckResId = detailedAckResId;
+		this.opResCode = opResCode;
+		this.datasetId = datasetId;
+		this.datasetStatus = datasetStatus;
+	}
+	
 	public void setDcCode(String dcCode) {
 		this.dcCode = dcCode;
 	}
 	public void setMessageValResCode(MessageValResCode messageValResCode) {
 		this.messageValResCode = messageValResCode;
+	}
+	// shahaal, set the detailedAckResId from the ack file in temp
+	// if the log status is in delivered
+	public void setDetailedAckResId(String detailedAckResId) {
+		this.detailedAckResId = detailedAckResId;
 	}
 	public void setOpResCode(OkCode opResCode) {
 		this.opResCode = opResCode;
@@ -74,6 +97,13 @@ public class DcfAckLogMock implements IDcfAckLog {
 	@Override
 	public MessageValResCode getMessageValResCode() {
 		return messageValResCode;
+	}
+	
+	// shahaal, set the detailedAckResId from the ack file in temp
+	// if the log status is in delivered
+	@Override
+	public String getDetailedAckResId() {
+		return detailedAckResId;
 	}
 
 	@Override
