@@ -58,7 +58,7 @@ public class GetFile extends SOAPRequest {
 	
 	@Override
 	public SOAPMessage createRequest(IDcfUser user, String namespace, SOAPConnection con) throws SOAPException {
-
+		
 		// create the standard structure and get the message
 		SOAPMessage soapMsg = createTemplateSOAPMessage (user, namespace, "dcf");
 		SOAPBody soapBody = soapMsg.getSOAPPart().getEnvelope().getBody();
