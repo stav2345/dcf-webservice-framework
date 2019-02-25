@@ -32,4 +32,9 @@ public interface IDcfLogDownloader {
 	 * @throws SOAPException 
 	 */
 	public File getLog(IDcfUser user, Environment env, String logCode, long interAttemptsTime, int maxAttempts) throws SOAPException;
+	
+	/**
+	 * Skip the wait process and try to get the log immediately
+	 */
+	public void skipWait();
 }

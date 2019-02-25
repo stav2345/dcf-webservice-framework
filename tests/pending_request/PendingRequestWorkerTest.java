@@ -6,7 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import config.Environment;
-import dcf_log.DcfLogDownloaderMock;
 import dcf_log.DcfLogParserMock;
 import soap.DetailedSOAPException;
 import user.DcfUser;
@@ -32,13 +31,13 @@ public class PendingRequestWorkerTest {
 		IPendingRequest r1 = upc.unreserve(user, env, "ACTION", "first pending request");
 		IPendingRequest r2 = upc.unreserve(user, env, "MTX", "second pending request");
 		
-		PendingRequestWorker worker = new PendingRequestWorker(new DcfLogDownloaderMock(), new DcfLogParserMock()) {
+		PendingRequestWorker worker = new PendingRequestWorker(new DcfLogParserMock()) {
 			
 			@Override
 			public void statusChanged(PendingRequestStatusChangedEvent event) {
 				
 				if (event.getNewStatus() == PendingRequestStatus.COMPLETED)
-					count++;
+					PendingRequestWorkerTest.this.count++;
 			}
 		};
 		
@@ -54,7 +53,7 @@ public class PendingRequestWorkerTest {
 		
 		worker.startPendingRequests(r2);
 
-		while(count < 2) {
+		while(this.count < 2) {
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {

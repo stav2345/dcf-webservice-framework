@@ -9,7 +9,7 @@ public enum DcfDatasetStatus {
 	
 	VALID("VALID"),
 	PROCESSING("PROCESSING"),
-	VALID_WITH_WARNINGS("VALID_WITH_WARNINGS"),
+	VALID_WITH_WARNINGS("VALID WITH WARNINGS"),
 	REJECTED_EDITABLE("REJECTED EDITABLE"),
 	REJECTED("REJECTED"),
 	DELETED("DELETED"),
@@ -30,7 +30,7 @@ public enum DcfDatasetStatus {
 	}
 	
 	public String getStep() {
-		return step;
+		return this.step;
 	}
 	
 	/**
@@ -38,7 +38,7 @@ public enum DcfDatasetStatus {
 	 * @return
 	 */
 	public String getStatus() {
-		return status;
+		return this.status;
 	}
 
 	/**

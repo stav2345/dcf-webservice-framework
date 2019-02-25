@@ -10,7 +10,7 @@ public enum PendingRequestPriority {
 	}
 	
 	public String getKey() {
-		return key;
+		return this.key;
 	}
 	
 	public static PendingRequestPriority fromString(String text) {

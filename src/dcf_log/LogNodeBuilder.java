@@ -6,7 +6,7 @@ import java.util.Collection;
 /**
  * Builder to create a single LogNode step by step.
  * @author avonva
- *
+ * @author shahaal
  */
 public class LogNodeBuilder {
 
@@ -15,7 +15,7 @@ public class LogNodeBuilder {
 	private Collection<String> opLogs;
 
 	public LogNodeBuilder() {
-		opLogs = new ArrayList<>();
+		this.opLogs = new ArrayList<>();
 	}
 
 	public LogNodeBuilder setName(String name) {
@@ -27,6 +27,7 @@ public class LogNodeBuilder {
 	    try {
 	    	this.result = DcfResponse.valueOf( result );
 	    } catch (IllegalArgumentException e) {
+	    	e.printStackTrace();
 	    	this.result = DcfResponse.ERROR;
 	    }
 
@@ -37,7 +38,7 @@ public class LogNodeBuilder {
 		return this;
 	}
 	public LogNodeBuilder addOpLog( String opLog ) {
-		opLogs.add( opLog );
+		this.opLogs.add( opLog );
 		return this;
 	}
 	
@@ -46,12 +47,12 @@ public class LogNodeBuilder {
 	}
 
 	public LogNode build() {
-		return new LogNode( name, result, opLogs );
+		return new LogNode( this.name, this.result, this.opLogs );
 	}
 	
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return "name=" + name + "; result=" + result + "; opLogs=" + opLogs;
+		return "name=" + this.name + "; result=" + this.result + "; opLogs=" + this.opLogs;
 	}
 }

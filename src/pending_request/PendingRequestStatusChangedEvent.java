@@ -24,7 +24,7 @@ public class PendingRequestStatusChangedEvent {
 	 * @return
 	 */
 	public IPendingRequest getPendingRequest() {
-		return pendingRequest;
+		return this.pendingRequest;
 	}
 	
 	/**
@@ -32,7 +32,7 @@ public class PendingRequestStatusChangedEvent {
 	 * @return
 	 */
 	public PendingRequestStatus getOldStatus() {
-		return oldStatus;
+		return this.oldStatus;
 	}
 	
 	/**
@@ -40,11 +40,11 @@ public class PendingRequestStatusChangedEvent {
 	 * @return
 	 */
 	public PendingRequestStatus getNewStatus() {
-		return newStatus;
+		return this.newStatus;
 	}
 	
 	@Override
 	public String toString() {
-		return "status=" + oldStatus + " => " + newStatus + "; pendingRequest=" + pendingRequest;
+		return "status=" + this.oldStatus + " => " + this.newStatus + "; pendingRequest=" + this.pendingRequest;
 	}
 }

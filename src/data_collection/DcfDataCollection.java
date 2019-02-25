@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 /**
  * Object which models a data collection
  * @author avonva
- *
+ * @author shahaal
  */
 public class DcfDataCollection implements IDcfDataCollection {
 
@@ -17,68 +17,83 @@ public class DcfDataCollection implements IDcfDataCollection {
 	private Timestamp activeTo;
 	private String resourceId;
 
+	@Override
 	public void setId(int id) {
 		this.id = id;
 	}
+	@Override
 	public void setCode(String code) {
 		this.code = code;
 	}
+	@Override
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	@Override
 	public void setCategory(String category) {
 		this.category = category;
 	}
+	@Override
 	public void setActiveFrom(Timestamp activeFrom) {
 		this.activeFrom = activeFrom;
 	}
+	@Override
 	public void setActiveTo(Timestamp activeTo) {
 		this.activeTo = activeTo;
 	}
+	@Override
 	public void setResourceId(String resourceId) {
 		this.resourceId = resourceId;
 	}
 
+	@Override
 	public int getId() {
-		return id;
+		return this.id;
 	}
+	@Override
 	public String getCode() {
-		return code;
+		return this.code;
 	}
+	@Override
 	public String getDescription() {
-		return description;
+		return this.description;
 	}
+	@Override
 	public String getCategory() {
-		return category;
+		return this.category;
 	}
+	@Override
 	public Timestamp getActiveFrom() {
-		return activeFrom;
+		return this.activeFrom;
 	}
+	@Override
 	public Timestamp getActiveTo() {
-		return activeTo;
+		return this.activeTo;
 	}
+	@Override
 	public String getResourceId() {
-		return resourceId;
+		return this.resourceId;
 	}
 
+	@Override
 	public boolean isActive() {
 
 		Timestamp today = new Timestamp(System.currentTimeMillis());
 
-		boolean started = activeFrom.before(today);
-		boolean notOver = activeTo.after(today);
+		boolean started = this.activeFrom.before(today);
+		boolean notOver = this.activeTo.after(today);
 
 		return started && notOver;
 	}
 
 	@Override
 	public String toString() {
-		return "DATA COLLECTION: id=" + (id == -1 ? "not defined yet" : id )
-				+ ";code=" + code 
-				+ ";description=" + description 
-				+ ";category=" + category 
-				+ ";activeFrom=" + activeFrom
-				+ ";activeTo=" + activeTo
-				+ ";resourceId=" + resourceId;
+		return "DATA COLLECTION: id=" + (this.id == -1 ? "not defined yet" : this.id )
+				+ ";code=" + this.code 
+				+ ";description=" + this.description 
+				+ ";category=" + this.category 
+				+ ";activeFrom=" + this.activeFrom
+				+ ";activeTo=" + this.activeTo
+				+ ";resourceId=" + this.resourceId;
 	}
 }

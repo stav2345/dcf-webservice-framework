@@ -64,19 +64,19 @@ public class DcfLog {
 	}
 
 	public String getAction() {
-		return action;
+		return this.action;
 	}
 	
 	public Timestamp getTransmissionDate() {
-		return transmissionDate;
+		return this.transmissionDate;
 	}
 	
 	public Timestamp getProcessingDate() {
-		return processingDate;
+		return this.processingDate;
 	}
 	
 	public String getUploadedFilename() {
-		return uploadedFilename;
+		return this.uploadedFilename;
 	}
 	
 	/**
@@ -84,7 +84,7 @@ public class DcfLog {
 	 * @return
 	 */
 	public String getCatalogueCode() {
-		return catalogueCode;
+		return this.catalogueCode;
 	}
 	
 	/**
@@ -92,7 +92,7 @@ public class DcfLog {
 	 * @return
 	 */
 	public String getCatalogueVersion() {
-		return catalogueVersion;
+		return this.catalogueVersion;
 	}
 	
 	/**
@@ -100,7 +100,7 @@ public class DcfLog {
 	 * @return
 	 */
 	public String getCatalogueStatus() {
-		return catalogueStatus;
+		return this.catalogueStatus;
 	}
 
 	/**
@@ -108,7 +108,7 @@ public class DcfLog {
 	 * @return
 	 */
 	public String getMacroOpName() {
-		return macroOpName;
+		return this.macroOpName;
 	}
 	
 	/**
@@ -117,7 +117,7 @@ public class DcfLog {
 	 * @return
 	 */
 	public DcfResponse getMacroOpResult() {
-		return macroOpResult;
+		return this.macroOpResult;
 	}
 
 	/**
@@ -125,19 +125,19 @@ public class DcfLog {
 	 * @return
 	 */
 	public boolean isMacroOperationCorrect() {
-		return macroOpResult == DcfResponse.OK;
+		return this.macroOpResult == DcfResponse.OK;
 	}
 	
 	public Collection<String> getMacroOpLogs() {
-		return macroOpLogs;
+		return this.macroOpLogs;
 	}
 	
 	public Collection<LogNode> getLogNodes() {
-		return logNodes;
+		return this.logNodes;
 	}
 	
 	public Collection<LogNode> getValidationErrors() {
-		return validationErrors;
+		return this.validationErrors;
 	}
 	/**
 	 * Get all the log nodes that were not successful
@@ -148,14 +148,14 @@ public class DcfLog {
 		// filter nodes by their result
 		Collection<LogNode> nodes = new ArrayList<>();
 
-		for(LogNode node : logNodes) {
+		for(LogNode node : this.logNodes) {
 			
 			// if erroneous operation
 			if(!node.isOperationCorrect())
 				nodes.add(node);
 		}
 		
-		for(LogNode node : validationErrors) {
+		for(LogNode node : this.validationErrors) {
 			// if erroneous operation
 			if(!node.isOperationCorrect())
 				nodes.add(node);
@@ -167,16 +167,16 @@ public class DcfLog {
 	
 	@Override
 	public String toString() {
-		return "DcfLog: action=" + action 
-				+ ";trxDate=" + transmissionDate 
-				+ ";procDate=" + processingDate 
-				+ ";uploadedFile=" + uploadedFilename
-				+ ";catalogueCode=" + catalogueCode
-				+ ";catalogueVersion=" + catalogueVersion
-				+ ";catalogueStatus=" + catalogueStatus
-				+ ";macroOpName=" + macroOpName
-				+ ";macroOpResult" + macroOpResult
-				+ ";macroOpLogs" + macroOpLogs
-				+ ";operationsLogs=" + logNodes;
+		return "DcfLog: action=" + this.action 
+				+ ";trxDate=" + this.transmissionDate 
+				+ ";procDate=" + this.processingDate 
+				+ ";uploadedFile=" + this.uploadedFilename
+				+ ";catalogueCode=" + this.catalogueCode
+				+ ";catalogueVersion=" + this.catalogueVersion
+				+ ";catalogueStatus=" + this.catalogueStatus
+				+ ";macroOpName=" + this.macroOpName
+				+ ";macroOpResult" + this.macroOpResult
+				+ ";macroOpLogs" + this.macroOpLogs
+				+ ";operationsLogs=" + this.logNodes;
 	}
 }

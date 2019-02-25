@@ -3,6 +3,7 @@ package data_collection;
 /**
  * Relation object among {@link IDcfDataCollection}, {@link IDcfDCTable}
  * and {@link IDcfCatalogueConfig}
+ * @author shahaal
  * @author avonva
  *
  */
@@ -20,19 +21,19 @@ public class DcfDCTableConfig {
 	}
 
 	public IDcfDataCollection getDataCollection() {
-		return dc;
+		return this.dc;
 	}
 	
 	public IDcfDCTable getTable() {
-		return table;
+		return this.table;
 	}
 	
 	public IDcfCatalogueConfig getConfig() {
-		return config;
+		return this.config;
 	}
 	
 	@Override
 	public String toString() {
-		return "DCTableConfig: " + dc + ";" + table + ";" + config;
+		return "DCTableConfig: " + this.dc + ";" + this.table + ";" + this.config;
 	}
 }

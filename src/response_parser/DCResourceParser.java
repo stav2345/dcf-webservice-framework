@@ -22,7 +22,7 @@ import data_collection.IDcfDCTableLists;
  * Parser used to extract all the {@link DCTable} from
  * a data collection configuration .xml.
  * @author avonva
- *
+ * @author shahaal
  */
 public class DCResourceParser<T extends IDcfDCTable> implements AutoCloseable {
 
@@ -55,8 +55,8 @@ public class DCResourceParser<T extends IDcfDCTable> implements AutoCloseable {
 		XMLInputFactory factory = XMLInputFactory.newInstance();
 		factory.setProperty(XMLInputFactory.IS_COALESCING, true);
 		
-		stream = new FileInputStream(file);
-		eventReader = factory.createXMLEventReader(stream);
+		this.stream = new FileInputStream(file);
+		this.eventReader = factory.createXMLEventReader(this.stream);
 	}
 	
 	/**
@@ -66,9 +66,9 @@ public class DCResourceParser<T extends IDcfDCTable> implements AutoCloseable {
 	 */
 	public IDcfDCTableLists<T> parse() throws XMLStreamException {
 		
-		while (eventReader.hasNext()) {
+		while (this.eventReader.hasNext()) {
 			// read the node
-			XMLEvent event = eventReader.nextEvent();
+			XMLEvent event = this.eventReader.nextEvent();
 
 			// actions based on the node type
 			switch(event.getEventType()) {
@@ -87,10 +87,12 @@ public class DCResourceParser<T extends IDcfDCTable> implements AutoCloseable {
 			case XMLStreamConstants.END_ELEMENT:
 				end(event);
 				break;
+			default:
+				break;
 			}
 		}
 		
-		return output;
+		return this.output;
 	}
 
 	/**
@@ -101,9 +103,9 @@ public class DCResourceParser<T extends IDcfDCTable> implements AutoCloseable {
 
 		StartElement startElement = event.asStartElement();
 		
-		currentNode = startElement.getName().getLocalPart();
+		this.currentNode = startElement.getName().getLocalPart();
 
-		switch (currentNode) {
+		switch (this.currentNode) {
 		case TABLE_NODE:
 			this.table = this.output.create();
 			break;
@@ -121,7 +123,7 @@ public class DCResourceParser<T extends IDcfDCTable> implements AutoCloseable {
 	 */
 	private void parseCharacters(XMLEvent event) {
 		
-		if (currentNode == null)
+		if (this.currentNode == null)
 			return;
 		
 		// get the xml node value
@@ -130,18 +132,18 @@ public class DCResourceParser<T extends IDcfDCTable> implements AutoCloseable {
 		if (contents == null)
 			return;
 
-		switch (currentNode) {
+		switch (this.currentNode) {
 		case TABLE_NAME_NODE:
-			table.setName(contents);
+			this.table.setName(contents);
 			break;
 		case DATA_NODE:
-			catalogueConfig.setDataElementName(contents);
+			this.catalogueConfig.setDataElementName(contents);
 			break;
 		case CAT_CODE_NODE:
-			catalogueConfig.setCatalogueCode(contents);
+			this.catalogueConfig.setCatalogueCode(contents);
 			break;
 		case HIER_CODE_NODE:
-			catalogueConfig.setHierarchyCode(contents);
+			this.catalogueConfig.setHierarchyCode(contents);
 			break;
 		default:
 			break;
@@ -164,21 +166,21 @@ public class DCResourceParser<T extends IDcfDCTable> implements AutoCloseable {
 		case TABLE_NODE:
 
 			// add table to output
-			output.add(table);
-			table = null;
+			this.output.add(this.table);
+			this.table = null;
 			break;
 			
 		case CONFIG_NODE:
 			// add the configuration to the table
-			table.addConfig(catalogueConfig);
-			catalogueConfig = null;
+			this.table.addConfig(this.catalogueConfig);
+			this.catalogueConfig = null;
 			break;
 			
 		default:
 			break;
 		}
 		
-		currentNode = null;
+		this.currentNode = null;
 	}
 	
 	/**
@@ -186,8 +188,9 @@ public class DCResourceParser<T extends IDcfDCTable> implements AutoCloseable {
 	 * @throws IOException
 	 * @throws XMLStreamException 
 	 */
+	@Override
 	public void close() throws IOException, XMLStreamException {
-		stream.close();
-		eventReader.close();
+		this.stream.close();
+		this.eventReader.close();
 	}
 }

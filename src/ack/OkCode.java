@@ -21,7 +21,7 @@ public enum OkCode {
 	 * @return
 	 */
 	public String getHeaderName() {
-		return headerName;
+		return this.headerName;
 	}
 
 	/**

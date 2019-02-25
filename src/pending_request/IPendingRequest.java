@@ -9,7 +9,6 @@ import javax.xml.soap.SOAPException;
 import config.Environment;
 import dcf_log.DcfLog;
 import dcf_log.DcfResponse;
-import dcf_log.IDcfLogDownloader;
 import dcf_log.IDcfLogParser;
 import soap.UploadCatalogueFile;
 import user.IDcfUser;
@@ -35,13 +34,25 @@ public interface IPendingRequest {
 	
 	/**
 	 * Start polling the DCF
-	 * @param downloader which log downloader should be used for downloading the log
 	 * @param parser which parser should be used to create a {@link DcfLog} object
 	 * starting from the log {@link File}
 	 * @return the response contained in the log
 	 * @throws SOAPException used for download issues
 	 */
-	public DcfResponse start(IDcfLogDownloader downloader, IDcfLogParser parser) throws SOAPException, IOException;
+	public DcfResponse start(IDcfLogParser parser) throws SOAPException, IOException;
+	
+	/**
+	 * Force the request to restart if queued
+	 */
+	public void restart();
+	
+	/**
+	 * Get when the pending request will be relaunched
+	 * (only if its status is {@link PendingRequestStatus#QUEUED}).
+	 * @return the time when the request will restart or -1 if the request
+	 * is already on going (or with HIGH priority)
+	 */
+	public long getRestartTime();
 	
 	/**
 	 * Get the DCF response contained in the log.
@@ -93,6 +104,12 @@ public interface IPendingRequest {
 	 * @return
 	 */
 	public String getType();
+	
+	/**
+	 * Check if the request is in pause or not
+	 * @return
+	 */
+	public boolean isPaused();
 	
 	/**
 	 * Get the priority of the pending request

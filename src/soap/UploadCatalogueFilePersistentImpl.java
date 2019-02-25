@@ -5,8 +5,8 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import config.Environment;
 import pending_request.IDcfPendingRequestsList;
@@ -16,6 +16,7 @@ import pending_request.PendingRequestListener;
 import pending_request.PendingRequestStatusChangedEvent;
 import soap.UploadCatalogueFileImpl.PublishLevel;
 import soap.UploadCatalogueFileImpl.ReserveLevel;
+import soap_interface.IUploadCatalogueFileImpl;
 import user.IDcfUser;
 
 /**
@@ -28,6 +29,7 @@ import user.IDcfUser;
  * the class methods are used to retrieve the pending requests from
  * the database).
  * @author avonva
+ * @author shahaal
  *
  */
 public class UploadCatalogueFilePersistentImpl implements IUploadCatalogueFileImpl {
@@ -54,6 +56,7 @@ public class UploadCatalogueFilePersistentImpl implements IUploadCatalogueFileIm
 	 * @throws IOException 
 	 * @throws SQLException 
 	 */
+	@Override
 	public IPendingRequest reserve(IDcfUser user, Environment env, ReserveLevel level, String catalogueCode, 
 			String description) throws DetailedSOAPException, IOException {
 
@@ -71,6 +74,7 @@ public class UploadCatalogueFilePersistentImpl implements IUploadCatalogueFileIm
 	 * @throws IOException 
 	 * @throws SQLException 
 	 */
+	@Override
 	public IPendingRequest unreserve(IDcfUser user, Environment env, String catalogueCode, String description) 
 			throws DetailedSOAPException, IOException {
 		
@@ -88,6 +92,7 @@ public class UploadCatalogueFilePersistentImpl implements IUploadCatalogueFileIm
 	 * @throws IOException 
 	 * @throws SQLException 
 	 */
+	@Override
 	public IPendingRequest publish(IDcfUser user, Environment env, PublishLevel level, String catalogueCode) 
 			throws DetailedSOAPException, IOException {
 		
@@ -131,6 +136,7 @@ public class UploadCatalogueFilePersistentImpl implements IUploadCatalogueFileIm
 	 * @throws DetailedSOAPException
 	 * @throws IOException
 	 */
+	@Override
 	public IPendingRequest uploadCatalogueFile(IDcfUser user, Environment env, 
 			String attachment, String uploadCatalogueFileType, Map<String, String> requestData) 
 					throws DetailedSOAPException, IOException {
@@ -154,7 +160,7 @@ public class UploadCatalogueFilePersistentImpl implements IUploadCatalogueFileIm
 			IDcfPendingRequestsList<IPendingRequest> output) 
 			throws SQLException, IOException {
 		
-		IDcfPendingRequestsList<IPendingRequest> requests = dao.getUserPendingRequests(user, output);
+		IDcfPendingRequestsList<IPendingRequest> requests = this.dao.getUserPendingRequests(user, output);
 		
 		// add listeners in order to remove/update the requests
 		for (IPendingRequest request : requests) {
@@ -176,7 +182,7 @@ public class UploadCatalogueFilePersistentImpl implements IUploadCatalogueFileIm
 		
 		// save the pending request into the database
 		try {
-			dao.insert(request);
+			this.dao.insert(request);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new IOException(e);  // follow the interface declaration
@@ -205,7 +211,7 @@ public class UploadCatalogueFilePersistentImpl implements IUploadCatalogueFileIm
 				switch(event.getNewStatus()) {
 				case COMPLETED:  // request finished, remove from db
 					try {
-						dao.remove(logCode);
+						UploadCatalogueFilePersistentImpl.this.dao.remove(logCode);
 					}
 					catch(IOException | SQLException e) {
 						e.printStackTrace();

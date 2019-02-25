@@ -18,6 +18,7 @@ import user.IDcfUser;
 /**
  * Get the entire catalogues list which are present in DCF
  * @author avonva
+ * @author shahaal
  *
  */
 public class GetCataloguesList<T extends IDcfCatalogue> extends GetList<T> {
@@ -28,17 +29,17 @@ public class GetCataloguesList<T extends IDcfCatalogue> extends GetList<T> {
 	
 	private IDcfCataloguesList<T> output;
 	
-	public GetCataloguesList(IDcfUser user, Environment env, IDcfCataloguesList<T> output) {
-		super(user, env, URL, TEST_URL, NAMESPACE);
-		this.output = output;
+	public GetCataloguesList() {
+		super(URL, TEST_URL, NAMESPACE);
 	}
 	
-	@Override
-	public IDcfList<T> getList() throws DetailedSOAPException {
+	public IDcfList<T> getList(Environment env, IDcfUser user, IDcfCataloguesList<T> output1) throws DetailedSOAPException {
 		
-		SOAPConsole.log("GetCataloguesList", getUser());
+		this.output = output1;
+		
+		SOAPConsole.log("GetCataloguesList", user);
 
-		IDcfList<T> response = super.getList();
+		IDcfList<T> response = super.getList(env, user);
 		
 		SOAPConsole.log("GetCataloguesList:", response);
 		
@@ -47,15 +48,15 @@ public class GetCataloguesList<T extends IDcfCatalogue> extends GetList<T> {
 	
 	@Override
 	public IDcfCataloguesList<T> getList(Document cdata) {
-		GetCataloguesListParser<T> parser = new GetCataloguesListParser<>(output);
+		GetCataloguesListParser<T> parser = new GetCataloguesListParser<>(this.output);
 		return parser.parse(cdata);
 	}
 
 	@Override
-	public SOAPMessage createRequest(SOAPConnection con) throws SOAPException {
+	public SOAPMessage createRequest(IDcfUser user, String namespace, SOAPConnection con) throws SOAPException {
 
 		// create the standard structure and get the message
-		SOAPMessage soapMsg = createTemplateSOAPMessage ("ws");
+		SOAPMessage soapMsg = createTemplateSOAPMessage(user, namespace, "ws");
 
 		// get the body of the message
 		SOAPBody soapBody = soapMsg.getSOAPPart().getEnvelope().getBody();

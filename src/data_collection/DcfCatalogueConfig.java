@@ -5,6 +5,7 @@ package data_collection;
  * variables. In particular it specifies the catalogue and 
  * the hierarchy which contains this variable.
  * @author avonva
+ * @author shahaal
  *
  */
 public class DcfCatalogueConfig implements IDcfCatalogueConfig {
@@ -23,6 +24,7 @@ public class DcfCatalogueConfig implements IDcfCatalogueConfig {
 		this.hierarchyCode = hierarchyCode;
 	}
 	
+	@Override
 	public void setId(int id) {
 		this.id = id;
 	}
@@ -42,27 +44,31 @@ public class DcfCatalogueConfig implements IDcfCatalogueConfig {
 		this.hierarchyCode = hierarchyCode;
 	}
 	
+	@Override
 	public int getId() {
-		return id;
+		return this.id;
 	}
 
+	@Override
 	public String getDataElementName() {
-		return dataElementName;
+		return this.dataElementName;
 	}
 
+	@Override
 	public String getCatalogueCode() {
-		return catalogueCode;
+		return this.catalogueCode;
 	}
 
+	@Override
 	public String getHierarchyCode() {
-		return hierarchyCode;
+		return this.hierarchyCode;
 	}
 	
 	@Override
 	public String toString() {
-		return "CAT CONFIG: id= " + (id == -1 ? "not defined yet" : id ) 
-				+ "dataElemName=" + dataElementName
-				+ ";catCode=" + catalogueCode
-				+ ";hierCode=" + hierarchyCode;
+		return "CAT CONFIG: id= " + (this.id == -1 ? "not defined yet" : this.id ) 
+				+ "dataElemName=" + this.dataElementName
+				+ ";catCode=" + this.catalogueCode
+				+ ";hierCode=" + this.hierarchyCode;
 	}
 }

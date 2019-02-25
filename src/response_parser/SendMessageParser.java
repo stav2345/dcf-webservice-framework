@@ -11,6 +11,7 @@ import message.TrxCode;
 /**
  * Parse the DCF response of a send message call.
  * @author avonva
+ * @author shahaal
  *
  */
 public class SendMessageParser {
@@ -19,7 +20,7 @@ public class SendMessageParser {
 	private static final String TRX_STATE_NODE = "trxState";
 	private static final String TRX_ERROR_NODE = "trxErr";
 
-	public MessageResponse parse(SOAPBody body) throws SOAPException {
+	public static MessageResponse parse(SOAPBody body) throws SOAPException {
 		
 		// extract the information
 		String messageId = extractMessageId(body);
@@ -38,7 +39,7 @@ public class SendMessageParser {
 	 * @return
 	 * @throws SOAPException
 	 */
-	private String extractMessageId(SOAPBody body) throws SOAPException {
+	private static String extractMessageId(SOAPBody body) throws SOAPException {
 		
 		NodeList msgId = body.getElementsByTagName(MESSAGE_ID_NODE);
 		
@@ -54,7 +55,7 @@ public class SendMessageParser {
 	 * @return
 	 * @throws SOAPException
 	 */
-	private TrxCode extractTrxState(SOAPBody body) throws SOAPException {
+	private static TrxCode extractTrxState(SOAPBody body) throws SOAPException {
 		
 		NodeList trxStateList = body.getElementsByTagName(TRX_STATE_NODE);
 		
@@ -72,7 +73,7 @@ public class SendMessageParser {
 	 * @return
 	 * @throws SOAPException
 	 */
-	private String extractTrxError(SOAPBody body) throws SOAPException {
+	private static String extractTrxError(SOAPBody body) throws SOAPException {
 		
 		NodeList msgId = body.getElementsByTagName(TRX_ERROR_NODE);
 		

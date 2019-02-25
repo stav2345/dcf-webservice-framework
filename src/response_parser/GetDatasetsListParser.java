@@ -14,15 +14,18 @@ import soap.GetDatasetsList;
  * Parser for a dom document containing the {@link GetDatasetsList}
  * response
  * @author avonva
- *
+ * @author shahaal
  */
 public class GetDatasetsListParser<T extends IDcfDataset> {
 
 	private static final String DATASET_ID_NODE = "datasetId";
-	private static final String SENDER_DATASET_ID_NODE = "datasetSenderId";
+	private static final String SENDER_DATASET_ID_NODE = "senderDatasetId";
 	private static final String WRAPPER_STATUS_NODE = "datasetStatus";
 	private static final String STATUS_NODE = "status";
 	private static final String STEP_NODE = "step";
+	private static final String LAST_MESSAGE_ID = "lastMessageId";
+	private static final String LAST_MODIFYING_MESSAGE_ID = "lastModifyingMessageId";
+	private static final String LAST_VALIDATION_MESSAGE_ID = "lastValidationMessageId";
 	
 	private IDcfDatasetsList<T> output;
 	
@@ -44,10 +47,10 @@ public class GetDatasetsListParser<T extends IDcfDataset> {
 			// get the current dataset
 			Node datasetNode = datas.item(i);
 
-			output.add(getDataset(datasetNode));
+			this.output.add(getDataset(datasetNode));
 		}
 		
-		return output;
+		return this.output;
 	}
 	
 	/**
@@ -60,7 +63,7 @@ public class GetDatasetsListParser<T extends IDcfDataset> {
 		// get the info related to the dataset
 		NodeList datasetInfoNode = datasetNode.getChildNodes();
 		
-		T dataset = output.create();
+		T dataset = this.output.create();
 		
 		// parse the dataset info
 		for (int i = 0; i < datasetInfoNode.getLength(); ++i) {
@@ -75,6 +78,15 @@ public class GetDatasetsListParser<T extends IDcfDataset> {
 				break;
 			case SENDER_DATASET_ID_NODE:
 				dataset.setSenderId(value);
+				break;
+			case LAST_MESSAGE_ID:
+				dataset.setLastMessageId(value);
+				break;
+			case LAST_MODIFYING_MESSAGE_ID:
+				dataset.setLastModifyingMessageId(value);
+				break;
+			case LAST_VALIDATION_MESSAGE_ID:
+				dataset.setLastValidationMessageId(value);
 				break;
 			case WRAPPER_STATUS_NODE:
 				dataset.setStatus(getStatus(field));
@@ -92,7 +104,7 @@ public class GetDatasetsListParser<T extends IDcfDataset> {
 	 * @param statusNode
 	 * @return
 	 */
-	private DcfDatasetStatus getStatus(Node statusNode) {
+	private static DcfDatasetStatus getStatus(Node statusNode) {
 		
 		DcfDatasetStatus status = null;
 		String step = null;

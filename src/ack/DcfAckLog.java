@@ -16,7 +16,7 @@ import soap.GetAck;
  * @author avonva
  *
  */
-public class DcfAckLog {
+public class DcfAckLog implements IDcfAckLog {
 
 	private InputStream rawLog;
 	private Document log;
@@ -29,14 +29,16 @@ public class DcfAckLog {
 		this.rawLog = rawLog;
 	}
 	
+	@Override
 	public InputStream getRawLog() {
-		return rawLog;
+		return this.rawLog;
 	}
 	
 	/**
 	 * Get the data collection used for this message
 	 * @return
 	 */
+	@Override
 	public String getDCCode() {
 		
 		String code = getFirstNodeText("dcCode");
@@ -48,6 +50,7 @@ public class DcfAckLog {
 	 * Get the message val res code
 	 * @return
 	 */
+	@Override
 	public MessageValResCode getMessageValResCode() {
 		
 		String code = getFirstNodeText("messageValResCode");
@@ -62,6 +65,7 @@ public class DcfAckLog {
 	 * Get the operation res code
 	 * @return
 	 */
+	@Override
 	public OkCode getOpResCode() {
 		
 		String code = getFirstNodeText("opResCode");
@@ -72,6 +76,7 @@ public class DcfAckLog {
 		return OkCode.fromString(code);
 	}
 	
+	@Override
 	public boolean isOk() {
 		
 		OkCode ok = getOpResCode();
@@ -88,10 +93,12 @@ public class DcfAckLog {
 	 * is {@link OkCode#KO}.
 	 * @return
 	 */
+	@Override
 	public Collection<String> getOpResLog() {
 		return getNodesText("opResLog");
 	}
 	
+	@Override
 	public boolean hasErrors() {
 		return !getOpResLog().isEmpty();
 	}
@@ -100,6 +107,7 @@ public class DcfAckLog {
 	 * Get the type of error if present
 	 * @return
 	 */
+	@Override
 	public OpResError getOpResError() {
 		
 		Collection<String> errors = getOpResLog();
@@ -117,10 +125,21 @@ public class DcfAckLog {
 		return error;
 	}
 	
+	@Override
+	public String getMessageValResText() {
+		return getFirstNodeText("messageValResText");
+	}
+	
+	@Override
+	public String getDetailedAckResId() {
+		return getFirstNodeText("detailedAckResId");
+	}
+	
 	/**
 	 * Get the retrieved dataset id
 	 * @return
 	 */
+	@Override
 	public String getDatasetId() {
 		return getFirstNodeText("datasetId");
 	}
@@ -129,6 +148,7 @@ public class DcfAckLog {
 	 * Get the status of the dataset
 	 * @return
 	 */
+	@Override
 	public DcfDatasetStatus getDatasetStatus() {
 		
 		String code = getFirstNodeText("datasetStatus");
@@ -149,7 +169,7 @@ public class DcfAckLog {
 		
 		Collection<String> text = new ArrayList<>();
 		
-		NodeList nodes = log.getElementsByTagName(nodeName);
+		NodeList nodes = this.log.getElementsByTagName(nodeName);
 		
 		for (int i = 0; i < nodes.getLength(); ++i) {
 			text.add(nodes.item(i).getTextContent());
@@ -166,7 +186,7 @@ public class DcfAckLog {
 	 */
 	public String getFirstNodeText(String nodeName) {
 		
-		NodeList messageCodeList = log.getElementsByTagName(nodeName);
+		NodeList messageCodeList = this.log.getElementsByTagName(nodeName);
 		
 		// if no message code return
 		if (messageCodeList.getLength() == 0)

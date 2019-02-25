@@ -7,12 +7,10 @@ import java.util.List;
 import javax.swing.SwingWorker;
 import javax.xml.soap.SOAPException;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import dcf_log.DcfLogDownloader;
 import dcf_log.DcfLogParser;
-import dcf_log.IDcfLogDownloader;
 import dcf_log.IDcfLogParser;
 
 /**
@@ -29,11 +27,11 @@ public abstract class PendingRequestWorker extends SwingWorker<Void, PendingRequ
 	private PendingRequestLauncher pool;
 	
 	public PendingRequestWorker() {
-		this(new DcfLogDownloader(), new DcfLogParser());
+		this(new DcfLogParser());
 	}
 	
-	public PendingRequestWorker(IDcfLogDownloader downloader, IDcfLogParser parser) {
-		this.pool = new PendingRequestLauncher(downloader, parser);
+	public PendingRequestWorker(IDcfLogParser parser) {
+		this.pool = new PendingRequestLauncher(parser);
 		
 		// set the listener for the requests
 		this.pool.addPendingRequestListener(new PendingRequestListener() {

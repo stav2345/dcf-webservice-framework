@@ -9,14 +9,16 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
 import config.Environment;
+import soap_interface.IGetDataset;
 import user.IDcfUser;
 
 /**
  * Generic get file request to the dcf.
  * @author avonva
+ * @author shahaal
  *
  */
-public class GetDataset extends SOAPRequest {
+public class GetDataset extends SOAPRequest implements IGetDataset {
 
 	private static final String NAMESPACE = "http://dcf-elect.efsa.europa.eu/";
 	private static final String URL = "https://dcf-elect.efsa.europa.eu/elect2";
@@ -25,24 +27,19 @@ public class GetDataset extends SOAPRequest {
 	private String datasetId;
 	
 	/**
-	 * Make a get file request for a specific dataset
-	 * @param datasetId
-	 */
-	public GetDataset(IDcfUser user, Environment env, String datasetId) {
-		super(user, env, NAMESPACE);
-		this.datasetId = datasetId;
-	}
-	
-	/**
 	 * Get an handle to the downloaded dataset
 	 * @return
 	 * @throws SOAPException
 	 */
-	public File getDatasetFile() throws DetailedSOAPException {
+	@Override
+	public File getDatasetFile(Environment env, IDcfUser user, String datasetId1) throws DetailedSOAPException {
 		
-		SOAPConsole.log("GetDataset: datasetId=" + datasetId, getUser());
+		this.datasetId = datasetId1;
+		
+		SOAPConsole.log("GetDataset: datasetId=" + datasetId1, user);
 
-		Object response = makeRequest(getEnvironment() == Environment.PRODUCTION ? URL : TEST_URL);
+		String url = env == Environment.PRODUCTION ? URL : TEST_URL;
+		Object response = makeRequest(env, user, NAMESPACE, url);
 		
 		SOAPConsole.log("GetDataset:", response);
 		
@@ -61,16 +58,16 @@ public class GetDataset extends SOAPRequest {
 	}
 	
 	@Override
-	public SOAPMessage createRequest(SOAPConnection con) throws SOAPException {
+	public SOAPMessage createRequest(IDcfUser user, String namespace, SOAPConnection con) throws SOAPException {
 
 		// create the standard structure and get the message
-		SOAPMessage soapMsg = createTemplateSOAPMessage ("dcf");
+		SOAPMessage soapMsg = createTemplateSOAPMessage(user, namespace, "dcf");
 		SOAPBody soapBody = soapMsg.getSOAPPart().getEnvelope().getBody();
 		SOAPElement soapElem = soapBody.addChildElement("getDataset", "dcf");
 
 		// add resource id
 		SOAPElement arg = soapElem.addChildElement("datasetId");
-		arg.setTextContent(datasetId);
+		arg.setTextContent(this.datasetId);
 
 		// save the changes in the message and return it
 		soapMsg.saveChanges();

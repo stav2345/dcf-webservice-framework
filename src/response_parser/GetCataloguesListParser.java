@@ -31,7 +31,7 @@ public class GetCataloguesListParser<T extends IDcfCatalogue> {
 		for (int i = 0; i < cataloguesNodes.getLength(); i++) {
 
 			// create a catalogue builder to build the catalogue step by step
-			T catalogue = output.create();
+			T catalogue = this.output.create();
 
 			// get the current catalogue node
 			Node catalogueNode = cataloguesNodes.item(i);
@@ -45,10 +45,10 @@ public class GetCataloguesListParser<T extends IDcfCatalogue> {
 			catalogue = addProperties(catalogue, catalogueNode.getLastChild());
 
 			// add the catalogue into the output array
-			output.add(catalogue);
+			this.output.add(catalogue);
 		}
 		
-		return output;
+		return this.output;
 	}
 	
 	/**
@@ -162,6 +162,8 @@ public class GetCataloguesListParser<T extends IDcfCatalogue> {
 				break;
 			case "status":
 				catalogue.setStatus(propertyValue);
+				break;
+			default:
 				break;
 			}  // end switch
 		}  // end for

@@ -9,23 +9,28 @@ import java.util.Map;
 
 import javax.xml.soap.SOAPException;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import config.Environment;
 import dcf_log.DcfLog;
 import dcf_log.DcfResponse;
-import dcf_log.IDcfLogDownloader;
 import dcf_log.IDcfLogParser;
+import soap.ExportCatalogueFile;
+import soap_interface.IExportCatalogueFile;
 import user.IDcfUser;
 
 /**
  * Implementation of a {@link IPendingRequest}
  * @author avonva
+ * @author shahaal
  */
 public class PendingRequest implements IPendingRequest {
 	
 	private static final Logger LOGGER = LogManager.getLogger(PendingRequest.class);
+	
+	private IExportCatalogueFile exportCatFile;
+	private boolean paused;
 	
 	// type of the pending request (RESERVE, UNRESERVE, PUBLISH, UPLOAD_DATA)
 	private String type;
@@ -54,6 +59,8 @@ public class PendingRequest implements IPendingRequest {
 	// additional data of the request
 	private Map<String, String> data;
 	
+	private long restartTime;  // when the request will be restarted
+	
 	// external listeners
 	private Collection<PendingRequestListener> pendingRequestListeners;
 
@@ -62,6 +69,7 @@ public class PendingRequest implements IPendingRequest {
 	 */
 	public PendingRequest() {
 		this.priority = PendingRequestPriority.HIGH;
+		this.status = PendingRequestStatus.WAITING;
 		this.pendingRequestListeners = new ArrayList<>();
 	}
 	
@@ -79,20 +87,19 @@ public class PendingRequest implements IPendingRequest {
 		this.user = user;
 		this.logCode = logCode;
 		this.environment = environment;
-		this.status = PendingRequestStatus.WAITING;
 	}
 
 	@Override
-	public DcfResponse start(IDcfLogDownloader downloader, IDcfLogParser parser) throws SOAPException, IOException {
+	public DcfResponse start(IDcfLogParser parser) throws SOAPException, IOException {
 		
 		LOGGER.info("Starting pending request=" + this);
 		
 		this.setStatus(PendingRequestStatus.DOWNLOADING);
 		
-		File logFile = getLog(downloader);
+		File logFile = downloadLog(this.priority);
 
 		// if it was in high priority but no log found
-		if (priority == PendingRequestPriority.HIGH && logFile == null) {
+		if (this.priority == PendingRequestPriority.HIGH && logFile == null) {
 			
 			// retry with low priority
 			
@@ -100,7 +107,7 @@ public class PendingRequest implements IPendingRequest {
 			this.priority = PendingRequestPriority.LOW;
 			this.setStatus(PendingRequestStatus.QUEUED);
 			
-			logFile = getLog(downloader);
+			logFile = downloadLog(this.priority);
 		}
 
 		if (logFile == null) {
@@ -116,7 +123,7 @@ public class PendingRequest implements IPendingRequest {
 		this.log = parser.parse(logFile);
 		
 		// get the macro operation result
-		this.response = log.getMacroOpResult();
+		this.response = this.log.getMacroOpResult();
 
 		// log retrieved, thus request completed
 		this.setStatus(PendingRequestStatus.COMPLETED);
@@ -131,12 +138,109 @@ public class PendingRequest implements IPendingRequest {
 	 * was found in the available time, otherwise null
 	 * @throws SOAPException 
 	 */
-	private File getLog(IDcfLogDownloader downloader) throws SOAPException {
+	private File downloadLog(PendingRequestPriority priorityVar) throws SOAPException {
 		
-		File log = null;
+		File logVar = null;
 		
 		// 12 attempts, one every 10 seconds -> 2 minutes total
-		int maxAttempts = 12;
+		int maxAttempts = priorityVar == PendingRequestPriority.HIGH ? 12 : -1;
+		long interAttemptsTime = getInterAttemptsTime(priorityVar);
+
+		if (priorityVar == PendingRequestPriority.LOW)
+			this.restartTime = System.currentTimeMillis() + getInterAttemptsTime(priorityVar);
+		else
+			this.restartTime = -1;
+		
+		logVar = this.downloadLog(this.user, this.environment, this.logCode, interAttemptsTime, maxAttempts);
+		
+		if (logVar != null)
+			this.restartTime = -1;
+		
+		return logVar;
+	}
+	
+	/**
+	 * Download a log without polling strategy
+	 * @param logCodeVar the code of the log to download
+	 * @throws SOAPException
+	 */
+	private File downloadLog(IDcfUser userVar, Environment env, String logCodeVar) throws SOAPException {
+		
+		if (this.exportCatFile == null)
+			this.exportCatFile = new ExportCatalogueFile();
+		
+		File logVar = this.exportCatFile.exportLog(env, userVar, logCodeVar);
+		
+		if (logVar != null)
+			LOGGER.info("Log successfully downloaded, file=" + logVar);
+
+		return logVar;
+	}
+	
+	/**
+	 * Download a log from DCF with a polling strategy
+	 * @param logCodeVar the code of the log to download
+	 * @param interAttemptsTime waiting time before trying again to download the log
+	 * @param maxAttempts max number of allowed attempts (prevents DOS)
+	 * @throws SOAPException 
+	 */
+	private synchronized File downloadLog(IDcfUser userVar, Environment env, String logCodeVar, 
+			long interAttemptsTime, int maxAttempts) throws SOAPException {
+		
+		// if maxAttempts is > 0 then a limit is applied
+		boolean isLimited = maxAttempts > 0;
+		
+		File logVar = null;
+		
+		// number of tried attempts
+		int attemptsCount = 1;
+		
+		// polling
+		while(true) {
+
+			String diagnostic = "Getting log=" + logCodeVar + ", attempt n°=" + attemptsCount;
+			
+			// add maximum number of attempts if limited attempts
+			if(isLimited)
+				diagnostic += "/" + maxAttempts;
+			
+			LOGGER.info(diagnostic);
+
+			logVar = downloadLog(userVar, env, logCodeVar);
+			
+			if(logVar == null)
+				LOGGER.info("Log=" + logCodeVar + " not available yet in DCF");
+
+			// if the log was found or no another attempt is available
+			if(logVar != null || (isLimited && attemptsCount >= maxAttempts))
+				break;
+			
+			LOGGER.info("Waiting " + (interAttemptsTime/1000.00) 
+					+ " seconds and then retry to download log=" + logCodeVar);
+			
+			// wait inter attempts time
+			try {
+				this.paused = true;
+				this.wait(interAttemptsTime);
+			} catch(InterruptedException e) {
+				e.printStackTrace();
+			}
+			
+			this.paused = false;
+			
+			// go to the next attempt
+			attemptsCount++;
+		}
+		
+		return logVar;
+	}
+	
+	/**
+	 * Get inter attempt time based on priority
+	 * @return
+	 */
+	private static long getInterAttemptsTime(PendingRequestPriority priority) {
+		
 		long interAttemptsTime = 10000; 
 		
 		// set inter attempts time according to the priority
@@ -150,10 +254,7 @@ public class PendingRequest implements IPendingRequest {
 		default:
 			break;
 		}
-
-		log = downloader.getLog(user, environment, logCode, interAttemptsTime, maxAttempts);
-		
-		return log;
+		return interAttemptsTime;
 	}
 	
 	/**
@@ -168,11 +269,9 @@ public class PendingRequest implements IPendingRequest {
 		
 		PendingRequestStatusChangedEvent event = new PendingRequestStatusChangedEvent(
 				this, oldStatus, newStatus);
-
-		LOGGER.info("New status=" + event);
 		
 		// notify listeners
-		for (PendingRequestListener listener : pendingRequestListeners) {
+		for (PendingRequestListener listener : this.pendingRequestListeners) {
 			listener.statusChanged(event);
 		}
 	}
@@ -204,12 +303,12 @@ public class PendingRequest implements IPendingRequest {
 	
 	@Override
 	public DcfResponse getResponse() {
-		return response;
+		return this.response;
 	}
 	
 	@Override
 	public String getLogCode() {
-		return logCode;
+		return this.logCode;
 	}
 	
 	@Override
@@ -219,7 +318,7 @@ public class PendingRequest implements IPendingRequest {
 	
 	@Override
 	public Map<String, String> getData() {
-		return data;
+		return this.data;
 	}
 	
 	/**
@@ -237,7 +336,27 @@ public class PendingRequest implements IPendingRequest {
 	
 	@Override
 	public String getType() {
-		return type;
+		return this.type;
+	}
+	
+	@Override
+	public boolean isPaused() {
+		return this.paused;
+	}
+	
+	@Override
+	public long getRestartTime() {
+		return this.restartTime;
+	}
+
+	@Override
+	public synchronized void restart() {
+		
+		if (!this.isPaused())
+			return;
+		
+		this.restartTime = System.currentTimeMillis();
+		this.notify();
 	}
 
 	@Override
@@ -284,12 +403,18 @@ public class PendingRequest implements IPendingRequest {
 	
 	@Override
 	public String toString() {
-		return "logCode=" + logCode 
-				+ "; status=" + status
-				+ "; priority=" + priority
-				+ "; environment=" + environment 
-				+ "; requestor=" + user 
-				+ "; requestType=" + type
-				+ "; data=" + data;
+		return "logCode=" + this.logCode 
+				+ "; status=" + this.status
+				+ "; priority=" + this.priority
+				+ "; environment=" + this.environment 
+				+ "; requestor=" + this.user 
+				+ "; requestType=" + this.type
+				+ "; data=" + this.data;
+	}
+
+	@Override
+	public int hashCode() {
+		// TODO Auto-generated method stub
+		return super.hashCode();
 	}
 }

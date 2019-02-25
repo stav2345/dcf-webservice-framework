@@ -11,6 +11,7 @@ import org.w3c.dom.Node;
  * Parse the soap response received with an upload catalogue file
  * request.
  * @author avonva
+ * @author shahaal
  *
  */
 public class UploadCatalogueFileParser {
@@ -20,7 +21,7 @@ public class UploadCatalogueFileParser {
 	 * @return
 	 * @throws SOAPException
 	 */
-	public String parse(SOAPBody body) throws SOAPException {
+	public static String parse(SOAPBody body) throws SOAPException {
 
 		// get the children of the body
 		Iterator<?> children = body.getChildElements();

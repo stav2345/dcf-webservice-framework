@@ -22,7 +22,7 @@ public class DcfLogParserTest {
 	 * @param date
 	 * @return
 	 */
-	public Timestamp getTimestamp(String date) {
+	public static Timestamp getTimestamp(String date) {
 
 		SimpleDateFormat format = new SimpleDateFormat(ISO_8601_24H_FULL_FORMAT);
 
@@ -40,7 +40,7 @@ public class DcfLogParserTest {
 	}
 
 	@Test
-	public void parseLog() throws IOException {
+	public static void parseLog() throws IOException {
 
 		File file = new File("test-files" + System.getProperty("file.separator") + "log.xml");
 
@@ -68,7 +68,7 @@ public class DcfLogParserTest {
 	}
 	
 	@Test
-	public void parseLog2() throws IOException {
+	public static void parseLog2() throws IOException {
 		File file = new File("test-files" + System.getProperty("file.separator") + "log2.xml");
 		
 		DcfLogParser parser = new DcfLogParser();

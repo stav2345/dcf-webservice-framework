@@ -17,12 +17,12 @@ public class PendingRequestDaoMock<T extends IPendingRequest> implements IPendin
 	private Collection<T> database;
 	
 	public PendingRequestDaoMock() {
-		database = new ArrayList<>();
+		this.database = new ArrayList<>();
 	}
 	
 	@Override
 	public int insert(T object) throws SQLException, IOException {
-		database.add(object);
+		this.database.add(object);
 		return 0;
 	}
 
@@ -31,7 +31,7 @@ public class PendingRequestDaoMock<T extends IPendingRequest> implements IPendin
 		
 		boolean removed = false;
 		
-		Iterator<T> iterator = database.iterator();
+		Iterator<T> iterator = this.database.iterator();
 		
 		while(iterator.hasNext()){
 			
@@ -55,7 +55,7 @@ public class PendingRequestDaoMock<T extends IPendingRequest> implements IPendin
 	public IDcfPendingRequestsList<T> getUserPendingRequests(IDcfUser user, IDcfPendingRequestsList<T> output)
 			throws SQLException, IOException {
 		
-		for (T request: database) {
+		for (T request: this.database) {
 			output.add(request);
 		}
 		

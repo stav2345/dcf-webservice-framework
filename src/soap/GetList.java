@@ -3,8 +3,8 @@ package soap;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -17,7 +17,7 @@ import user.IDcfUser;
 /**
  * Generic get list request
  * @author avonva
- *
+ * @author shahaal
  * @param <T>
  */
 public abstract class GetList<T> extends SOAPRequest {
@@ -26,6 +26,7 @@ public abstract class GetList<T> extends SOAPRequest {
 	
 	private String url;
 	private String testUrl;
+	private String namespace;
 
 	/**
 	 * 
@@ -34,10 +35,10 @@ public abstract class GetList<T> extends SOAPRequest {
 	 * @param testUrl
 	 * @param namespace
 	 */
-	public GetList(IDcfUser user, Environment env, String url, String testUrl, String namespace) {
-		super (user, env, namespace);
+	public GetList(String url, String testUrl, String namespace) {
 		this.url = url;
 		this.testUrl = testUrl;
+		this.namespace = namespace;
 	}
 	
 	/**
@@ -48,8 +49,11 @@ public abstract class GetList<T> extends SOAPRequest {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	public IDcfList<T> getList() throws DetailedSOAPException {
-		return (IDcfList<T>) makeRequest(getEnvironment() == Environment.PRODUCTION ? url : testUrl);
+	public IDcfList<T> getList(Environment env, IDcfUser user) throws DetailedSOAPException {
+		
+		String endpoint = env == Environment.PRODUCTION ? this.url : this.testUrl;
+		
+		return (IDcfList<T>) makeRequest(env, user, this.namespace, endpoint);
 	}
 	
 	@Override

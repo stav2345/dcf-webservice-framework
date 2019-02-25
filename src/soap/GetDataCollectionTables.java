@@ -13,19 +13,13 @@ import response_parser.DCResourceParser;
 import user.IDcfUser;
 
 public class GetDataCollectionTables<T extends IDcfDCTable> extends GetFile {
-
-	private IDcfDCTableLists<T> output;
-
-	public GetDataCollectionTables(IDcfUser user, Environment env, IDcfDCTableLists<T> output, String resourceId) {
-		super(user, env, resourceId);
-		this.output = output;
-	}
 	
-	public IDcfDCTableLists<T> getTables() throws SOAPException, IOException, XMLStreamException {
+	public IDcfDCTableLists<T> getTables(Environment env, IDcfUser user, 
+			String resourceId, IDcfDCTableLists<T> output) throws SOAPException, IOException, XMLStreamException {
 		
 		IDcfDCTableLists<T> tables = null;
 		
-		File file = getFile();
+		File file = getFile(env, user, resourceId);
 		
 		if (file == null)
 			return null;

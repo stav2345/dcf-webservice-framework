@@ -7,15 +7,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Builder to create a {@link DcfLog} step by step. This
  * is useful while parsing the .xml log document, in order
  * to create it step by step.
  * @author avonva
- *
+ * @author shahaal
  */
 public class DcfLogBuilder {
 
@@ -40,9 +40,9 @@ public class DcfLogBuilder {
 	 * Initialize the dcf log builder memory
 	 */
 	public DcfLogBuilder() {
-		macroOpLogs = new ArrayList<>();
-		logNodes = new ArrayList<>();
-		validationErrors = new ArrayList<>();
+		this.macroOpLogs = new ArrayList<>();
+		this.logNodes = new ArrayList<>();
+		this.validationErrors = new ArrayList<>();
 	}
 	
 	/**
@@ -50,7 +50,7 @@ public class DcfLogBuilder {
 	 * @param date
 	 * @return
 	 */
-	public Timestamp getTimestamp(String date) {
+	public static Timestamp getTimestamp(String date) {
 		
 		SimpleDateFormat format = new SimpleDateFormat(ISO_8601_24H_FULL_FORMAT);
 	    
@@ -97,6 +97,7 @@ public class DcfLogBuilder {
 	    try {
 	    	this.macroOpResult = DcfResponse.valueOf(macroOpResult);
 	    } catch (IllegalArgumentException e) {
+	    	e.printStackTrace();
 	    	this.macroOpResult = DcfResponse.ERROR;
 	    }
 	}
@@ -124,8 +125,8 @@ public class DcfLogBuilder {
 	 * @return
 	 */
 	public DcfLog build() {
-		return new DcfLog(action, transmissionDate, processingDate, uploadedFilename, 
-				catalogueCode, catalogueVersion, catalogueStatus, macroOpName, 
-				macroOpResult, macroOpLogs, logNodes, validationErrors);
+		return new DcfLog(this.action, this.transmissionDate, this.processingDate, this.uploadedFilename, 
+				this.catalogueCode, this.catalogueVersion, this.catalogueStatus, this.macroOpName, 
+				this.macroOpResult, this.macroOpLogs, this.logNodes, this.validationErrors);
 	}
 }

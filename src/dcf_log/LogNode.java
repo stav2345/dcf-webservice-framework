@@ -6,7 +6,7 @@ import java.util.Collection;
  * Class modeling an xml node contained in the Dcf log document
  * and representing the result of an upload operation.
  * @author avonva
- *
+ * @author shahaal
  */
 public class LogNode {
 
@@ -21,15 +21,15 @@ public class LogNode {
 	}
 	
 	public String getName() {
-		return name;
+		return this.name;
 	}
 	
 	public DcfResponse getResult() {
-		return result;
+		return this.result;
 	}
 	
 	public Collection<String> getOpLogs() {
-		return opLogs;
+		return this.opLogs;
 	}
 	
 	/**
@@ -37,11 +37,11 @@ public class LogNode {
 	 * @return
 	 */
 	public boolean isOperationCorrect() {
-		return result == DcfResponse.OK;
+		return this.result == DcfResponse.OK;
 	}
 	
 	@Override
 	public String toString() {
-		return "LogNode: name=" + name + ";result=" + result + ";opLogs=" + opLogs;
+		return "LogNode: name=" + this.name + ";result=" + this.result + ";opLogs=" + this.opLogs;
 	}
 }

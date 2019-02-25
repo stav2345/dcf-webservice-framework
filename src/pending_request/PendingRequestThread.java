@@ -5,11 +5,10 @@ import java.sql.SQLException;
 
 import javax.xml.soap.SOAPException;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.xml.sax.SAXException;
 
-import dcf_log.IDcfLogDownloader;
 import dcf_log.IDcfLogParser;
 import soap.DetailedSOAPException;
 
@@ -24,22 +23,20 @@ public class PendingRequestThread extends Thread {
 	
 	private boolean finished;
 	private IPendingRequest request;
-	private IDcfLogDownloader downloader;
 	private IDcfLogParser parser;
 	
 	/**
 	 * Prepare the launcher with a single {@link IPendingRequest} which need to be started
 	 * @param requests
 	 */
-	public PendingRequestThread(IPendingRequest request, IDcfLogDownloader downloader, IDcfLogParser parser) {
+	public PendingRequestThread(IPendingRequest request, IDcfLogParser parser) {
 		this.request = request;
-		this.downloader = downloader;
 		this.parser = parser;
 		this.finished = false;
 	}
 	
 	public IPendingRequest getRequest() {
-		return request;
+		return this.request;
 	}
 	
 	/**
@@ -49,6 +46,7 @@ public class PendingRequestThread extends Thread {
 	 * @throws SAXException
 	 * @throws IOException
 	 */
+	@Override
 	public void run() {
 		try {
 			startRequest();
@@ -78,7 +76,7 @@ public class PendingRequestThread extends Thread {
 		// start procedure if no connection error is found
 		while(!done) {
 			try {
-				request.start(downloader, parser);  // start the request
+				this.request.start(this.parser);  // start the request
 				done = true;
 			}
 			catch(DetailedSOAPException e) {
@@ -86,7 +84,7 @@ public class PendingRequestThread extends Thread {
 					
 					// bad connection, wait connection
 					LOGGER.error("Bad internet connection. The pending request=" 
-							+ request + " will be relaunched in one minute", e);
+							+ this.request + " will be relaunched in one minute", e);
 					
 					Thread.sleep(60000);
 				}
@@ -96,10 +94,10 @@ public class PendingRequestThread extends Thread {
 			}
 		}
 		
-		finished = true;
+		this.finished = true;
 	}
 	
 	public boolean isFinished() {
-		return finished;
+		return this.finished;
 	}
 }

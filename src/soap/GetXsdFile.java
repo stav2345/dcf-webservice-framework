@@ -19,10 +19,6 @@ import user.IDcfUser;
  */
 public class GetXsdFile extends GetFile {
 
-	public GetXsdFile(IDcfUser user, Environment env, String resourceId) {
-		super(user, env, resourceId);
-	}
-
 	/**
 	 * Get the xsd file
 	 * @return
@@ -31,9 +27,9 @@ public class GetXsdFile extends GetFile {
 	 * @throws IOException 
 	 * @throws SAXException 
 	 */
-	public Document getXsdFile() throws SOAPException, SAXException, IOException, ParserConfigurationException {
+	public Document getXsdFile(Environment env, IDcfUser user, String resourceId) throws SOAPException, SAXException, IOException, ParserConfigurationException {
 		
-		File response = getFile();
+		File response = getFile(env, user, resourceId);
 		if (response == null)
 			return null;
 		

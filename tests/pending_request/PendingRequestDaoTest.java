@@ -30,7 +30,7 @@ public class PendingRequestDaoTest {
 		
 		Environment env = Environment.TEST;
 		
-		PendingRequestDao<IPendingRequest> dao = new PendingRequestDao<>(dbUrl);
+		PendingRequestDao<IPendingRequest> dao = new PendingRequestDao<>(this.dbUrl);
 		
 		UploadCatalogueFilePersistentImplMock upc = new UploadCatalogueFilePersistentImplMock(dao);
 		

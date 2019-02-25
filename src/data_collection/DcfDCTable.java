@@ -6,6 +6,7 @@ import java.util.Collection;
 /**
  * A table related to a data collection
  * @author avonva
+ * @author shahaal
  *
  */
 public class DcfDCTable implements IDcfDCTable {
@@ -39,17 +40,17 @@ public class DcfDCTable implements IDcfDCTable {
 	
 	@Override
 	public int getId() {
-		return id;
+		return this.id;
 	}
 	
 	@Override
 	public String getName() {
-		return name;
+		return this.name;
 	}
 	
 	@Override
 	public Collection<IDcfCatalogueConfig> getConfigs() {
-		return configs;
+		return this.configs;
 	}
 
 	@Override
@@ -64,8 +65,8 @@ public class DcfDCTable implements IDcfDCTable {
 
 	@Override
 	public String toString() {
-		return "DC TABLE: id=" + (id == -1 ? "not defined yet" : id )
-				+ ";name=" + name
-				+ ";configs=" + configs;
+		return "DC TABLE: id=" + (this.id == -1 ? "not defined yet" : this.id )
+				+ ";name=" + this.name
+				+ ";configs=" + this.configs;
 	}
 }

@@ -14,6 +14,7 @@ import user.IDcfUser;
 
 /**
  * Class to manage a ping request to the DCF web service
+ * @author shahaal
  * @author avonva
  *
  */
@@ -22,29 +23,26 @@ public class Ping extends SOAPRequest {
 	// The correct value that the ping should return to be correct
 	private static final String PING_CORRECT_VALUE = "TRXOK";
 	private static final String PING_NODE_NAME = "PingResponse";
-
-	// web service link of the ping service
+	
 	private static final String URL = "https://dcf-elect.efsa.europa.eu/elect2";
 	private static final String TEST_URL = "https://dcf-01.efsa.test/dcf-dp-ws/elect2/?wsdl";
 	private static final String NAMESPACE = "http://dcf-elect.efsa.europa.eu/";
 	
-	public Ping(IDcfUser user, Environment env) {
-		super(user, env, NAMESPACE);
-	}
-
 	/**
 	 * Make a ping
 	 * @return
 	 * @throws DetailedSOAPException 
 	 */
-	public boolean ping() throws DetailedSOAPException {
+	public boolean ping(Environment env, IDcfUser user) throws DetailedSOAPException {
 
-		SOAPConsole.log("Ping", getUser());
+		SOAPConsole.log("Ping", user);
 		
 		boolean check;
 		
+		String url = env == Environment.PRODUCTION ? URL : TEST_URL;
+		
 		try {
-			check = (boolean) makeRequest(getEnvironment() == Environment.PRODUCTION ? URL : TEST_URL);
+			check = (boolean) makeRequest(env, user, NAMESPACE, url);
 		} catch (SOAPException e) {
 			throw new DetailedSOAPException(e);
 		}
@@ -60,11 +58,12 @@ public class Ping extends SOAPRequest {
 	 * @param serverURI
 	 * @throws SOAPException
 	 */
-	public SOAPMessage createRequest(SOAPConnection soapConnection) throws SOAPException {
+	@Override
+	public SOAPMessage createRequest(IDcfUser user, String namespace, SOAPConnection soapConnection) throws SOAPException {
 
 		// create the standard structure and get the message
-		SOAPMessage soapMsg = createTemplateSOAPMessage("dcf");
-
+		SOAPMessage soapMsg = createTemplateSOAPMessage(user, namespace, "dcf");
+		
 		// get the body of the message
 		SOAPBody soapBody = soapMsg.getSOAPPart().getEnvelope().getBody();
 
@@ -84,6 +83,7 @@ public class Ping extends SOAPRequest {
 	 * @return
 	 * @throws SOAPException
 	 */
+	@Override
 	public Object processResponse(SOAPMessage soapResponse) throws SOAPException {
 		
 		String response = "";

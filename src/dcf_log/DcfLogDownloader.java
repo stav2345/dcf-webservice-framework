@@ -4,11 +4,12 @@ import java.io.File;
 
 import javax.xml.soap.SOAPException;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import config.Environment;
 import soap.ExportCatalogueFile;
+import soap_interface.IExportCatalogueFile;
 import user.IDcfUser;
 
 /**
@@ -17,25 +18,41 @@ import user.IDcfUser;
  * strategy can be used. In particular, it is possible to set the inter
  * attempts time and a limit to the maximum number of attempts.
  * @author avonva
+ * @author shahaal
  *
  */
 public class DcfLogDownloader implements IDcfLogDownloader {
 
 	private static final Logger LOGGER = LogManager.getLogger(DcfLogDownloader.class);
 
+	private IExportCatalogueFile exportCatFile;  // soap object
+	private boolean waiting;
+	
+	public DcfLogDownloader() {
+		this.waiting = true;
+	}
+	
+	public DcfLogDownloader(IExportCatalogueFile exportCatFile) {
+		this.exportCatFile = exportCatFile;
+		this.waiting = true;
+	}
+	
 	/**
 	 * Download a log without polling strategy
 	 * @param logCode the code of the log to download
 	 * @throws SOAPException
 	 */
+	@Override
 	public File getLog(IDcfUser user, Environment env, String logCode) throws SOAPException {
 		
-		ExportCatalogueFile req = new ExportCatalogueFile(user, env);
-		File log = req.exportLog(logCode);
+		if (this.exportCatFile == null)
+			this.exportCatFile = new ExportCatalogueFile();
+		
+		File log = this.exportCatFile.exportLog(env, user, logCode);
 		
 		if (log != null)
 			LOGGER.info("Log successfully downloaded, file=" + log);
-		
+
 		return log;
 	}
 	
@@ -45,6 +62,7 @@ public class DcfLogDownloader implements IDcfLogDownloader {
 	 * @param interAttemptsTime waiting time before trying again to download the log
 	 * @throws SOAPException 
 	 */
+	@Override
 	public File getLog(IDcfUser user, Environment env, String logCode, long interAttemptsTime) throws SOAPException {
 		return getLog(user, env, logCode, interAttemptsTime, -1);
 	}
@@ -56,7 +74,9 @@ public class DcfLogDownloader implements IDcfLogDownloader {
 	 * @param maxAttempts max number of allowed attempts (prevents DOS)
 	 * @throws SOAPException 
 	 */
-	public File getLog(IDcfUser user, Environment env, String logCode, long interAttemptsTime, int maxAttempts) throws SOAPException {
+	@Override
+	public synchronized File getLog(IDcfUser user, Environment env, String logCode, 
+			long interAttemptsTime, int maxAttempts) throws SOAPException {
 		
 		// if maxAttempts is > 0 then a limit is applied
 		boolean isLimited = maxAttempts > 0;
@@ -91,16 +111,28 @@ public class DcfLogDownloader implements IDcfLogDownloader {
 			
 			// wait inter attempts time
 			try {
-				Thread.sleep(interAttemptsTime);
+				this.waiting = true;
+				this.wait(interAttemptsTime);
 			} catch(InterruptedException e) {
 				e.printStackTrace();
-				LOGGER.error("Cannot sleep thread=" + this, e);
 			}
+			
+			this.waiting = false;
 			
 			// go to the next attempt
 			attemptsCount++;
 		}
 		
 		return log;
+	}
+
+	public boolean isWaiting() {
+		return this.waiting;
+	}
+	
+	@Override
+	public synchronized void skipWait() {
+		if(this.isWaiting())
+			this.notify();
 	}
 }

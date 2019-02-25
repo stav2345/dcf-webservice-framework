@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.xml.soap.SOAPException;
 
-import dcf_log.IDcfLogDownloader;
 import dcf_log.IDcfLogParser;
 
 /**
@@ -15,22 +14,20 @@ import dcf_log.IDcfLogParser;
  * one {@link PendingRequestThread} is created for each {@link IPendingRequest}.
  * Every thread is independent and runs in background.
  * @author avonva
- *
+ * @author shahaal
  */
 public class PendingRequestLauncher {
 	
 	private List<PendingRequestThread> pool;
 	private Collection<PendingRequestListener> listeners;
-	private IDcfLogDownloader downloader;
 	private IDcfLogParser parser;
 	private boolean started;
 	
 	/**
 	 * Prepare the launcher
 	 */
-	public PendingRequestLauncher(IDcfLogDownloader downloader, IDcfLogParser parser) {
+	public PendingRequestLauncher(IDcfLogParser parser) {
 		this.listeners = new ArrayList<>();
-		this.downloader = downloader;
 		this.parser = parser;
 		this.pool = new ArrayList<>();
 	}
@@ -45,7 +42,7 @@ public class PendingRequestLauncher {
 		if (this.started)
 			throw new IllegalStateException("Cannot add a pending listener after the Launcher is started");
 		
-		listeners.add(listener);
+		this.listeners.add(listener);
 	}
 	
 	/**
@@ -68,20 +65,20 @@ public class PendingRequestLauncher {
 	private void startRequest(IPendingRequest req) {
 		
 		// do not restart already started requests
-		for (PendingRequestThread startedReq : pool) {
+		for (PendingRequestThread startedReq : this.pool) {
 			if (startedReq.getRequest().getLogCode().equals(req.getLogCode()))
 				return;
 		}
 		
 		// set the listeners
-		for (PendingRequestListener listener : listeners)
+		for (PendingRequestListener listener : this.listeners)
 			req.addPendingRequestListener(listener);
 		
 		// prepare the single request launcher
-		PendingRequestThread launcher = new PendingRequestThread(req, downloader, parser);
+		PendingRequestThread launcher = new PendingRequestThread(req, this.parser);
 		
 		// add the launcher to the pool
-		pool.add(launcher);
+		this.pool.add(launcher);
 		
 		launcher.start();
 	}

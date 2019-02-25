@@ -6,12 +6,14 @@ import java.util.Map;
 import config.Environment;
 import pending_request.IPendingRequest;
 import pending_request.PendingRequest;
+import soap_interface.IUploadCatalogueFileImpl;
 import user.IDcfUser;
 
 /**
  * This class provides an implementation of the most commonly used
  * upload catalogue file actions.
  * @author avonva
+ * @author shahaal
  *
  */
 public class UploadCatalogueFileImpl implements IUploadCatalogueFileImpl {
@@ -87,6 +89,7 @@ public class UploadCatalogueFileImpl implements IUploadCatalogueFileImpl {
 	 * @return
 	 * @throws DetailedSOAPException
 	 */
+	@Override
 	public IPendingRequest reserve(IDcfUser user, Environment env, ReserveLevel level, 
 			String catalogueCode, String description) throws DetailedSOAPException {
 		
@@ -113,6 +116,7 @@ public class UploadCatalogueFileImpl implements IUploadCatalogueFileImpl {
 	 * @return
 	 * @throws DetailedSOAPException
 	 */
+	@Override
 	public IPendingRequest unreserve(IDcfUser user, Environment env, String catalogueCode, 
 			String description) throws DetailedSOAPException {
 		
@@ -137,6 +141,7 @@ public class UploadCatalogueFileImpl implements IUploadCatalogueFileImpl {
 	 * @return
 	 * @throws DetailedSOAPException
 	 */
+	@Override
 	public IPendingRequest publish(IDcfUser user, Environment env, PublishLevel level, 
 			String catalogueCode) throws DetailedSOAPException {
 		UploadCatalogueFileAction action = IUploadCatalogueFileImpl.fromPublishLevel(level);
@@ -164,11 +169,12 @@ public class UploadCatalogueFileImpl implements IUploadCatalogueFileImpl {
 	 * retrieve the result of the request
 	 * @throws DetailedSOAPException
 	 */
+	@Override
 	public IPendingRequest uploadCatalogueFile(IDcfUser user, Environment env, 
 			String attachment, String uploadCatalogueFileType, Map<String, String> requestData) throws DetailedSOAPException {
 		
-		UploadCatalogueFile ucf = new UploadCatalogueFile(user, env);
-		String logCode = ucf.send(attachment);
+		UploadCatalogueFile ucf = new UploadCatalogueFile();
+		String logCode = ucf.send(env, user, attachment);
 		PendingRequest pr = new PendingRequest(uploadCatalogueFileType, user, logCode, env);
 		pr.setData(requestData);
 		return pr;
