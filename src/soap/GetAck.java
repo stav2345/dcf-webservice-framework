@@ -28,6 +28,7 @@ import user.IDcfUser;
 /**
  * Get acknowledge request
  * @author avonva
+ * @author shahaal
  *
  */
 public class GetAck extends SOAPRequest implements IGetAck {
@@ -47,21 +48,22 @@ public class GetAck extends SOAPRequest implements IGetAck {
 	 * @return
 	 * @throws SOAPException
 	 */
-	public DcfAck getAck(Environment env, IDcfUser user, String messageId) throws DetailedSOAPException {
+	@Override
+	public DcfAck getAck(Environment env, IDcfUser user, String messageId1) throws DetailedSOAPException {
 		
-		this.messageId = messageId;
+		this.messageId = messageId1;
 		
-		SOAPConsole.log("GetAck: messageId=" + messageId, user);
+		SOAPConsole.log("GetAck: messageId=" + messageId1, user);
 
 		String url = env == Environment.PRODUCTION ? URL : TEST_URL;
-		Object response = makeRequest(env, user, NAMESPACE, url);
+		Object response1 = makeRequest(env, user, NAMESPACE, url);
 		
-		SOAPConsole.log("GetAck:", response);
+		SOAPConsole.log("GetAck:", response1);
 		
-		if (response == null)
+		if (response1 == null)
 			return null;
 		
-		return (DcfAck) response;
+		return (DcfAck) response1;
 	}
 	
 	/**
@@ -69,6 +71,7 @@ public class GetAck extends SOAPRequest implements IGetAck {
 	 * @return
 	 * @throws SOAPException
 	 */
+	@Override
 	public DcfAckDetailedResId getAckDetailedResId(Environment env, IDcfUser user, String detailedResId) throws DetailedSOAPException {
 		
 		this.messageId = detailedResId;
@@ -76,14 +79,14 @@ public class GetAck extends SOAPRequest implements IGetAck {
 		SOAPConsole.log("GetAckDetailedResId: messageId=" + detailedResId, user);
 
 		String url = env == Environment.PRODUCTION ? URL : TEST_URL;
-		Object response = makeRequest(env, user, NAMESPACE, url);
+		Object response1 = makeRequest(env, user, NAMESPACE, url);
 		
-		SOAPConsole.log("GetAckDetailedResId:", response);
+		SOAPConsole.log("GetAckDetailedResId:", response1);
 		
-		if (response == null)
+		if (response1 == null)
 			return null;
 		
-		return (DcfAckDetailedResId) response;
+		return (DcfAckDetailedResId) response1;
 	}
 
 	/**
@@ -97,12 +100,12 @@ public class GetAck extends SOAPRequest implements IGetAck {
 	public Document getAttachment() throws SOAPException, 
 		ParserConfigurationException, SAXException, IOException {
 		
-		if (response == null) {
+		if (this.response == null) {
 			LOGGER.error("Cannot get attachment. Make request first!");
 			return null;
 		}
 		
-		return getFirstXmlAttachment(response);
+		return getFirstXmlAttachment(this.response);
 	}
 	
 	/**
@@ -112,12 +115,12 @@ public class GetAck extends SOAPRequest implements IGetAck {
 	 */
 	public InputStream getRawAttachment() throws DetailedSOAPException {
 		
-		if (response == null) {
+		if (this.response == null) {
 			LOGGER.error("Cannot get attachment. Make request first!");
 			return null;
 		}
 		
-		return getFirstRawAttachment(response);
+		return getFirstRawAttachment(this.response);
 	}
 	
 	@Override
@@ -160,7 +163,7 @@ public class GetAck extends SOAPRequest implements IGetAck {
 			log = extractAcklog(soapResponse);
 			
 			if (log == null)
-				LOGGER.warn("Ack ready but no log found for message id: " + messageId);
+				LOGGER.warn("Ack ready but no log found for message id: " + this.messageId);
 		}
 
 		// create the ack object
@@ -175,7 +178,7 @@ public class GetAck extends SOAPRequest implements IGetAck {
 	 * @return
 	 * @throws SOAPException
 	 */
-	private boolean hasFaultCode(SOAPMessage soapResponse) throws SOAPException {
+	private static boolean hasFaultCode(SOAPMessage soapResponse) throws SOAPException {
 		
 		NodeList fault = soapResponse.getSOAPPart()
 				.getEnvelope().getBody().getElementsByTagName("faultcode");
@@ -189,7 +192,7 @@ public class GetAck extends SOAPRequest implements IGetAck {
 	 * @return
 	 * @throws SOAPException
 	 */
-	private FileState extractState(SOAPMessage soapResponse) throws SOAPException {
+	private static FileState extractState(SOAPMessage soapResponse) throws SOAPException {
 		
 		// get state
 		NodeList children = soapResponse.getSOAPPart()

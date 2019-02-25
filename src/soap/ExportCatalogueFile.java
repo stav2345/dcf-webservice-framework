@@ -16,6 +16,7 @@ import user.IDcfUser;
  * see all the available options. Here we can download a file from
  * the dcf, as an internal version of a catalogue or a log.
  * @author avonva
+ * @author shahaal
  *
  */
 public class ExportCatalogueFile extends SOAPRequest implements IExportCatalogueFile {
@@ -36,11 +37,12 @@ public class ExportCatalogueFile extends SOAPRequest implements IExportCatalogue
 	private String fileType;
 	
 	
-	public File exportCatalogue(Environment env, IDcfUser user, String catalogueCode) throws DetailedSOAPException {
+	@Override
+	public File exportCatalogue(Environment env, IDcfUser user, String catalogueCode1) throws DetailedSOAPException {
 		
-		SOAPConsole.log("ExportCatalogueFile: export last published version of catalogue=" + catalogueCode, user);
+		SOAPConsole.log("ExportCatalogueFile: export last published version of catalogue=" + catalogueCode1, user);
 		
-		Object log = exportXml(env, user, catalogueCode, EXPORT_TYPE_CATALOGUE, XML_FILE_TYPE);
+		Object log = exportXml(env, user, catalogueCode1, EXPORT_TYPE_CATALOGUE, XML_FILE_TYPE);
 		
 		if (log != null)
 			return (File) log;
@@ -55,6 +57,7 @@ public class ExportCatalogueFile extends SOAPRequest implements IExportCatalogue
 	 * @return a File object which points to the log file
 	 * @throws SOAPException 
 	 */
+	@Override
 	public File exportLog(Environment env, IDcfUser user, String code) throws DetailedSOAPException {
 		
 		SOAPConsole.log("ExportCatalogueFile: export log=" + code, user);
@@ -69,18 +72,19 @@ public class ExportCatalogueFile extends SOAPRequest implements IExportCatalogue
 	
 	/**
 	 * Export the last internal version of the catalogue.
-	 * @param catalogueCode the code of the catalogue we want to consider
+	 * @param catalogueCode1 the code of the catalogue we want to consider
 	 * @param filename the file where we want to store the downloaded catalogue
 	 * @return a File object which points to the downloaded catalogue .xml file
 	 * @throws SOAPException
 	 */
-	public File exportLastInternalVersion(Environment env, IDcfUser user, String catalogueCode) 
+	@Override
+	public File exportLastInternalVersion(Environment env, IDcfUser user, String catalogueCode1) 
 			throws SOAPException {
 		
 		SOAPConsole.log("ExportCatalogueFile: export last internal version of catalogue=" 
-				+ catalogueCode, user);
+				+ catalogueCode1, user);
 		
-		Object lastVersion = exportXml(env, user, catalogueCode, 
+		Object lastVersion = exportXml(env, user, catalogueCode1, 
 				EXPORT_TYPE_INTERNAL_VERSION, 
 				XML_FILE_TYPE);
 		
@@ -95,17 +99,17 @@ public class ExportCatalogueFile extends SOAPRequest implements IExportCatalogue
 	 * to be inserted in the request.
 	 * @param code code of the object we are considering as the
 	 * catalogue code or the log code
-	 * @param exportType the export type (see GDE2)
-	 * @param fileType the type of the attachment we want
+	 * @param exportType1 the export type (see GDE2)
+	 * @param fileType1 the type of the attachment we want
 	 * @return an object containing the xml structure
 	 * @throws SOAPException 
 	 */
-	public Object exportXml(Environment env, IDcfUser user, String code, String exportType, 
-			String fileType) throws DetailedSOAPException {
+	public Object exportXml(Environment env, IDcfUser user, String code, String exportType1, 
+			String fileType1) throws DetailedSOAPException {
 		
 		this.catalogueCode = code;
-		this.exportType = exportType;
-		this.fileType = fileType;
+		this.exportType = exportType1;
+		this.fileType = fileType1;
 
 		Object obj = export(env, user);
 		return obj;
@@ -138,21 +142,21 @@ public class ExportCatalogueFile extends SOAPRequest implements IExportCatalogue
 		SOAPElement export = soapBody.addChildElement("ExportCatalogueFile", "ws");
 
 		// add the catalogue code to the xml if there is one
-		if (catalogueCode != null) {
+		if (this.catalogueCode != null) {
 			SOAPElement catCodeNode = export.addChildElement("catalogueCode");
-			catCodeNode.setValue(catalogueCode);
+			catCodeNode.setValue(this.catalogueCode);
 		}
 		
 		// add the catalogue code to the xml if there is one
-		if (exportType != null) {
+		if (this.exportType != null) {
 			SOAPElement exportTypeNode = export.addChildElement("exportType");
-			exportTypeNode.setValue(exportType);
+			exportTypeNode.setValue(this.exportType);
 		}
 		
 		// add the file type if required
-		if (fileType != null) {
+		if (this.fileType != null) {
 			SOAPElement fileTypeNode = export.addChildElement("fileType");
-			fileTypeNode.setValue(fileType);
+			fileTypeNode.setValue(this.fileType);
 		}
 
 		// save the changes
@@ -168,7 +172,7 @@ public class ExportCatalogueFile extends SOAPRequest implements IExportCatalogue
 		
 		// process the response based
 		// on the export type field
-		switch (exportType) {
+		switch (this.exportType) {
 		case EXPORT_TYPE_LOG:
 			response = writeXmlIntoFile(soapResponse, true);
 			break;

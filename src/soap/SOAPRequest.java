@@ -57,7 +57,8 @@ import zip_manager.ZipManager;
 /**
  * Abstract class used to create soap requests and to process soap responses.
  * 
- * @author avonva && shahaal
+ * @author avonva
+ * @author shahaal
  */
 public abstract class SOAPRequest {
 
@@ -72,12 +73,13 @@ public abstract class SOAPRequest {
 	 * @throws MalformedURLException
 	 * @throws ProxyConfigException
 	 */
-	private URL getEndpoint(String stringUrl) throws MalformedURLException, ProxyConfigException {
+	private static URL getEndpoint(String stringUrl) throws MalformedURLException, ProxyConfigException {
 
 		Proxy proxy = HttpManager.getProxy();
 
 		URL endpoint = new URL(null, stringUrl, new URLStreamHandler() {
 
+			@Override
 			protected URLConnection openConnection(URL url) throws IOException {
 
 				// The url is the parent of this stream handler, so must
@@ -110,7 +112,7 @@ public abstract class SOAPRequest {
 	 * @throws NoSuchAlgorithmException
 	 * @throws IOException
 	 */
-	private HttpsURLConnection avoidCertificates(String url)
+	private static HttpsURLConnection avoidCertificates(String url)
 			throws KeyManagementException, NoSuchAlgorithmException, IOException {
 
 		HttpsURLConnection httpsConnection = null;
@@ -143,6 +145,7 @@ public abstract class SOAPRequest {
 	 * Dummy class implementing HostnameVerifier to trust all host names
 	 */
 	private static class TrustAllHosts implements HostnameVerifier {
+		@Override
 		public boolean verify(String hostname, SSLSession session) {
 			return true;
 		}
@@ -153,12 +156,15 @@ public abstract class SOAPRequest {
 	 */
 	private static class TrustAllCertificates implements X509TrustManager {
 
+		@Override
 		public void checkClientTrusted(X509Certificate[] certs, String authType) {
 		}
 
+		@Override
 		public void checkServerTrusted(X509Certificate[] certs, String authType) {
 		}
 
+		@Override
 		public X509Certificate[] getAcceptedIssuers() {
 			return null;
 		}
@@ -167,6 +173,7 @@ public abstract class SOAPRequest {
 	/**
 	 * Create the request and get the response. Process the response and return the
 	 * results.
+	 * @param env 
 	 * 
 	 * @param soapConnection
 	 * @return
@@ -250,7 +257,8 @@ public abstract class SOAPRequest {
 	 * @return
 	 * @throws SOAPException
 	 */
-	public SOAPMessage createTemplateSOAPMessage(IDcfUser user, String namespace, String prefix) throws SOAPException {
+	public static SOAPMessage createTemplateSOAPMessage(IDcfUser user, String namespace, String prefix)
+			throws SOAPException {
 
 		// create the soap message
 		MessageFactory msgFactory = MessageFactory.newInstance();
@@ -382,7 +390,7 @@ public abstract class SOAPRequest {
 	 * @return
 	 * @throws SOAPException
 	 */
-	public AttachmentPart getFirstAttachmentPart(SOAPMessage message) throws DetailedSOAPException {
+	public static AttachmentPart getFirstAttachmentPart(SOAPMessage message) {
 
 		// get the attachment
 		Iterator<?> iter = message.getAttachments();
@@ -404,7 +412,7 @@ public abstract class SOAPRequest {
 	 * @return the input stream containing the xml
 	 * @throws SOAPException
 	 */
-	public File writeXmlIntoFile(SOAPMessage soapResponse, boolean isZipped) throws SOAPException {
+	public static File writeXmlIntoFile(SOAPMessage soapResponse, boolean isZipped) throws SOAPException {
 
 		AttachmentPart part = getFirstAttachmentPart(soapResponse);
 
@@ -447,7 +455,7 @@ public abstract class SOAPRequest {
 	 * @return
 	 * @throws SOAPException
 	 */
-	public File writeZippedAttachment(SOAPMessage message, String attachmentFormat) throws SOAPException {
+	public static File writeZippedAttachment(SOAPMessage message, String attachmentFormat) throws SOAPException {
 
 		AttachmentPart attachmentPart = getFirstAttachmentPart(message);
 
@@ -456,19 +464,19 @@ public abstract class SOAPRequest {
 
 		File file = FileUtils.createTempFile("attachment_" + System.currentTimeMillis(), attachmentFormat);
 
-		InputStream stream = attachmentPart.getRawContent();
+		// solve memory leak
+		try (InputStream stream = attachmentPart.getRawContent()) {
 
-		if (stream == null) {
-			LOGGER.error("No raw contents in the attachment found");
-			return null;
-		}
+			if (stream == null) {
+				LOGGER.error("No raw contents in the attachment found");
+				return null;
+			}
 
-		// unzip the stream into a file
-		ZipManager.unzipStream(stream, file);
+			// unzip the stream into a file
+			ZipManager.unzipStream(stream, file);
 
-		try {
-			stream.close();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -488,7 +496,7 @@ public abstract class SOAPRequest {
 	 * @throws ParserConfigurationException
 	 * @throws SAXException
 	 */
-	public Document getXsdAttachment(SOAPMessage response)
+	public static Document getXsdAttachment(SOAPMessage response)
 			throws ClassNotFoundException, InstantiationException, IllegalAccessException, ClassCastException,
 			SOAPException, IOException, ParserConfigurationException, SAXException {
 
@@ -497,18 +505,19 @@ public abstract class SOAPRequest {
 		if (part == null)
 			return null;
 
-		InputStream stream = part.getRawContent();
+		// solve memory leak
+		try (InputStream stream = part.getRawContent()) {
 
-		// parse the document
-		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
-		Document doc = docBuilder.parse(stream);
-		stream.close();
+			// parse the document
+			DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
+			Document doc = docBuilder.parse(stream);
 
-		return doc;
+			return doc;
+		}
 	}
 
-	protected Document fileToXsd(File file) throws SAXException, IOException, ParserConfigurationException {
+	protected static Document fileToXsd(File file) throws SAXException, IOException, ParserConfigurationException {
 
 		if (!file.exists())
 			return null;
@@ -529,7 +538,7 @@ public abstract class SOAPRequest {
 	 * @throws SOAPException
 	 * @throws IOException
 	 */
-	public File writeAttachment(SOAPMessage response) throws SOAPException, IOException {
+	public static File writeAttachment(SOAPMessage response) throws SOAPException, IOException {
 
 		File file = FileUtils.createTempFile("attachment_" + System.currentTimeMillis(), "");
 
@@ -541,32 +550,32 @@ public abstract class SOAPRequest {
 
 		// shahaal: here the method replace the oldUrl with the one which point
 		// to the xlst file present under the config folder
-		
+
 		// url to replace
 		String oldUrl = "https://dcf.efsa.europa.eu/dcf-war/downloadResourcesPage/fileName/";
 		// new url to xlst file in config folder
 		String newUrl = "../config/";
-		
+
 		// open the input/output stream of the message to be written in the file
-		InputStream inputStream = attachment.getRawContent();
-		OutputStream outputStream = new FileOutputStream(file);
-		
-		//get the message as string
-		String attachmentContent = IOUtils.toString(attachment.getRawContent(), StandardCharsets.UTF_8.name());
-		
-		//replace the new url if the message contains the old one
-		if(attachmentContent.contains(oldUrl))
-			attachmentContent=attachmentContent.replace(oldUrl, newUrl);
-		
-		// get the bytes of the string
-		byte[] strToBytes = attachmentContent.getBytes();
 
-		// write the bytes on file
-		outputStream.write(strToBytes);
+		// solve memory leak
+		try (InputStream inputStream = attachment.getRawContent();
+				OutputStream outputStream = new FileOutputStream(file)) {
 
-		//close the input/output stream
-		outputStream.close();
-		inputStream.close();
+			// get the message as string
+			String attachmentContent = IOUtils.toString(attachment.getRawContent(), StandardCharsets.UTF_8.name());
+
+			// replace the new url if the message contains the old one
+			if (attachmentContent.contains(oldUrl))
+				attachmentContent = attachmentContent.replace(oldUrl, newUrl);
+
+			// get the bytes of the string
+			byte[] strToBytes = attachmentContent.getBytes();
+
+			// write the bytes on file
+			outputStream.write(strToBytes);
+
+		}
 
 		return file;
 	}
@@ -581,28 +590,26 @@ public abstract class SOAPRequest {
 	 * @throws SAXException
 	 * @throws IOException
 	 */
-	public Document getFirstXmlAttachment(SOAPMessage message)
+	public static Document getFirstXmlAttachment(SOAPMessage message)
 			throws SOAPException, ParserConfigurationException, SAXException, IOException {
 
 		// get the stream
-		InputStream stream = getFirstRawAttachment(message);
+		try (InputStream stream = getFirstRawAttachment(message)) {
 
-		if (stream == null)
-			return null;
+			if (stream == null)
+				return null;
 
-		// parse the stream and get the document
-		Document xml = getDocument(stream);
+			// parse the stream and get the document
+			Document xml = getDocument(stream);
 
-		// close the stream
-		stream.close();
-
-		return xml;
+			return xml;
+		}
 	}
 
 	/*
 	 * get the attachment raw format
 	 */
-	public InputStream getFirstRawAttachment(SOAPMessage message) throws DetailedSOAPException {
+	public static InputStream getFirstRawAttachment(SOAPMessage message) throws DetailedSOAPException {
 
 		AttachmentPart part = getFirstAttachmentPart(message);
 

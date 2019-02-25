@@ -5,7 +5,7 @@ package soap;
  * attached to the uploadCatalogueFile message to make the
  * related operations, as the reserve, unreserve...
  * @author avonva
- *
+ * @author shahaal
  */
 public class UploadMessages {
 

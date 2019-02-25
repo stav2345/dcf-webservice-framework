@@ -28,113 +28,145 @@ public class DcfCatalogue implements IDcfCatalogue {
 	private boolean generateMissingCodes;
 	private String catalogueGroups;
 
+	@Override
 	public void setCode(String code) {
 		this.code = code;
 	}
+	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
+	@Override
 	public void setLabel(String label) {
 		this.label = label;
 	}
+	@Override
 	public void setScopenotes(String scopenotes) {
 		this.scopenotes = scopenotes;
 	}
+	@Override
 	public void setVersion(String version) {
 		this.version = version;
 	}
+	@Override
 	public void setLastUpdate(Timestamp lastUpdate) {
 		this.lastUpdate = lastUpdate;
 	}
+	@Override
 	public void setValidFrom(Timestamp validFrom) {
 		this.validFrom = validFrom;
 	}
+	@Override
 	public void setValidTo(Timestamp validTo) {
 		this.validTo = validTo;
 	}
+	@Override
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	@Override
 	public void setDeprecated(boolean deprecated) {
 		this.deprecated = deprecated;
 	}
+	@Override
 	public void setTermCodeMask(String termCodeMask) {
 		this.termCodeMask = termCodeMask;
 	}
+	@Override
 	public void setTermCodeLength(int termCodeLength) {
 		this.termCodeLength = termCodeLength;
 	}
+	@Override
 	public void setTermMinCode(String termMinCode) {
 		this.termMinCode = termMinCode;
 	}
+	@Override
 	public void setAcceptNonStandardCodes(boolean acceptNonStandardCodes) {
 		this.acceptNonStandardCodes = acceptNonStandardCodes;
 	}
+	@Override
 	public void setGenerateMissingCodes(boolean generateMissingCodes) {
 		this.generateMissingCodes = generateMissingCodes;
 	}
+	@Override
 	public void setCatalogueGroups(String catalogueGroups) {
 		this.catalogueGroups = catalogueGroups;
 	}
 
+	@Override
 	public String getCode() {
-		return code;
+		return this.code;
 	}
+	@Override
 	public String getName() {
-		return name;
+		return this.name;
 	}
+	@Override
 	public String getLabel() {
-		return label;
+		return this.label;
 	}
+	@Override
 	public String getScopenotes() {
-		return scopenotes;
+		return this.scopenotes;
 	}
+	@Override
 	public String getVersion() {
-		return version;
+		return this.version;
 	}
+	@Override
 	public Timestamp getLastUpdate() {
-		return lastUpdate;
+		return this.lastUpdate;
 	}
+	@Override
 	public Timestamp getValidFrom() {
-		return validFrom;
+		return this.validFrom;
 	}
+	@Override
 	public Timestamp getValidTo() {
-		return validTo;
+		return this.validTo;
 	}
+	@Override
 	public String getStatus() {
-		return status;
+		return this.status;
 	}
+	@Override
 	public boolean isDeprecated() {
-		return deprecated;
+		return this.deprecated;
 	}
+	@Override
 	public String getTermMinCode() {
-		return termMinCode;
+		return this.termMinCode;
 	}
+	@Override
 	public int getTermCodeLength() {
-		return termCodeLength;
+		return this.termCodeLength;
 	}
+	@Override
 	public String getTermCodeMask() {
-		return termCodeMask;
+		return this.termCodeMask;
 	}
+	@Override
 	public boolean isAcceptNonStandardCodes() {
-		return acceptNonStandardCodes;
+		return this.acceptNonStandardCodes;
 	}
+	@Override
 	public boolean isGenerateMissingCodes() {
-		return generateMissingCodes;
+		return this.generateMissingCodes;
 	}
+	@Override
 	public String getCatalogueGroups() {
-		return catalogueGroups;
+		return this.catalogueGroups;
 	}
 	
 	@Override
 	public String toString() {
-		return "code=" + code 
-				+ ";version=" + version
-				+ ";label=" + label 
-				+ ";scopenotes=" + scopenotes 
-				+ ";termCodeLength=" + termCodeLength
-				+ ";validFrom=" + validFrom 
-				+ ";validTo=" + validTo;
+		return "code=" + this.code 
+				+ ";version=" + this.version
+				+ ";label=" + this.label 
+				+ ";scopenotes=" + this.scopenotes 
+				+ ";termCodeLength=" + this.termCodeLength
+				+ ";validFrom=" + this.validFrom 
+				+ ";validTo=" + this.validTo;
 	}
 }
 

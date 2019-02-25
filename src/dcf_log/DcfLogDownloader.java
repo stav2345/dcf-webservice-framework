@@ -18,6 +18,7 @@ import user.IDcfUser;
  * strategy can be used. In particular, it is possible to set the inter
  * attempts time and a limit to the maximum number of attempts.
  * @author avonva
+ * @author shahaal
  *
  */
 public class DcfLogDownloader implements IDcfLogDownloader {
@@ -41,12 +42,13 @@ public class DcfLogDownloader implements IDcfLogDownloader {
 	 * @param logCode the code of the log to download
 	 * @throws SOAPException
 	 */
+	@Override
 	public File getLog(IDcfUser user, Environment env, String logCode) throws SOAPException {
 		
-		if (exportCatFile == null)
-			exportCatFile = new ExportCatalogueFile();
+		if (this.exportCatFile == null)
+			this.exportCatFile = new ExportCatalogueFile();
 		
-		File log = exportCatFile.exportLog(env, user, logCode);
+		File log = this.exportCatFile.exportLog(env, user, logCode);
 		
 		if (log != null)
 			LOGGER.info("Log successfully downloaded, file=" + log);
@@ -60,6 +62,7 @@ public class DcfLogDownloader implements IDcfLogDownloader {
 	 * @param interAttemptsTime waiting time before trying again to download the log
 	 * @throws SOAPException 
 	 */
+	@Override
 	public File getLog(IDcfUser user, Environment env, String logCode, long interAttemptsTime) throws SOAPException {
 		return getLog(user, env, logCode, interAttemptsTime, -1);
 	}
@@ -71,6 +74,7 @@ public class DcfLogDownloader implements IDcfLogDownloader {
 	 * @param maxAttempts max number of allowed attempts (prevents DOS)
 	 * @throws SOAPException 
 	 */
+	@Override
 	public synchronized File getLog(IDcfUser user, Environment env, String logCode, 
 			long interAttemptsTime, int maxAttempts) throws SOAPException {
 		
@@ -107,11 +111,13 @@ public class DcfLogDownloader implements IDcfLogDownloader {
 			
 			// wait inter attempts time
 			try {
-				waiting = true;
+				this.waiting = true;
 				this.wait(interAttemptsTime);
-			} catch(InterruptedException e) {}
+			} catch(InterruptedException e) {
+				e.printStackTrace();
+			}
 			
-			waiting = false;
+			this.waiting = false;
 			
 			// go to the next attempt
 			attemptsCount++;
@@ -121,7 +127,7 @@ public class DcfLogDownloader implements IDcfLogDownloader {
 	}
 
 	public boolean isWaiting() {
-		return waiting;
+		return this.waiting;
 	}
 	
 	@Override

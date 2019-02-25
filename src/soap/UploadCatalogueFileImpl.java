@@ -13,6 +13,7 @@ import user.IDcfUser;
  * This class provides an implementation of the most commonly used
  * upload catalogue file actions.
  * @author avonva
+ * @author shahaal
  *
  */
 public class UploadCatalogueFileImpl implements IUploadCatalogueFileImpl {
@@ -88,6 +89,7 @@ public class UploadCatalogueFileImpl implements IUploadCatalogueFileImpl {
 	 * @return
 	 * @throws DetailedSOAPException
 	 */
+	@Override
 	public IPendingRequest reserve(IDcfUser user, Environment env, ReserveLevel level, 
 			String catalogueCode, String description) throws DetailedSOAPException {
 		
@@ -114,6 +116,7 @@ public class UploadCatalogueFileImpl implements IUploadCatalogueFileImpl {
 	 * @return
 	 * @throws DetailedSOAPException
 	 */
+	@Override
 	public IPendingRequest unreserve(IDcfUser user, Environment env, String catalogueCode, 
 			String description) throws DetailedSOAPException {
 		
@@ -138,6 +141,7 @@ public class UploadCatalogueFileImpl implements IUploadCatalogueFileImpl {
 	 * @return
 	 * @throws DetailedSOAPException
 	 */
+	@Override
 	public IPendingRequest publish(IDcfUser user, Environment env, PublishLevel level, 
 			String catalogueCode) throws DetailedSOAPException {
 		UploadCatalogueFileAction action = IUploadCatalogueFileImpl.fromPublishLevel(level);
@@ -165,6 +169,7 @@ public class UploadCatalogueFileImpl implements IUploadCatalogueFileImpl {
 	 * retrieve the result of the request
 	 * @throws DetailedSOAPException
 	 */
+	@Override
 	public IPendingRequest uploadCatalogueFile(IDcfUser user, Environment env, 
 			String attachment, String uploadCatalogueFileType, Map<String, String> requestData) throws DetailedSOAPException {
 		

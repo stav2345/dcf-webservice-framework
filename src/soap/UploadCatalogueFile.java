@@ -26,6 +26,7 @@ import user.IDcfUser;
  * to be uploaded to the dcf. Use {@link #processResponse(String)} to
  * process the log code related to the upload catalogue file request.
  * @author avonva
+ * @author shahaal
  *
  */
 public class UploadCatalogueFile extends SOAPRequest implements IUploadCatalogueFile {
@@ -54,15 +55,16 @@ public class UploadCatalogueFile extends SOAPRequest implements IUploadCatalogue
 	
 	/**
 	 * Upload an .xml file contained in a string to dcf
-	 * @param attachment
+	 * @param attachment1
 	 * @return
 	 * @throws DetailedSOAPException
 	 */
-	public String send(Environment env, IDcfUser user, String attachment) throws DetailedSOAPException {
+	@Override
+	public String send(Environment env, IDcfUser user, String attachment1) throws DetailedSOAPException {
 		
-		SOAPConsole.log("UploadCatalogueFile: attachment=" + attachment, user);
+		SOAPConsole.log("UploadCatalogueFile: attachment=" + attachment1, user);
 		
-		this.attachment = attachment;
+		this.attachment = attachment1;
 		
 		String url = env == Environment.PRODUCTION ? URL : TEST_URL;
 		
@@ -96,7 +98,7 @@ public class UploadCatalogueFile extends SOAPRequest implements IUploadCatalogue
 		SOAPElement fileData = upload.addChildElement("fileData");
 		
 		// get the attachment in base64 format
-		String encodedAttachment = encodeAttachment(attachment);
+		String encodedAttachment = encodeAttachment(this.attachment);
 
 		// row data node (child of file data)
 		SOAPElement rowData = fileData.addChildElement("rowData");
@@ -108,7 +110,7 @@ public class UploadCatalogueFile extends SOAPRequest implements IUploadCatalogue
 		return soapMsg;
 	}
 	
-	private String encodeAttachment(String attachment) {
+	private static String encodeAttachment(String attachment) {
 		byte[] data = attachment.getBytes();
 		return new String(Base64.getEncoder().encode(data));
 	}
@@ -116,11 +118,8 @@ public class UploadCatalogueFile extends SOAPRequest implements IUploadCatalogue
 	@Override
 	public Object processResponse(SOAPMessage soapResponse) throws SOAPException {
 		
-		// search the log code in the soap message
-		UploadCatalogueFileParser parser = new UploadCatalogueFileParser();
-
 		// get the log code of the response
-		String logCode = parser.parse(soapResponse.getSOAPBody());
+		String logCode = UploadCatalogueFileParser.parse(soapResponse.getSOAPBody());
 		
 		// if errors the log code is not returned
 		if (logCode == null)

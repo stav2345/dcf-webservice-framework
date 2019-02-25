@@ -10,6 +10,7 @@ import pending_request.IPendingRequest;
  * MINOR
  * MAJOR
  * @author avonva
+ * @author shahaal
  *
  */
 public enum UploadCatalogueFileAction {
@@ -32,7 +33,7 @@ public enum UploadCatalogueFileAction {
     }
 
 	public String getName() {
-		return name;
+		return this.name;
 	}
 	
 	public String getDatabaseCode() {

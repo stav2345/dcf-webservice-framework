@@ -17,6 +17,7 @@ import user.IDcfUser;
 /**
  * Get a list with all the data collections related to the current user
  * @author avonva
+ * @author shahaal
  *
  */
 public class GetDataCollectionsList<T extends IDcfDataCollection> extends GetList<T> {
@@ -24,17 +25,17 @@ public class GetDataCollectionsList<T extends IDcfDataCollection> extends GetLis
 	private static final String NAMESPACE = "http://dcf-elect.efsa.europa.eu/";
 	private static final String URL = "https://dcf-elect.efsa.europa.eu/elect2";
 	private static final String TEST_URL = "https://dcf-01.efsa.test/dcf-dp-ws/elect2/?wsdl";
-
+	
 	private IDcfDataCollectionsList<T> output;
 	
 	public GetDataCollectionsList() {
 		super(URL, TEST_URL, NAMESPACE);
 	}
 
-	public IDcfList<T> getList(Environment env, IDcfUser user, IDcfDataCollectionsList<T> output) throws DetailedSOAPException {
+	public IDcfList<T> getList(Environment env, IDcfUser user, IDcfDataCollectionsList<T> output1) throws DetailedSOAPException {
 		SOAPConsole.log("GetDataCollectionsList", user);
 		
-		this.output = output;
+		this.output = output1;
 		IDcfList<T> response = super.getList(env, user);
 		
 		SOAPConsole.log("GetDataCollectionsList:", response);
@@ -45,7 +46,7 @@ public class GetDataCollectionsList<T extends IDcfDataCollection> extends GetLis
 	@Override
 	public IDcfDataCollectionsList<T> getList(Document cdata) {
 
-		GetDataCollectionsListParser<T> parser = new GetDataCollectionsListParser<>(output);
+		GetDataCollectionsListParser<T> parser = new GetDataCollectionsListParser<>(this.output);
 		return parser.parse(cdata);
 	}
 

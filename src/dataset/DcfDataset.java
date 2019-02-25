@@ -6,6 +6,7 @@ import soap.GetDatasetsList;
  * Dcf dataset that is downloaded using the {@link GetDatasetsList}
  * request.
  * @author avonva
+ * @author shahaal
  *
  */
 public class DcfDataset implements IDcfDataset {
@@ -18,38 +19,44 @@ public class DcfDataset implements IDcfDataset {
 	private String lastModifyingMessageId;
 	private String lastValidationMessageId;
 
+	@Override
 	public void setId(String id) {
 		this.id = id;
 	}
 
+	@Override
 	public void setSenderId(String senderId) {
 		this.senderId = senderId;
 	}
 
+	@Override
 	public void setStatus(DcfDatasetStatus status) {
 		this.status = status;
 	}
 	
+	@Override
 	public String getId() {
-		return id;
+		return this.id;
 	}
 
+	@Override
 	public String getSenderId() {
-		return senderId;
+		return this.senderId;
 	}
 
+	@Override
 	public DcfDatasetStatus getStatus() {
-		return status;
+		return this.status;
 	}
 
 	@Override
 	public String toString() {
-		return "Dataset: id=" + id 
-				+ ";senderId=" + senderId 
-				+ ";lastMessageId=" + lastMessageId
-				+ ";lastModifyingMessageId=" + lastModifyingMessageId
-				+ ";lastValidationMessageId=" + lastValidationMessageId
-				+ ";status=" + status;
+		return "Dataset: id=" + this.id 
+				+ ";senderId=" + this.senderId 
+				+ ";lastMessageId=" + this.lastMessageId
+				+ ";lastModifyingMessageId=" + this.lastModifyingMessageId
+				+ ";lastValidationMessageId=" + this.lastValidationMessageId
+				+ ";status=" + this.status;
 	}
 	
 	@Override
@@ -95,5 +102,11 @@ public class DcfDataset implements IDcfDataset {
 	@Override
 	public String getLastValidationMessageId() {
 		return this.lastValidationMessageId;
+	}
+
+	@Override
+	public int hashCode() {
+		// TODO Auto-generated method stub
+		return super.hashCode();
 	}
 }

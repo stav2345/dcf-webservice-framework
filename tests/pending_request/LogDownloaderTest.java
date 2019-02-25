@@ -19,7 +19,7 @@ import user.DcfUser;
 public class LogDownloaderTest {
 
 	@Test
-	public void getLogSuccess() throws SOAPException {
+	public static void getLogSuccess() throws SOAPException {
 		DcfLogDownloader downloader = new DcfLogDownloader(new ExportCatalogueFileMock(MockResult.OK));
 		DcfUser user = new DcfUser();
 		user.login("avonva", "Ab123456");
@@ -29,7 +29,7 @@ public class LogDownloaderTest {
 	}
 	
 	@Test
-	public void getLogFailed() throws SOAPException {
+	public static void getLogFailed() throws SOAPException {
 		DcfLogDownloader downloader = new DcfLogDownloader(new ExportCatalogueFileMock(MockResult.NULL));
 		DcfUser user = new DcfUser();
 		user.login("avonva", "Ab123456");
@@ -39,7 +39,7 @@ public class LogDownloaderTest {
 	}
 	
 	@Test(expected = SOAPException.class)
-	public void getLog() throws SOAPException {
+	public static void getLog() throws SOAPException {
 		DcfLogDownloader downloader = new DcfLogDownloader(new ExportCatalogueFileMock(MockResult.EXCEPTION));
 		DcfUser user = new DcfUser();
 		user.login("avonva", "Ab123456");
@@ -47,7 +47,7 @@ public class LogDownloaderTest {
 	}
 	
 	@Test
-	public void getLogRetry() throws SOAPException {
+	public static void getLogRetry() {
 		
 		DcfLogDownloader downloader = new DcfLogDownloader(new ExportCatalogueFileMock(MockResult.NULL, 1000));
 		DcfUser user = new DcfUser();

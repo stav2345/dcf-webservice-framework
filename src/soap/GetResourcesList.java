@@ -18,6 +18,7 @@ import user.IDcfUser;
 /**
  * Request to the DCF for getting the resource list
  * @author avonva
+ * @author shahaal
  *
  */
 public class GetResourcesList<T extends IDcfResourceReference> extends GetList<T> {
@@ -35,12 +36,12 @@ public class GetResourcesList<T extends IDcfResourceReference> extends GetList<T
 		super(URL, TEST_URL, NAMESPACE);
 	}
 	
-	public IDcfList<T> getList(Environment env, IDcfUser user, String dataCollectionCode, IDcfResourcesList<T> output) throws DetailedSOAPException {
+	public IDcfList<T> getList(Environment env, IDcfUser user, String dataCollectionCode1, IDcfResourcesList<T> output1) throws DetailedSOAPException {
 		
-		this.dataCollectionCode = dataCollectionCode;
-		this.output = output;
+		this.dataCollectionCode = dataCollectionCode1;
+		this.output = output1;
 		
-		SOAPConsole.log("GetResourcesList: dcCode=" + dataCollectionCode, user);
+		SOAPConsole.log("GetResourcesList: dcCode=" + dataCollectionCode1, user);
 		IDcfList<T> response = super.getList(env, user);
 		
 		SOAPConsole.log("GetResourcesList:", response);
@@ -50,7 +51,7 @@ public class GetResourcesList<T extends IDcfResourceReference> extends GetList<T
 	
 	@Override
 	public IDcfResourcesList<T> getList(Document cdata) {
-		GetResourcesListParser<T> parser = new GetResourcesListParser<>(output);
+		GetResourcesListParser<T> parser = new GetResourcesListParser<>(this.output);
 		return parser.parse(cdata);
 	}
 

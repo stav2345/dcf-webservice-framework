@@ -21,8 +21,8 @@ public class SendMessageMock implements ISendMessage {
 	@Override
 	public MessageResponse send(Environment env, IDcfUser user, File file) throws DetailedSOAPException, IOException {
 		
-		if (response != null)
-			return response;
+		if (this.response != null)
+			return this.response;
 		
 		String messageId = String.valueOf((int) (10000 + Math.random() * 90000));
 		return new MessageResponse(messageId, TrxCode.TRXOK, null);

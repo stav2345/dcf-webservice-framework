@@ -32,7 +32,7 @@ public enum FileState {
 	 * @return
 	 */
 	public String getHeaderName() {
-		return headerName;
+		return this.headerName;
 	}
 
 	/**

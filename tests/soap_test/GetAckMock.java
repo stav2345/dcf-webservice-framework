@@ -22,11 +22,11 @@ public class GetAckMock implements IGetAck {
 	
 	@Override
 	public DcfAck getAck(Environment env, IDcfUser user, String messageId) throws DetailedSOAPException {
-		return ack;
+		return this.ack;
 	}
 	
 	@Override
 	public DcfAckDetailedResId getAckDetailedResId(Environment env, IDcfUser user, String detaildeResId) throws DetailedSOAPException {
-		return detailedAck;
+		return this.detailedAck;
 	}
 }

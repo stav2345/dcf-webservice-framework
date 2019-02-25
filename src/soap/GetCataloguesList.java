@@ -18,6 +18,7 @@ import user.IDcfUser;
 /**
  * Get the entire catalogues list which are present in DCF
  * @author avonva
+ * @author shahaal
  *
  */
 public class GetCataloguesList<T extends IDcfCatalogue> extends GetList<T> {
@@ -32,9 +33,9 @@ public class GetCataloguesList<T extends IDcfCatalogue> extends GetList<T> {
 		super(URL, TEST_URL, NAMESPACE);
 	}
 	
-	public IDcfList<T> getList(Environment env, IDcfUser user, IDcfCataloguesList<T> output) throws DetailedSOAPException {
+	public IDcfList<T> getList(Environment env, IDcfUser user, IDcfCataloguesList<T> output1) throws DetailedSOAPException {
 		
-		this.output = output;
+		this.output = output1;
 		
 		SOAPConsole.log("GetCataloguesList", user);
 
@@ -47,7 +48,7 @@ public class GetCataloguesList<T extends IDcfCatalogue> extends GetList<T> {
 	
 	@Override
 	public IDcfCataloguesList<T> getList(Document cdata) {
-		GetCataloguesListParser<T> parser = new GetCataloguesListParser<>(output);
+		GetCataloguesListParser<T> parser = new GetCataloguesListParser<>(this.output);
 		return parser.parse(cdata);
 	}
 

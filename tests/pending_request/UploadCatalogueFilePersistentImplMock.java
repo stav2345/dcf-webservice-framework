@@ -34,7 +34,7 @@ public class UploadCatalogueFilePersistentImplMock implements IUploadCatalogueFi
 			IDcfPendingRequestsList<IPendingRequest> output) 
 			throws SQLException, IOException {
 		
-		IDcfPendingRequestsList<IPendingRequest> requests = dao.getUserPendingRequests(user, output);
+		IDcfPendingRequestsList<IPendingRequest> requests = this.dao.getUserPendingRequests(user, output);
 		
 		// add listeners in order to remove/update the requests
 		for (IPendingRequest request : requests) {
@@ -65,7 +65,7 @@ public class UploadCatalogueFilePersistentImplMock implements IUploadCatalogueFi
 			public void statusChanged(PendingRequestStatusChangedEvent event) {
 				if (event.getNewStatus() == PendingRequestStatus.COMPLETED) {
 					try {
-						dao.remove(event.getPendingRequest().getLogCode());
+						UploadCatalogueFilePersistentImplMock.this.dao.remove(event.getPendingRequest().getLogCode());
 					} catch (SQLException | IOException e) {
 						e.printStackTrace();
 					}
@@ -95,13 +95,13 @@ public class UploadCatalogueFilePersistentImplMock implements IUploadCatalogueFi
 
 	private IPendingRequest sendAction(IDcfUser user, Environment env, UploadCatalogueFileAction action, 
 			String catalogueCode, String description) throws DetailedSOAPException, IOException {
-		IPendingRequest pr = upl.sendAction(user, env, action, catalogueCode, description);
+		IPendingRequest pr = this.upl.sendAction(user, env, action, catalogueCode, description);
 		return makePersistent(pr);
 	}
 
 	@Override
 	public IPendingRequest uploadCatalogueFile(IDcfUser user, Environment env, String attachment,
 			String uploadCatalogueFileType, Map<String, String> requestData) throws DetailedSOAPException, IOException {
-		IPendingRequest pr = upl.uploadCatalogueFile(user, env, attachment, uploadCatalogueFileType, requestData);
+		IPendingRequest pr = this.upl.uploadCatalogueFile(user, env, attachment, uploadCatalogueFileType, requestData);
 		return makePersistent(pr);
 	}}

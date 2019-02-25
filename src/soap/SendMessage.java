@@ -22,6 +22,7 @@ import user.IDcfUser;
 /**
  * SendMessage request to the dcf
  * @author avonva
+ * @author shahaal
  *
  */
 public class SendMessage extends SOAPRequest implements ISendMessage {
@@ -38,6 +39,7 @@ public class SendMessage extends SOAPRequest implements ISendMessage {
 	 * @param filename
 	 * @throws IOException 
 	 */
+	@Override
 	public MessageResponse send(Environment env, IDcfUser user, File file) throws DetailedSOAPException, IOException {
 		
 		SOAPConsole.log("SendMessage: file=" + file, user);
@@ -66,7 +68,7 @@ public class SendMessage extends SOAPRequest implements ISendMessage {
 	 * @return
 	 * @throws IOException
 	 */
-	private String prepareMessage(File file) throws IOException {
+	private static String prepareMessage(File file) throws IOException {
 		
 		// add attachment to fileHandler node
 		Path path = Paths.get(file.getAbsolutePath());
@@ -104,7 +106,6 @@ public class SendMessage extends SOAPRequest implements ISendMessage {
 
 	@Override
 	public Object processResponse(SOAPMessage soapResponse) throws SOAPException {
-		SendMessageParser parser = new SendMessageParser();
-		return parser.parse(soapResponse.getSOAPBody());
+		return SendMessageParser.parse(soapResponse.getSOAPBody());
 	}
 }

@@ -12,9 +12,7 @@ public class SOAPConsole {
 	
 	public static void log(String action, IDcfUser user) {
 		
-		Config config = new Config();
-		
-		String env = config.isProductionEnvironment() ? "production" : "test";
+		String env = Config.isProductionEnvironment() ? "production" : "test";
 		
 		LOGGER.info("WebServiceRequest#" + action + " required from user=" + user.getUsername() 
 			+ " in " + env + " environment");

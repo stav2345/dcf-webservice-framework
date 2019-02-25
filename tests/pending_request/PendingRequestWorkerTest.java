@@ -37,7 +37,7 @@ public class PendingRequestWorkerTest {
 			public void statusChanged(PendingRequestStatusChangedEvent event) {
 				
 				if (event.getNewStatus() == PendingRequestStatus.COMPLETED)
-					count++;
+					PendingRequestWorkerTest.this.count++;
 			}
 		};
 		
@@ -53,7 +53,7 @@ public class PendingRequestWorkerTest {
 		
 		worker.startPendingRequests(r2);
 
-		while(count < 2) {
+		while(this.count < 2) {
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {

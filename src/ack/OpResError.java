@@ -15,7 +15,7 @@ public enum OpResError {
 	}
 	
 	public int getPriority() {
-		return priority;
+		return this.priority;
 	}
 	
 	public boolean priorTo(OpResError other) {

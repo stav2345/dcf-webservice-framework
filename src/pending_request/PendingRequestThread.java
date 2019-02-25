@@ -36,7 +36,7 @@ public class PendingRequestThread extends Thread {
 	}
 	
 	public IPendingRequest getRequest() {
-		return request;
+		return this.request;
 	}
 	
 	/**
@@ -46,6 +46,7 @@ public class PendingRequestThread extends Thread {
 	 * @throws SAXException
 	 * @throws IOException
 	 */
+	@Override
 	public void run() {
 		try {
 			startRequest();
@@ -75,7 +76,7 @@ public class PendingRequestThread extends Thread {
 		// start procedure if no connection error is found
 		while(!done) {
 			try {
-				request.start(parser);  // start the request
+				this.request.start(this.parser);  // start the request
 				done = true;
 			}
 			catch(DetailedSOAPException e) {
@@ -83,7 +84,7 @@ public class PendingRequestThread extends Thread {
 					
 					// bad connection, wait connection
 					LOGGER.error("Bad internet connection. The pending request=" 
-							+ request + " will be relaunched in one minute", e);
+							+ this.request + " will be relaunched in one minute", e);
 					
 					Thread.sleep(60000);
 				}
@@ -93,10 +94,10 @@ public class PendingRequestThread extends Thread {
 			}
 		}
 		
-		finished = true;
+		this.finished = true;
 	}
 	
 	public boolean isFinished() {
-		return finished;
+		return this.finished;
 	}
 }

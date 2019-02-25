@@ -39,7 +39,7 @@ public class UploadCatalogueFileImplMock implements IUploadCatalogueFileImpl {
 	protected IPendingRequest sendAction(IDcfUser user, Environment env, UploadCatalogueFileAction action, 
 			String catalogueCode, String description) throws DetailedSOAPException {
 		
-		String logCode = upc.send(env, user, "my-attachment");
+		String logCode = this.upc.send(env, user, "my-attachment");
 		
 		String type = action.getDatabaseCode();
 		PendingRequest pr = new PendingRequest(type, user, logCode, env);
@@ -56,7 +56,7 @@ public class UploadCatalogueFileImplMock implements IUploadCatalogueFileImpl {
 	public IPendingRequest uploadCatalogueFile(IDcfUser user, Environment env, String attachment,
 			String uploadCatalogueFileType, Map<String, String> requestData) throws DetailedSOAPException, IOException {
 		
-		String logCode = upc.send(env, user, "my-attachment");
+		String logCode = this.upc.send(env, user, "my-attachment");
 		
 		PendingRequest pr = new PendingRequest(uploadCatalogueFileType, user, logCode, env);
 		pr.setData(requestData);

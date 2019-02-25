@@ -11,7 +11,10 @@ public class DcfLogParserMock implements IDcfLogParser {
 
 	@Override
 	public DcfLog parse(File file) throws IOException {
-		return this.parse(new FileInputStream(file));
+		//solve memory leak
+		try(FileInputStream f = new FileInputStream(file)){
+			return this.parse(f);
+		}
 	}
 
 	@Override

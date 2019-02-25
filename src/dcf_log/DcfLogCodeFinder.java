@@ -11,7 +11,7 @@ import org.w3c.dom.Node;
  * Class to analyze a dcf response which contains the LOG code
  * for the previouly performed operation (through web service)
  * @author avonva
- *
+ * @author shahaal
  */
 public class DcfLogCodeFinder {
 	
@@ -35,7 +35,7 @@ public class DcfLogCodeFinder {
 	public String getLogCode() throws SOAPException {
 
 		// get the children of the body
-		Iterator<?> children = message.getSOAPPart().getEnvelope().getBody().getChildElements();
+		Iterator<?> children = this.message.getSOAPPart().getEnvelope().getBody().getChildElements();
 		
 		if ( !children.hasNext() )
 			return null;

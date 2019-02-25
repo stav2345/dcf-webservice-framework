@@ -13,17 +13,17 @@ public class MessageResponse {
 	}
 	
 	public String getMessageId() {
-		return messageId;
+		return this.messageId;
 	}
 	public TrxCode getTrxState() {
-		return trxState;
+		return this.trxState;
 	}
 	public String getTrxError() {
-		return trxError;
+		return this.trxError;
 	}
 	
 	public SendMessageErrorType getErrorType() {
-		return SendMessageErrorType.fromString(trxError);
+		return SendMessageErrorType.fromString(this.trxError);
 	}
 	
 	/**
@@ -31,11 +31,11 @@ public class MessageResponse {
 	 * @return
 	 */
 	public boolean isCorrect() {
-		return trxState == TrxCode.TRXOK;
+		return this.trxState == TrxCode.TRXOK;
 	}
 	
 	@Override
 	public String toString() {
-		return "MessageId=" + messageId + "; trxCode=" + trxState;
+		return "MessageId=" + this.messageId + "; trxCode=" + this.trxState;
 	}
 }

@@ -59,21 +59,24 @@ import zip_manager.ZipManager;
 
 /**
  * Abstract class used to create soap requests and to process soap responses.
+ * 
  * @author avonva
+ * @author shahaal
  */
 public class GetCataloguesListOpenAPI<T extends IDcfCatalogue> {
 
 	private static final Logger LOGGER = LogManager.getLogger(GetCataloguesListOpenAPI.class);
-	
+
 	private IDcfUser user;
 	private String namespace;
-	private SOAPError error;  // error, if occurred
+	private SOAPError error; // error, if occurred
 	private Environment env;
 
 	private IDcfCataloguesList<T> output;
 
 	/**
 	 * Set the url where we make the request and the namespace of the request
+	 * 
 	 * @param url
 	 * @param namespace
 	 */
@@ -82,62 +85,64 @@ public class GetCataloguesListOpenAPI<T extends IDcfCatalogue> {
 		this.namespace = "http://ws.catalog.dc.efsa.europa.eu/";
 		this.output = output;
 	}
-	
+
 	public Environment getEnvironment() {
-		return env;
+		return this.env;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public IDcfList<T> getList() throws DetailedSOAPException {
 		return (IDcfList<T>) makeRequest("https://openscaie-dev.azure-api.net/catalogues");
 	}
-	
+
 	/**
 	 * Use the proxy if present
+	 * 
 	 * @param stringUrl
 	 * @return
 	 * @throws MalformedURLException
 	 * @throws ProxyConfigException
 	 */
-	private URL getEndpoint(String stringUrl) throws MalformedURLException, 
-		ProxyConfigException {
-		
-		Proxy proxy = HttpManager.getProxy();
-		
-		URL endpoint = new URL(null, stringUrl, new URLStreamHandler() {
-			
-	        protected URLConnection openConnection(URL url) throws IOException {
-	        	
-	            // The url is the parent of this stream handler, so must
-	            // create clone
-	            URL clone = new URL(url.toString());
+	private static URL getEndpoint(String stringUrl) throws MalformedURLException, ProxyConfigException {
 
-	            URLConnection connection = null;
-	            
-	            // set the proxy if needed
-	            if (proxy == null)
-	                connection = clone.openConnection();
-	            else
-	                connection = clone.openConnection(proxy);
-	            
-	            connection.setConnectTimeout(30000);
-	            connection.setReadTimeout(30000);
-	            return connection;
-	        }
-	    });
-		
+		Proxy proxy = HttpManager.getProxy();
+
+		URL endpoint = new URL(null, stringUrl, new URLStreamHandler() {
+
+			@Override
+			protected URLConnection openConnection(URL url) throws IOException {
+
+				// The url is the parent of this stream handler, so must
+				// create clone
+				URL clone = new URL(url.toString());
+
+				URLConnection connection = null;
+
+				// set the proxy if needed
+				if (proxy == null)
+					connection = clone.openConnection();
+				else
+					connection = clone.openConnection(proxy);
+
+				connection.setConnectTimeout(30000);
+				connection.setReadTimeout(30000);
+				return connection;
+			}
+		});
+
 		return endpoint;
 	}
-	
+
 	/**
 	 * Get an https connection which ignores certificates
+	 * 
 	 * @param url
 	 * @return
 	 * @throws KeyManagementException
 	 * @throws NoSuchAlgorithmException
 	 * @throws IOException
 	 */
-	private HttpsURLConnection avoidCertificates(String url) 
+	private static HttpsURLConnection avoidCertificates(String url)
 			throws KeyManagementException, NoSuchAlgorithmException, IOException {
 
 		HttpsURLConnection httpsConnection = null;
@@ -145,14 +150,12 @@ public class GetCataloguesListOpenAPI<T extends IDcfCatalogue> {
 		// Create SSL context and trust all certificates
 		SSLContext sslContext = SSLContext.getInstance("SSL");
 
-		TrustManager[] trustAll
-		= new TrustManager[] {new TrustAllCertificates()};
+		TrustManager[] trustAll = new TrustManager[] { new TrustAllCertificates() };
 
 		sslContext.init(null, trustAll, new java.security.SecureRandom());
 
 		// Set trust all certificates context to HttpsURLConnection
-		HttpsURLConnection
-		.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
+		HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
 
 		// Open HTTPS connection
 		URL link = new URL(url);
@@ -164,50 +167,55 @@ public class GetCataloguesListOpenAPI<T extends IDcfCatalogue> {
 
 		// Connect
 		httpsConnection.connect();
-		
+
 		return httpsConnection;
 	}
-	
 
 	/**
 	 * Dummy class implementing HostnameVerifier to trust all host names
 	 */
 	private static class TrustAllHosts implements HostnameVerifier {
+		@Override
 		public boolean verify(String hostname, SSLSession session) {
 			return true;
 		}
 	}
-	
+
 	/**
 	 * Dummy class implementing X509TrustManager to trust all certificates
 	 */
 	private static class TrustAllCertificates implements X509TrustManager {
-		
+
+		@Override
 		public void checkClientTrusted(X509Certificate[] certs, String authType) {
 		}
 
+		@Override
 		public void checkServerTrusted(X509Certificate[] certs, String authType) {
 		}
 
+		@Override
 		public X509Certificate[] getAcceptedIssuers() {
 			return null;
 		}
 	}
-	
+
 	/**
-	 * Create the request and get the response. Process the response and return the results.
+	 * Create the request and get the response. Process the response and return the
+	 * results.
+	 * 
 	 * @param soapConnection
 	 * @return
 	 * @throws DetailedSOAPException
 	 */
 	public Object makeRequest(String url) throws DetailedSOAPException {
-		
+
 		final boolean isHttps = url.toLowerCase().startsWith("https");
-		
+
 		HttpsURLConnection httpsConnection = null;
-		
+
 		// if https with test => skip certificates
-		if (isHttps && env == Environment.TEST) {
+		if (isHttps && this.env == Environment.TEST) {
 			try {
 				httpsConnection = avoidCertificates(url);
 			} catch (KeyManagementException | NoSuchAlgorithmException | IOException e) {
@@ -218,152 +226,155 @@ public class GetCataloguesListOpenAPI<T extends IDcfCatalogue> {
 		try {
 			// Connect to the url
 			SOAPConnectionFactory connectionFactory = SOAPConnectionFactory.newInstance();
-			
+
 			// open the connection
 			SOAPConnection soapConnection = connectionFactory.createConnection();
-	
+
 			// create the request message
-			SOAPMessage request = createRequest(soapConnection);
-	
+			SOAPMessage request = createRequest();
+
 			SOAPMessage response;
 			try {
-				
+
 				URL endpoint = getEndpoint(url);
-				
+
 				// get the response
 				response = soapConnection.call(request, endpoint);
-				
+
 			} catch (MalformedURLException | ProxyConfigException e) {
 				e.printStackTrace();
-				
+
 				LOGGER.error("ERROR OCCURRED. Proceeding with NO_PROXY.", e);
-				
+
 				// get the response with no proxy
 				response = soapConnection.call(request, url);
 			}
-			
+
 			// close the soap connection
 			soapConnection.close();
-			
+
 			// if https with test => skip certificates
 			if (httpsConnection != null) {
 				httpsConnection.disconnect();
 			}
-			
+
 			// parse the response and get the result
 			return processResponse(response);
-		}
-		catch (SOAPException e) {
-			
+		} catch (SOAPException e) {
+
 			// parse error codes
 			throw new DetailedSOAPException(e);
 		}
 	}
-	
+
 	/**
 	 * Get the error type if it occurred
+	 * 
 	 * @return
 	 */
 	public SOAPError getSOAPError() {
 		return this.error;
 	}
-	
+
 	/**
-	 * Create the standard structure of a SOAPMessage, including the
-	 * authentication block
+	 * Create the standard structure of a SOAPMessage, including the authentication
+	 * block
+	 * 
 	 * @param username
 	 * @param password
 	 * @return
 	 * @throws SOAPException
 	 */
 	public SOAPMessage createTemplateSOAPMessage(String prefix) throws SOAPException {
-		
+
 		// create the soap message
 		MessageFactory msgFactory = MessageFactory.newInstance();
 		SOAPMessage soapMsg = msgFactory.createMessage();
 		SOAPPart soapPart = soapMsg.getSOAPPart();
-		
+
 		// add the content type header
 		soapMsg.getMimeHeaders().addHeader("Content-Type", "text/xml;charset=UTF-8");
 		soapMsg.getMimeHeaders().addHeader("Ocp-Apim-Subscription-Key", "842d0d2edbeb4b1db69b841e535d2f4f");
 
 		// create the envelope and name it
 		SOAPEnvelope envelope = soapPart.getEnvelope();
-		envelope.addNamespaceDeclaration(prefix, namespace);
+		envelope.addNamespaceDeclaration(prefix, this.namespace);
 
 		// return the message
 		return soapMsg;
 	}
-	
+
 	/**
 	 * Get an xml document starting from a string text formatted as xml
+	 * 
 	 * @param xml
 	 * @return
-	 * @throws ParserConfigurationException 
-	 * @throws IOException 
-	 * @throws SAXException 
+	 * @throws ParserConfigurationException
+	 * @throws IOException
+	 * @throws SAXException
 	 * @throws Exception
 	 */
-	public static Document getDocument(String xml) 
-			throws ParserConfigurationException, SAXException, IOException {
+	public static Document getDocument(String xml) throws ParserConfigurationException, SAXException, IOException {
 
 		// create the factory object to create the document object
-	    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-	    
-	    // get the builder from the factory
-	    DocumentBuilder builder = factory.newDocumentBuilder();
-	    
-	    // Set the input source (the text string)
-	    InputSource is = new InputSource(new StringReader(xml));
-	    
-	    // get the xml document and return it
-	    return builder.parse(is);
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
+		// get the builder from the factory
+		DocumentBuilder builder = factory.newDocumentBuilder();
+
+		// Set the input source (the text string)
+		InputSource is = new InputSource(new StringReader(xml));
+
+		// get the xml document and return it
+		return builder.parse(is);
 	}
-	
+
 	/**
 	 * Load an xml document using a file
+	 * 
 	 * @param file
 	 * @return
 	 * @throws ParserConfigurationException
 	 * @throws SAXException
 	 * @throws IOException
 	 */
-	public static Document getDocument(File file) 
-			throws ParserConfigurationException, SAXException, IOException {
-		
+	public static Document getDocument(File file) throws ParserConfigurationException, SAXException, IOException {
+
 		// create the factory object to create the document object
-	    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-	    
-	    // get the builder from the factory
-	    DocumentBuilder builder = factory.newDocumentBuilder();
-	    
-	    // get the xml document and return it
-	    return builder.parse(file);
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
+		// get the builder from the factory
+		DocumentBuilder builder = factory.newDocumentBuilder();
+
+		// get the xml document and return it
+		return builder.parse(file);
 	}
-	
+
 	/**
 	 * Get a document from an input stream
+	 * 
 	 * @param input
 	 * @return
 	 * @throws ParserConfigurationException
 	 * @throws SAXException
 	 * @throws IOException
 	 */
-	public static Document getDocument(InputStream input) 
+	public static Document getDocument(InputStream input)
 			throws ParserConfigurationException, SAXException, IOException {
-		
+
 		// create the factory object to create the document object
-	    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-	    
-	    // get the builder from the factory
-	    DocumentBuilder builder = factory.newDocumentBuilder();
-	    
-	    // get the xml document and return it
-	    return builder.parse(input);
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
+		// get the builder from the factory
+		DocumentBuilder builder = factory.newDocumentBuilder();
+
+		// get the xml document and return it
+		return builder.parse(input);
 	}
 
 	/**
 	 * Convert the cdata content of a node into document
+	 * 
 	 * @param node
 	 * @return
 	 */
@@ -379,35 +390,37 @@ public class GetCataloguesListOpenAPI<T extends IDcfCatalogue> {
 
 		return cdata;
 	}
-	
+
 	/**
 	 * Get the first attachment of the message
+	 * 
 	 * @param message
 	 * @return
 	 * @throws SOAPException
 	 */
-	public AttachmentPart getFirstAttachmentPart(SOAPMessage message) throws DetailedSOAPException {
+	public static AttachmentPart getFirstAttachmentPart(SOAPMessage message) {
 
 		// get the attachment
 		Iterator<?> iter = message.getAttachments();
-		
+
 		if (!iter.hasNext()) {
 			return null;
 		}
 
 		// get the response attachment
 		AttachmentPart attachment = (AttachmentPart) iter.next();
-		
+
 		return attachment;
 	}
-	
+
 	/**
 	 * Process an xml attachment without binding it into a dom Document
+	 * 
 	 * @param soapResponse
 	 * @return the input stream containing the xml
 	 * @throws SOAPException
 	 */
-	public File writeXmlIntoFile(SOAPMessage soapResponse, boolean isZipped) throws SOAPException {
+	public static File writeXmlIntoFile(SOAPMessage soapResponse, boolean isZipped) throws SOAPException {
 
 		AttachmentPart part = getFirstAttachmentPart(soapResponse);
 
@@ -416,14 +429,13 @@ public class GetCataloguesListOpenAPI<T extends IDcfCatalogue> {
 			LOGGER.info("No attachment found!");
 			return null;
 		}
-		
-		File file =  FileUtils.createTempFile("attachment_" 
-				+ System.currentTimeMillis(), ".xml");
-		
+
+		File file = FileUtils.createTempFile("attachment_" + System.currentTimeMillis(), ".xml");
+
 		// create an attachment handler to analyze the soap attachment
-		try(AttachmentHandler handler = new AttachmentHandler(part, isZipped);
-			InputStream inputStream = handler.readAttachment();
-			OutputStream outputStream = new FileOutputStream(file);) {
+		try (AttachmentHandler handler = new AttachmentHandler(part, isZipped);
+				InputStream inputStream = handler.readAttachment();
+				OutputStream outputStream = new FileOutputStream(file);) {
 
 			byte[] buf = new byte[512];
 			int num;
@@ -435,53 +447,52 @@ public class GetCataloguesListOpenAPI<T extends IDcfCatalogue> {
 			outputStream.close();
 			inputStream.close();
 			handler.close();
-		}
-		catch(IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
 		}
 
 		return file;
 	}
-	
+
 	/**
 	 * Write a zipped stream into the disk
-	 * @param message message containing the attachment
+	 * 
+	 * @param message          message containing the attachment
 	 * @param attachmentFormat format of the file in the zip file
 	 * @return
 	 * @throws SOAPException
 	 */
-	public File writeZippedAttachment(SOAPMessage message, String attachmentFormat) throws SOAPException {
-		
+	public static File writeZippedAttachment(SOAPMessage message, String attachmentFormat) throws SOAPException {
+
 		AttachmentPart attachmentPart = getFirstAttachmentPart(message);
-		
+
 		if (attachmentPart == null)
 			return null;
-		
-		File file =  FileUtils.createTempFile("attachment_" 
-				+ System.currentTimeMillis(), attachmentFormat);
-		
-		InputStream stream = attachmentPart.getRawContent();
-		
-		if (stream == null) {
-			LOGGER.error("No raw contents in the attachment found");
-			return null;
-		}
-		
-		// unzip the stream into a file
-		ZipManager.unzipStream(stream, file);
-		
-		try {
-			stream.close();
+
+		File file = FileUtils.createTempFile("attachment_" + System.currentTimeMillis(), attachmentFormat);
+
+		try (InputStream stream = attachmentPart.getRawContent()) {
+
+			if (stream == null) {
+				LOGGER.error("No raw contents in the attachment found");
+				return null;
+			}
+
+			// unzip the stream into a file
+			ZipManager.unzipStream(stream, file);
+
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return file;
 	}
-	
+
 	/**
 	 * Get the xsd from the attachment
+	 * 
 	 * @param response
 	 * @throws ClassNotFoundException
 	 * @throws InstantiationException
@@ -489,81 +500,79 @@ public class GetCataloguesListOpenAPI<T extends IDcfCatalogue> {
 	 * @throws ClassCastException
 	 * @throws SOAPException
 	 * @throws IOException
-	 * @throws ParserConfigurationException 
-	 * @throws SAXException 
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
 	 */
-	public Document getXsdAttachment(SOAPMessage response) 
-			throws ClassNotFoundException, InstantiationException, IllegalAccessException, 
-			ClassCastException, SOAPException, IOException, ParserConfigurationException, SAXException {
-		
+	public static Document getXsdAttachment(SOAPMessage response)
+			throws ClassNotFoundException, InstantiationException, IllegalAccessException, ClassCastException,
+			SOAPException, IOException, ParserConfigurationException, SAXException {
+
 		AttachmentPart part = getFirstAttachmentPart(response);
-		
+
 		if (part == null)
 			return null;
-		
-		InputStream stream = part.getRawContent();
-		
-        // parse the document
-        DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
-        Document doc = docBuilder.parse(stream); 
-		stream.close();
-		
-		return doc;
+
+		try (InputStream stream = part.getRawContent()) {
+
+			// parse the document
+			DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
+			Document doc = docBuilder.parse(stream);
+
+			return doc;
+		}
 	}
-	
-	protected Document fileToXsd(File file) throws SAXException, IOException, ParserConfigurationException {
+
+	protected static Document fileToXsd(File file) throws SAXException, IOException, ParserConfigurationException {
 
 		if (!file.exists())
 			return null;
-		
-        // parse the document
-        DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
-        Document doc = docBuilder.parse(file); 
-		
+
+		// parse the document
+		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
+		Document doc = docBuilder.parse(file);
+
 		return doc;
 	}
-	
+
 	/**
 	 * Write the first attachment of the response
+	 * 
 	 * @param response
 	 * @param file
 	 * @throws SOAPException
 	 * @throws IOException
 	 */
-	public File writeAttachment(SOAPMessage response) 
-			throws SOAPException, IOException {
-		
-		File file =  FileUtils.createTempFile("attachment_" 
-				+ System.currentTimeMillis(), "");
-		
+	public static File writeAttachment(SOAPMessage response) throws SOAPException, IOException {
+
+		File file = FileUtils.createTempFile("attachment_" + System.currentTimeMillis(), "");
+
 		// get the attachment
 		AttachmentPart attachment = getFirstAttachmentPart(response);
-		
+
 		if (attachment == null)
 			return null;
-		
-		// read attachment and write it
-		InputStream inputStream = attachment.getRawContent();
-		OutputStream outputStream = new FileOutputStream(file);
 
-		byte[] buf = new byte[512];
-		int num;
-		
-		// write file
-		while ( (num = inputStream.read(buf) ) != -1) {
-			outputStream.write(buf, 0, num);
+		// read attachment and write it
+		try (InputStream inputStream = attachment.getRawContent();
+				OutputStream outputStream = new FileOutputStream(file)) {
+
+			byte[] buf = new byte[512];
+			int num;
+
+			// write file
+			while ((num = inputStream.read(buf)) != -1) {
+				outputStream.write(buf, 0, num);
+			}
+
+			return file;
 		}
-		
-		outputStream.close();
-		inputStream.close();
-		
-		return file;
 	}
-	
+
 	/**
 	 * get the first xml attachment in a dom document
+	 * 
 	 * @param message
 	 * @return
 	 * @throws SOAPException
@@ -571,34 +580,32 @@ public class GetCataloguesListOpenAPI<T extends IDcfCatalogue> {
 	 * @throws SAXException
 	 * @throws IOException
 	 */
-	public Document getFirstXmlAttachment(SOAPMessage message) 
+	public static Document getFirstXmlAttachment(SOAPMessage message)
 			throws SOAPException, ParserConfigurationException, SAXException, IOException {
-		
+
 		// get the stream
-		InputStream stream = getFirstRawAttachment(message);
-		
-		if (stream == null)
-			return null;
-		
-		// parse the stream and get the document
-		Document xml = getDocument(stream);
-		
-		// close the stream
-		stream.close();
-		
-		return xml;
+		try (InputStream stream = getFirstRawAttachment(message)) {
+
+			if (stream == null)
+				return null;
+
+			// parse the stream and get the document
+			Document xml = getDocument(stream);
+
+			return xml;
+		}
 	}
-	
+
 	/*
 	 * get the attachment raw format
 	 */
-	public InputStream getFirstRawAttachment(SOAPMessage message) throws DetailedSOAPException {
-		
+	public static InputStream getFirstRawAttachment(SOAPMessage message) throws DetailedSOAPException {
+
 		AttachmentPart part = getFirstAttachmentPart(message);
-		
+
 		if (part == null)
 			return null;
-		
+
 		// get the stream
 		InputStream stream;
 		try {
@@ -607,18 +614,18 @@ public class GetCataloguesListOpenAPI<T extends IDcfCatalogue> {
 			e.printStackTrace();
 			throw new DetailedSOAPException(e);
 		}
-		
+
 		return stream;
 	}
-	
+
 	public IDcfUser getUser() {
-		return user;
+		return this.user;
 	}
-	
-	public SOAPMessage createRequest(SOAPConnection con) throws SOAPException {
+
+	public SOAPMessage createRequest() throws SOAPException {
 
 		// create the standard structure and get the message
-		SOAPMessage soapMsg = createTemplateSOAPMessage ("ws");
+		SOAPMessage soapMsg = createTemplateSOAPMessage("ws");
 
 		// get the body of the message
 		SOAPBody soapBody = soapMsg.getSOAPPart().getEnvelope().getBody();
@@ -639,39 +646,39 @@ public class GetCataloguesListOpenAPI<T extends IDcfCatalogue> {
 	public Object processResponse(SOAPMessage soapResponse) throws SOAPException {
 
 		// get the children of the body
-		NodeList returnNodes = soapResponse.getSOAPPart().
-				getEnvelope().getBody().getElementsByTagName("return");
+		NodeList returnNodes = soapResponse.getSOAPPart().getEnvelope().getBody().getElementsByTagName("return");
 
 		if (returnNodes.getLength() == 0) {
 			LOGGER.error("GetList: no return node was found in the soap response");
 			return null;
 		}
-		
+
 		// get return node
 		Node returnNode = returnNodes.item(0);
-		
+
 		// return the parsed cdata field
 		Document cdata = getCData(returnNode);
-		
+
 		if (cdata == null) {
 			LOGGER.error("GetList: no cdata was found in the soap response");
 			return null;
 		}
-		
+
 		return getList(cdata);
 	}
-	
+
 	public IDcfCataloguesList<T> getList(Document cdata) {
-		GetCataloguesListParser<T> parser = new GetCataloguesListParser<>(output);
+		GetCataloguesListParser<T> parser = new GetCataloguesListParser<>(this.output);
 		return parser.parse(cdata);
 	}
-	
+
 	public static void main(String[] args) throws DetailedSOAPException {
 		IDcfCataloguesList<IDcfCatalogue> output = new DcfCataloguesList();
-		GetCataloguesListOpenAPI<IDcfCatalogue> request = new GetCataloguesListOpenAPI<>(Environment.PRODUCTION, output);
-		
+		GetCataloguesListOpenAPI<IDcfCatalogue> request = new GetCataloguesListOpenAPI<>(Environment.PRODUCTION,
+				output);
+
 		request.getList();
-		
+
 		System.out.println(output);
 	}
 }

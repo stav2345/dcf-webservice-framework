@@ -19,6 +19,7 @@ import org.xml.sax.SAXException;
  * Class used to parse a dcf log document and retrieve
  * all the {@link LogNode} contained in it.
  * @author avonva
+ * @author shahaal
  *
  */
 public class DcfLogParser implements IDcfLogParser {
@@ -54,6 +55,7 @@ public class DcfLogParser implements IDcfLogParser {
 	 * @throws SAXException
 	 * @throws IOException
 	 */
+	@Override
 	public DcfLog parse(File file) throws IOException {
 		
 		try(InputStream input = new FileInputStream(file);) {
@@ -61,6 +63,7 @@ public class DcfLogParser implements IDcfLogParser {
 		}
 	}
 
+	@Override
 	public DcfLog parse(InputStream input) throws IOException {
 		
 		Document document;
@@ -90,7 +93,7 @@ public class DcfLogParser implements IDcfLogParser {
 		return logBuilder.build();
 	}
 	
-	private Collection<String> getMacroOperations(Document document) {
+	private static Collection<String> getMacroOperations(Document document) {
 		
 		Collection<String> ops = new ArrayList<>();
 		
@@ -108,7 +111,7 @@ public class DcfLogParser implements IDcfLogParser {
 		return ops;
 	}
 	
-	private Collection<LogNode> getOperations(Document document) {
+	private static Collection<LogNode> getOperations(Document document) {
 		
 		Collection<LogNode> ops = new ArrayList<>();
 		
@@ -126,7 +129,7 @@ public class DcfLogParser implements IDcfLogParser {
 		return ops;
 	}
 	
-	private LogNode getOperationNode(Node operationNode) {
+	private static LogNode getOperationNode(Node operationNode) {
 
 		NodeList data = operationNode.getChildNodes();
 
@@ -145,13 +148,15 @@ public class DcfLogParser implements IDcfLogParser {
 			case OP_LOGS_BLOCK:
 				builder.setOpLogs(getOperationLogs(data.item(j)));
 				break;
+			default:
+				break;
 			}
 		}
 
 		return builder.build();
 	}
 	
-	private Collection<String> getOperationLogs(Node operationLogsNode) {
+	private static Collection<String> getOperationLogs(Node operationLogsNode) {
 		
 		Collection<String> opLogs = new ArrayList<>();
 		
@@ -163,13 +168,15 @@ public class DcfLogParser implements IDcfLogParser {
 			case OP_LOG:
 				opLogs.add(data.item(j).getTextContent());
 				break;
+			default:
+				break;
 			}
 		}
 		
 		return opLogs;
 	}
 	
-	private Collection<LogNode> getValidationErrors(Document document) {
+	private static Collection<LogNode> getValidationErrors(Document document) {
 		
 		Collection<LogNode> errors = new ArrayList<>();
 		
@@ -187,7 +194,7 @@ public class DcfLogParser implements IDcfLogParser {
 		return errors;
 	}
 	
-	private LogNode getValidationError(Node validationNode) {
+	private static LogNode getValidationError(Node validationNode) {
 		
 		LogNodeBuilder builder = new LogNodeBuilder();
 		builder.setResult(DcfResponse.ERROR);
@@ -202,7 +209,7 @@ public class DcfLogParser implements IDcfLogParser {
 		return builder.build();
 	}
 	
-	private String getSingleNodeText(Document document, String node) {
+	private static String getSingleNodeText(Document document, String node) {
 		
 		NodeList list = document.getElementsByTagName(node);
 		

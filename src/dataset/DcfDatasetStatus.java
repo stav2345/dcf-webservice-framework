@@ -30,7 +30,7 @@ public enum DcfDatasetStatus {
 	}
 	
 	public String getStep() {
-		return step;
+		return this.step;
 	}
 	
 	/**
@@ -38,7 +38,7 @@ public enum DcfDatasetStatus {
 	 * @return
 	 */
 	public String getStatus() {
-		return status;
+		return this.status;
 	}
 
 	/**

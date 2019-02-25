@@ -17,7 +17,7 @@ import user.IDcfUser;
 /**
  * Generic get list request
  * @author avonva
- *
+ * @author shahaal
  * @param <T>
  */
 public abstract class GetList<T> extends SOAPRequest {
@@ -51,9 +51,9 @@ public abstract class GetList<T> extends SOAPRequest {
 	@SuppressWarnings("unchecked")
 	public IDcfList<T> getList(Environment env, IDcfUser user) throws DetailedSOAPException {
 		
-		String endpoint = env == Environment.PRODUCTION ? url : testUrl;
+		String endpoint = env == Environment.PRODUCTION ? this.url : this.testUrl;
 		
-		return (IDcfList<T>) makeRequest(env, user, namespace, endpoint);
+		return (IDcfList<T>) makeRequest(env, user, this.namespace, endpoint);
 	}
 	
 	@Override

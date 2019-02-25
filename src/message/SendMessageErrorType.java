@@ -22,7 +22,7 @@ public enum SendMessageErrorType {
 	 * @return
 	 */
 	public String getHeaderName() {
-		return errorMessage;
+		return this.errorMessage;
 	}
 
 	/**

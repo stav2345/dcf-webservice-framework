@@ -14,11 +14,11 @@ public class GetDatasetsListMock<T extends IDcfDataset> implements IGetDatasetsL
 	public IDcfDatasetsList<T> getList(Environment env, IDcfUser user, String dcCode, IDcfDatasetsList<T> output) 
 			throws DetailedSOAPException {
 		
-		if (list != null)
-			for (T d: list)
+		if (this.list != null)
+			for (T d: this.list)
 				output.add(d);
 		
-		return list;
+		return this.list;
 	}
 	
 	public void setList(IDcfDatasetsList<T> list) {

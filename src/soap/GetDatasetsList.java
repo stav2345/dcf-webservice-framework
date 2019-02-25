@@ -18,7 +18,7 @@ import user.IDcfUser;
  * by calling {@link #getList()} to get all the dataset
  * of the current user.
  * @author avonva
- *
+ * @author shahaal
  */
 public class GetDatasetsList<T extends IDcfDataset> extends SOAPRequest implements IGetDatasetsList<T> {
 
@@ -34,14 +34,15 @@ public class GetDatasetsList<T extends IDcfDataset> extends SOAPRequest implemen
 	 * Send the request and get the dataset list
 	 * @throws SOAPException
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public IDcfDatasetsList<T> getList(Environment env, IDcfUser user, 
-			String dataCollectionCode, IDcfDatasetsList<T> output) throws DetailedSOAPException {
+			String dataCollectionCode1, IDcfDatasetsList<T> output1) throws DetailedSOAPException {
 		
-		SOAPConsole.log("GetDatasetsList: dcCode=" + dataCollectionCode, user);
+		SOAPConsole.log("GetDatasetsList: dcCode=" + dataCollectionCode1, user);
 		
-		this.dataCollectionCode = dataCollectionCode;
-		this.output = output;
+		this.dataCollectionCode = dataCollectionCode1;
+		this.output = output1;
 		
 		IDcfDatasetsList<T> datasets = null;
 
@@ -82,7 +83,7 @@ public class GetDatasetsList<T extends IDcfDataset> extends SOAPRequest implemen
 	public Object processResponse(SOAPMessage soapResponse) throws SOAPException {
 
 		// parse the dom document and return the contents
-		GetDatasetsListParser<T> parser = new GetDatasetsListParser<>(output);
+		GetDatasetsListParser<T> parser = new GetDatasetsListParser<>(this.output);
 		SOAPBody body = soapResponse.getSOAPPart().getEnvelope().getBody();
 		return parser.parse(body);
 	}

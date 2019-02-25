@@ -14,7 +14,7 @@ import soap.GetDatasetsList;
  * Parser for a dom document containing the {@link GetDatasetsList}
  * response
  * @author avonva
- *
+ * @author shahaal
  */
 public class GetDatasetsListParser<T extends IDcfDataset> {
 
@@ -47,10 +47,10 @@ public class GetDatasetsListParser<T extends IDcfDataset> {
 			// get the current dataset
 			Node datasetNode = datas.item(i);
 
-			output.add(getDataset(datasetNode));
+			this.output.add(getDataset(datasetNode));
 		}
 		
-		return output;
+		return this.output;
 	}
 	
 	/**
@@ -63,7 +63,7 @@ public class GetDatasetsListParser<T extends IDcfDataset> {
 		// get the info related to the dataset
 		NodeList datasetInfoNode = datasetNode.getChildNodes();
 		
-		T dataset = output.create();
+		T dataset = this.output.create();
 		
 		// parse the dataset info
 		for (int i = 0; i < datasetInfoNode.getLength(); ++i) {
@@ -104,7 +104,7 @@ public class GetDatasetsListParser<T extends IDcfDataset> {
 	 * @param statusNode
 	 * @return
 	 */
-	private DcfDatasetStatus getStatus(Node statusNode) {
+	private static DcfDatasetStatus getStatus(Node statusNode) {
 		
 		DcfDatasetStatus status = null;
 		String step = null;

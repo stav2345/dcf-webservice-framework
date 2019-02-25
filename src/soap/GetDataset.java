@@ -15,6 +15,7 @@ import user.IDcfUser;
 /**
  * Generic get file request to the dcf.
  * @author avonva
+ * @author shahaal
  *
  */
 public class GetDataset extends SOAPRequest implements IGetDataset {
@@ -30,11 +31,12 @@ public class GetDataset extends SOAPRequest implements IGetDataset {
 	 * @return
 	 * @throws SOAPException
 	 */
-	public File getDatasetFile(Environment env, IDcfUser user, String datasetId) throws DetailedSOAPException {
+	@Override
+	public File getDatasetFile(Environment env, IDcfUser user, String datasetId1) throws DetailedSOAPException {
 		
-		this.datasetId = datasetId;
+		this.datasetId = datasetId1;
 		
-		SOAPConsole.log("GetDataset: datasetId=" + datasetId, user);
+		SOAPConsole.log("GetDataset: datasetId=" + datasetId1, user);
 
 		String url = env == Environment.PRODUCTION ? URL : TEST_URL;
 		Object response = makeRequest(env, user, NAMESPACE, url);
@@ -65,7 +67,7 @@ public class GetDataset extends SOAPRequest implements IGetDataset {
 
 		// add resource id
 		SOAPElement arg = soapElem.addChildElement("datasetId");
-		arg.setTextContent(datasetId);
+		arg.setTextContent(this.datasetId);
 
 		// save the changes in the message and return it
 		soapMsg.saveChanges();

@@ -23,27 +23,27 @@ public class DcfAck {
 	}
 	
 	public FileState getState() {
-		return state;
+		return this.state;
 	}
 	
 	public IDcfAckLog getLog() {
-		return log;
+		return this.log;
 	}
 	
 	public boolean isReady() {
-		return state != null && state == FileState.READY;
+		return this.state != null && this.state == FileState.READY;
 	}
 	
 	public boolean hasFault() {
-		return state != null && state == FileState.EXCEPTION;
+		return this.state != null && this.state == FileState.EXCEPTION;
 	}
 	
 	public boolean isDenied() {
-		return state != null && state == FileState.ACCESS_DENIED;
+		return this.state != null && this.state == FileState.ACCESS_DENIED;
 	}
 	
 	@Override
 	public String toString() {
-		return "Ack: state=" + state + "; log=" + log;
+		return "Ack: state=" + this.state + "; log=" + this.log;
 	}
 }

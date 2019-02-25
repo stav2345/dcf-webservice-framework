@@ -13,7 +13,8 @@ import user.IDcfUser;
 
 /**
  * Generic get file request to the dcf.
- * @author avonva && shahaal
+ * @author avonva
+ * @author shahaal
  *
  */
 public class GetFile extends SOAPRequest {
@@ -28,16 +29,16 @@ public class GetFile extends SOAPRequest {
 	 * Get a file using its id
 	 * @param env
 	 * @param user
-	 * @param resourceId
+	 * @param resourceId1
 	 * @return
 	 * @throws SOAPException
 	 * @throws IOException
 	 */
-	public File getFile(Environment env, IDcfUser user, String resourceId) throws SOAPException, IOException {
+	public File getFile(Environment env, IDcfUser user, String resourceId1) throws SOAPException, IOException {
 		
-		this.resourceId = resourceId;
+		this.resourceId = resourceId1;
 		
-		SOAPConsole.log("GetFile: resourceId=" + resourceId, user);
+		SOAPConsole.log("GetFile: resourceId=" + resourceId1, user);
 		
 		SOAPMessage response = (SOAPMessage) makeRequest(env, user, NAMESPACE, getUrl(env));
 		
@@ -52,7 +53,7 @@ public class GetFile extends SOAPRequest {
 	 * Get the url for making get file requests
 	 * @return
 	 */
-	public String getUrl(Environment env) {
+	public static String getUrl(Environment env) {
 		return env == Environment.PRODUCTION ? URL : TEST_URL;
 	}
 	
@@ -66,7 +67,7 @@ public class GetFile extends SOAPRequest {
 
 		// add resource id
 		SOAPElement arg = soapElem.addChildElement("trxResourceId");
-		arg.setTextContent(resourceId);
+		arg.setTextContent(this.resourceId);
 
 		// save the changes in the message and return it
 		soapMsg.saveChanges();

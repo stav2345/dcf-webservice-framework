@@ -91,57 +91,57 @@ public class DcfAckLogMock implements IDcfAckLog {
 	
 	@Override
 	public String getDCCode() {
-		return dcCode;
+		return this.dcCode;
 	}
 
 	@Override
 	public MessageValResCode getMessageValResCode() {
-		return messageValResCode;
+		return this.messageValResCode;
 	}
 	
 	// shahaal, set the detailedAckResId from the ack file in temp
 	// if the log status is in delivered
 	@Override
 	public String getDetailedAckResId() {
-		return detailedAckResId;
+		return this.detailedAckResId;
 	}
 
 	@Override
 	public OkCode getOpResCode() {
-		return opResCode;
+		return this.opResCode;
 	}
 
 	@Override
 	public boolean isOk() {
-		if(opResCode == null)
+		if(this.opResCode == null)
 			return false;
 		
-		return opResCode == OkCode.OK;
+		return this.opResCode == OkCode.OK;
 	}
 
 	@Override
 	public Collection<String> getOpResLog() {
-		return opResLog;
+		return this.opResLog;
 	}
 
 	@Override
 	public boolean hasErrors() {
-		return opResLog != null && !opResLog.isEmpty();
+		return this.opResLog != null && !this.opResLog.isEmpty();
 	}
 
 	@Override
 	public OpResError getOpResError() {
-		return opResError;
+		return this.opResError;
 	}
 
 	@Override
 	public String getDatasetId() {
-		return datasetId;
+		return this.datasetId;
 	}
 
 	@Override
 	public DcfDatasetStatus getDatasetStatus() {
-		return datasetStatus;
+		return this.datasetStatus;
 	}
 
 	@Override

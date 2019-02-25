@@ -10,7 +10,7 @@ import proxy.ProxyMode;
 /**
  * Configuration of the application
  * @author avonva
- *
+ * @author shahaal
  */
 public class Config {
 	
@@ -29,11 +29,11 @@ public class Config {
 	public static final String PROXY_PORT = "Proxy.ManualPort";
 	public static final String PROXY_MODE = "Proxy.Mode";
 	
-	public String getProxyConfigPath() {
+	public static String getProxyConfigPath() {
 		return Config.PROXY_CONFIG_PATH;
 	}
 	
-	private String getProxyConfigFromParent(String key) {
+	private static String getProxyConfigFromParent(String key) {
 		return getValue(PARENT_PROXY_CONFIG_PATH, key);
 	}
 	
@@ -41,7 +41,7 @@ public class Config {
 	 * Get customized proxy hostname
 	 * @return
 	 */
-	public String getProxyHostname() {
+	public static String getProxyHostname() {
 		
 		String name = getProxyConfigFromParent(PROXY_HOST_NAME);
 				
@@ -55,7 +55,7 @@ public class Config {
 	 * Get customized proxy port
 	 * @return
 	 */
-	public String getProxyPort() {
+	public static String getProxyPort() {
 		
 		String port = getProxyConfigFromParent(PROXY_PORT);
 		
@@ -65,7 +65,7 @@ public class Config {
 		return port;
 	}
 	
-	public ProxyMode getProxyMode() {
+	public static ProxyMode getProxyMode() {
 		
 		String mode = getProxyConfigFromParent(PROXY_MODE);
 		
@@ -75,7 +75,7 @@ public class Config {
 		return ProxyMode.fromString(mode);
 	}
 	
-	public Environment getEnvironment() {
+	public static Environment getEnvironment() {
 		String production = getValue(ENV_CONFIG_PATH, ENV_TYPE);
 
 		if (production == null)
@@ -87,7 +87,7 @@ public class Config {
 		return isProd ? Environment.PRODUCTION : Environment.TEST;
 	}
 	
-	public boolean isProductionEnvironment() {
+	public static boolean isProductionEnvironment() {
 		return getEnvironment() == Environment.PRODUCTION;
 	}
 	
@@ -95,19 +95,20 @@ public class Config {
 	 * Read the application properties from the xml file
 	 * @return
 	 */
-	public Properties getProperties(String filename) {
+	public static Properties getProperties(String filename) {
 		
 		Properties properties = new Properties();
 
 		try(InputStream stream = new FileInputStream(filename)) {
 			properties.loadFromXML(stream);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		catch (IOException e) {}
 
 		return properties;
 	}
 	
-	private String getValue(String propertiesFilename, String property) {
+	private static String getValue(String propertiesFilename, String property) {
 		
 		Properties prop = getProperties(propertiesFilename);
 		

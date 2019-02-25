@@ -10,7 +10,7 @@ public enum Environment {
 	}
 	
 	public String getKey() {
-		return key;
+		return this.key;
 	}
 	
 	public static Environment fromString(String text) {

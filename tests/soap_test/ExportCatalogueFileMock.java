@@ -29,34 +29,36 @@ public class ExportCatalogueFileMock implements IExportCatalogueFile {
 		this.waitTime = waitTime;
 	}
 	
-	private File export(Environment env, IDcfUser user, String file) throws DetailedSOAPException {
+	private File export(String file) throws DetailedSOAPException {
 		
-		if (result == MockResult.NULL)
+		if (this.result == MockResult.NULL)
 			return null;
 		
-		if (result == MockResult.EXCEPTION)
+		if (this.result == MockResult.EXCEPTION)
 			throw new DetailedSOAPException(new SOAPException("Mock exception"));
 		
 		try {
-			Thread.sleep(waitTime);
+			Thread.sleep(this.waitTime);
 		}
-		catch (InterruptedException e) {}
+		catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		
 		return new File("test-files" + System.getProperty("file.separator") + file);
 	}
 	
 	@Override
 	public File exportCatalogue(Environment env, IDcfUser user, String catalogueCode) throws DetailedSOAPException {
-		return export(env, user, "lastInternalVersion.xml");
+		return export("lastInternalVersion.xml");
 	}
 
 	@Override
 	public File exportLog(Environment env, IDcfUser user, String code) throws DetailedSOAPException {
-		return export(env, user, "log.xml");
+		return export("log.xml");
 	}
 
 	@Override
 	public File exportLastInternalVersion(Environment env, IDcfUser user, String catalogueCode) throws SOAPException {
-		return export(env, user, "lastInternalVersion.xml");
+		return export("lastInternalVersion.xml");
 	}	
 }

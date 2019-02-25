@@ -34,10 +34,10 @@ public class GetResourcesListParser<T extends IDcfResourceReference> {
 		
 		for (int i = 0; i < refs.getLength(); ++i) {
 			Node ref = refs.item(i);
-			output.add(getResource(ref));
+			this.output.add(getResource(ref));
 		}
 		
-		return output;
+		return this.output;
 	}
 	
 	/**
@@ -49,7 +49,7 @@ public class GetResourcesListParser<T extends IDcfResourceReference> {
 		
 		NodeList fields = resNode.getChildNodes();
 		
-		T reference = output.create();
+		T reference = this.output.create();
 		
 		for (int i = 0; i < fields.getLength(); ++i) {
 			

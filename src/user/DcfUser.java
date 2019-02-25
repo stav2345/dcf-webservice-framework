@@ -11,24 +11,24 @@ public class DcfUser implements IDcfUser {
 	
 	/**
 	 * Login the user
-	 * @param username
-	 * @param password
+	 * @param username1
+	 * @param password1
 	 */
-	public void login(String username, String password) {
-		this.username = username;
-		this.password = password;
+	public void login(String username1, String password1) {
+		this.username = username1;
+		this.password = password1;
 	}
 	
 	/**
 	 * Login the user and check if credentials are correct
-	 * @param username
-	 * @param password
+	 * @param username1
+	 * @param password1
 	 * @return
 	 * @throws DetailedSOAPException 
 	 */
-	public boolean verifiedLogin(Environment env, String username, String password) throws DetailedSOAPException {
+	public boolean verifiedLogin(Environment env, String username1, String password1) throws DetailedSOAPException {
 		
-		this.login(username, password);
+		this.login(username1, password1);
 
 		boolean logged;
 
@@ -65,16 +65,18 @@ public class DcfUser implements IDcfUser {
 	 * Get the saved dcf username
 	 * @return
 	 */
+	@Override
 	public String getUsername() {
-		return username;
+		return this.username;
 	}
 	
 	/**
 	 * Get the saved dcf password
 	 * @return
 	 */
+	@Override
 	public String getPassword() {
-		return password;
+		return this.password;
 	}
 	
 	/**
@@ -82,7 +84,7 @@ public class DcfUser implements IDcfUser {
 	 * @return
 	 */
 	public boolean isLoggedIn() {
-		return username != null && password != null;
+		return this.username != null && this.password != null;
 	}
 	
 	@Override
@@ -91,11 +93,17 @@ public class DcfUser implements IDcfUser {
 		if (!(obj instanceof IDcfUser))
 			return super.equals(obj);
 		
-		return username.equals(((IDcfUser)obj).getUsername());
+		return this.username.equals(((IDcfUser)obj).getUsername());
 	}
 	
 	@Override
 	public String toString() {
 		return this.username;
+	}
+
+	@Override
+	public int hashCode() {
+		// TODO Auto-generated method stub
+		return super.hashCode();
 	}
 }

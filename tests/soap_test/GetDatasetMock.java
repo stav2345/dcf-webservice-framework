@@ -21,11 +21,11 @@ public class GetDatasetMock implements IGetDataset {
 	 * @param file
 	 */
 	public void addDatasetFile(String datasetId, File file) {
-		datasets.put(datasetId, file);
+		this.datasets.put(datasetId, file);
 	}
 	
 	@Override
 	public File getDatasetFile(Environment env, IDcfUser user, String datasetId) throws DetailedSOAPException {
-		return datasets.get(datasetId);
+		return this.datasets.get(datasetId);
 	}
 }

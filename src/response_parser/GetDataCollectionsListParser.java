@@ -30,10 +30,10 @@ public class GetDataCollectionsListParser<T extends IDcfDataCollection> {
 			// get the current node
 			Node node = dcNodes.item(i);
 
-			output.add(getDataCollection(node));
+			this.output.add(getDataCollection(node));
 		}
 
-		return output;
+		return this.output;
 	}
 	
 	/**
@@ -46,7 +46,7 @@ public class GetDataCollectionsListParser<T extends IDcfDataCollection> {
 		// get elements
 		NodeList nodes = node.getChildNodes();
 
-		T dc = output.create();
+		T dc = this.output.create();
 		
 		// for each element
 		for ( int i = 0; i < nodes.getLength(); ++i ) {
@@ -108,6 +108,8 @@ public class GetDataCollectionsListParser<T extends IDcfDataCollection> {
 				break;
 			case "resourceId":
 				dc.setResourceId( propertyValue );
+				break;
+			default:
 				break;
 			}  // end switch
 		}  // end for
