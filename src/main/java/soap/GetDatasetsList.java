@@ -34,6 +34,7 @@ public class GetDatasetsList<T extends IDcfDataset> extends SOAPRequest implemen
 	 * Send the request and get the dataset list
 	 * @throws SOAPException
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public IDcfDatasetsList<T> getList(Environment env, IDcfUser user, 
 			String dataCollectionCode1, IDcfDatasetsList<T> output1) throws DetailedSOAPException {

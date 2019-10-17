@@ -2,30 +2,6 @@
 <licenseSummary>
   <dependencies>
     <dependency>
-      <groupId>HttpManager</groupId>
-      <artifactId>HttpManager</artifactId>
-      <version>1.0.0</version>
-      <licenses>
-        <!-- No license information available. -->
-      </licenses>
-    </dependency>
-    <dependency>
-      <groupId>SQL_statements_executor</groupId>
-      <artifactId>SQL_statements_executor</artifactId>
-      <version>1.0.0</version>
-      <licenses>
-        <!-- No license information available. -->
-      </licenses>
-    </dependency>
-    <dependency>
-      <groupId>ZipManager</groupId>
-      <artifactId>ZipManager</artifactId>
-      <version>1.0.0</version>
-      <licenses>
-        <!-- No license information available. -->
-      </licenses>
-    </dependency>
-    <dependency>
       <groupId>com.github.markusbernhardt</groupId>
       <artifactId>proxy-vole</artifactId>
       <version>1.0.5</version>
@@ -87,6 +63,30 @@
           <distribution>repo</distribution>
           <file>the apache software license, version 2.0 - license-2.0.txt</file>
         </license>
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>openefsa</groupId>
+      <artifactId>http-manager</artifactId>
+      <version>1.0.0</version>
+      <licenses>
+        <!-- No license information available. -->
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>openefsa</groupId>
+      <artifactId>sql-script-executor</artifactId>
+      <version>1.0.0</version>
+      <licenses>
+        <!-- No license information available. -->
+      </licenses>
+    </dependency>
+    <dependency>
+      <groupId>openefsa</groupId>
+      <artifactId>zip-manager</artifactId>
+      <version>1.0.0</version>
+      <licenses>
+        <!-- No license information available. -->
       </licenses>
     </dependency>
     <dependency>

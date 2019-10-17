@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>openefsa</groupId>
-	<artifactId>dcf_webservice_framework</artifactId>
+	<artifactId>dcf-webservice-framework</artifactId>
 	<version>1.0.0</version>
 
 	<properties>
@@ -14,18 +14,18 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>HttpManager</groupId>
-			<artifactId>HttpManager</artifactId>
-			<version>1.0.0</version>
+			<groupId>openefsa</groupId>
+			<artifactId>http-manager</artifactId>
+			<version>[1.0.0,)</version>
 		</dependency>
 		<dependency>
-			<groupId>SQL_statements_executor</groupId>
-			<artifactId>SQL_statements_executor</artifactId>
-			<version>1.0.0</version>
+			<groupId>openefsa</groupId>
+			<artifactId>sql-script-executor</artifactId>
+			<version>[1.0.0,)</version>
 		</dependency>
 		<dependency>
-			<groupId>ZipManager</groupId>
-			<artifactId>ZipManager</artifactId>
+			<groupId>openefsa</groupId>
+			<artifactId>zip-manager</artifactId>
 			<version>1.0.0</version>
 		</dependency>
 		<dependency>
@@ -90,6 +90,9 @@
 						<goals>
 							<goal>aggregate-download-licenses</goal>
 						</goals>
+						<configuration>
+							<licensesOutputDirectory>third-party-license</licensesOutputDirectory>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>

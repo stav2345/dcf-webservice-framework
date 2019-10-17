@@ -90,6 +90,7 @@ public class GetCataloguesListOpenAPI<T extends IDcfCatalogue> {
 		return this.env;
 	}
 
+	@SuppressWarnings("unchecked")
 	public IDcfList<T> getList() throws DetailedSOAPException {
 		return (IDcfList<T>) makeRequest("https://openapi.efsa.europa.eu/catalogues");
 	}

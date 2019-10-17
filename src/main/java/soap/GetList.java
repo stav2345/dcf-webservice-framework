@@ -48,6 +48,7 @@ public abstract class GetList<T> extends SOAPRequest {
 	 * @throws DetailedSOAPException 
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unchecked")
 	public IDcfList<T> getList(Environment env, IDcfUser user) throws DetailedSOAPException {
 		String endpoint = env == Environment.PRODUCTION ? this.url : this.testUrl;
 		return (IDcfList<T>) makeRequest(env, user, this.namespace, endpoint);
