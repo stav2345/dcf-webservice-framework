@@ -9,7 +9,7 @@ These objects provide several built-in useful functionalities which can also be 
 In particular, all the web services inherit from the SOAPRequest object, which handles the SOAP connection.
 This class uses the DcfUser class to retrieve the account credentials.
 
-# Dependencies
+## Dependencies
 All project dependencies are listed in the [pom.xml](pom.xml) file.
 
 ## Import the project
@@ -35,7 +35,7 @@ At this stage you can simply open the IDE and import back the parent project whi
 _Please note that the "SWT.jar" and the "Jface.jar" libraries (if used) must be downloaded and installed manually in the Maven local repository since are custom versions used in the tool ((install 3rd party jars)[https://maven.apache.org/guides/mini/guide-3rd-party-jars-local.html]). 
 Download the exact version by checking the Catalogue browser pom.xml file._
 
-# Documentation
+## Documentation
 The procedure to call a web service is always the same:
 1. Create an object which implements the IDcfUser interface (or extends the DcfUser class) that contains the credentials of the DCF user
 		
@@ -222,7 +222,7 @@ Get a list containing all the metadata of the tables of a data collection with t
 		GetDataCollectionTables req = new GetDataCollectionTables(user, output, "resourceId");  // set the id you prefer
 		req.getTables();
 
-# How to extends the DcfUser class
+## How to extends the DcfUser class
 If your application needs an extended concept of 'user', you can extend the DcfUser class to still be able to call the dcf web services maintaining your implementation. In particular, make sure that your class either inherits from the DcfUser class, or implements the IDcfUser interface.
 
 	public class CustomUser extends DcfUser
@@ -238,9 +238,9 @@ If your application needs an extended concept of 'user', you can extend the DcfU
 
 If you want you can extend the DcfUser class in order to make it a singleton. This has the advantage that the user credentials can be accessed everywhere in your application. Use this approach only if only one user at a time is active in the local application.
 
-# How to extend a DCF class (a class which contains the result of a web service call)
+## How to extend a DCF class (a class which contains the result of a web service call)
 
-## Simple objects
+### Simple objects
 It is sufficient to extend the base class provided by the library. While calling a web service, you will be asked to provide the output object which will be filled with the web service information. This object must implement the related interface or extend the base class.
 
 For example, image we want to extend the base class for Dcf datasets:
@@ -263,7 +263,7 @@ If you want to provide a complete new implementation, then you can simply implem
 	
 However, note that this approach will not provide you any already created method which is present in the DcfDataset class.
 
-## Lists
+### Lists
 Lists are more complicated. In particular, it is necessary to implement a method which instantiate the objects of the lists and add them to the list (add and create methods).
 The custom list should either implement the **IDcfList** interface or extend the base class provided by the library, as for the objects. In your custom list you will need to implement the add and create methods, in order to specify which are your custom elements of the list.
 
