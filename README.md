@@ -1,6 +1,11 @@
+<p align="center">
+	<img src="http://www.efsa.europa.eu/profiles/efsa/themes/responsive_efsa/logo.png" alt="European Food Safety Authority"/>
+</p>
+
 # DCF Webservice Framework
 
-This is a Java library which can be used to call the Data Collection Framework web services and retrieve their responses with standardized Java objects. These objects provide several built-in useful functionalities; they can also be extended to add custom methods for the specific business logic required.
+This Maven project is a Java library which can be used to call the Data Collection Framework web services and retrieve their responses with standardised Java objects.
+These objects provide several built-in useful functionalities which can also be extended to add custom methods for the specific business logic required.
 
 In particular, all the web services inherit from the SOAPRequest object, which handles the SOAP connection.
 This class uses the DcfUser class to retrieve the account credentials.
@@ -272,7 +277,27 @@ In this way it is possible to use the list in the web services call. For example
 	output.get(0).myCustomMethod();
 
 # Dependencies
-The project needs the following projects to work properly:
-* https://github.com/openefsa/zip-manager
-* https://github.com/openefsa/http-manager
+All project dependencies are listed in the [pom.xml](pom.xml) file.
 
+## Import the project
+In order to import the project correctly into the integrated development environment (e.g. Eclipse), it is necessary to download the project together with all its dependencies.
+The project and all its dependencies are based on the concept of "project object model" and hence Apache Maven is used for the specific purpose.
+In order to correctly import the project into the IDE it is firstly required to create a parent POM Maven project (check the following [link](https://maven.apache.org/guides/introduction/introduction-to-the-pom.html) for further information). 
+Once the parent project has been created add the project and all the dependencies as "modules" into the pom.xml file as shown below: 
+
+	<modules>
+
+		<!-- dependency modules -->
+		<module>module_1</module>
+		...
+		...
+		...
+		<module>module_n</module>
+		
+	</modules>
+	
+Next, close the IDE and extract all the zip packets inside the parent project.
+At this stage you can simply open the IDE and import back the parent project which will automatically import also the project and all its dependencies.
+
+_Please note that the "SWT.jar" and the "Jface.jar" libraries (if used) must be downloaded and installed manually in the Maven local repository since are custom versions used in the tool ((install 3rd party jars)[https://maven.apache.org/guides/mini/guide-3rd-party-jars-local.html]). 
+Download the exact version by checking the Catalogue browser pom.xml file._
