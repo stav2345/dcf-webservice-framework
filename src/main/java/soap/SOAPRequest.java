@@ -60,6 +60,7 @@ import zip_manager.ZipManager;
  * @author avonva
  * @author shahaal
  */
+@SuppressWarnings("restriction")
 public abstract class SOAPRequest {
 
 	private static final Logger LOGGER = LogManager.getLogger(SOAPRequest.class);

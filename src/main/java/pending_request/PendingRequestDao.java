@@ -78,7 +78,7 @@ public class PendingRequestDao<T extends IPendingRequest> implements IPendingReq
 		// solve memory leak
 		try (Connection con = getConnection();
 				SQLExecutor executor = new SQLExecutor(con);
-				InputStream stream = getClass().getClassLoader().getResourceAsStream("PendingRequest")) {
+				InputStream stream = PendingRequest.class.getClassLoader().getResourceAsStream("PendingRequest")) {
 			executor.exec(stream);
 
 			con.close();

@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import pending_request.IDcfPendingRequestsList;
 import pending_request.IPendingRequest;
 import pending_request.IPendingRequestDao;
 import user.IDcfUser;

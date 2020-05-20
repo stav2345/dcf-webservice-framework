@@ -2,11 +2,8 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>openefsa</groupId>
-		<artifactId>all-projects</artifactId>
-		<version>${global.version}</version>
-	</parent>
+	<groupId>openefsa</groupId>
+	<version>1.0.3</version>
 	<artifactId>dcf-webservice-framework</artifactId>
 
 	<properties>
@@ -17,37 +14,25 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>openefsa</groupId>
-			<artifactId>http-manager</artifactId>
-			<version>${global.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>openefsa</groupId>
-			<artifactId>sql-script-executor</artifactId>
-			<version>${global.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>openefsa</groupId>
-			<artifactId>zip-manager</artifactId>
-			<version>${global.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-api</artifactId>
+			<version>[2.12.1,)</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-core</artifactId>
+			<version>[2.12.1,)</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
+			<version>[2.6,)</version>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
-			<version>[5.5.2,)</version>
 			<scope>test</scope>
+			<version>[5.5.2,)</version>
 		</dependency>
 	</dependencies>
 
