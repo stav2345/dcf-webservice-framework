@@ -41,7 +41,6 @@ public class GetFile extends SOAPRequest {
 			throws SOAPException, IOException {
 		
 		this.resourceId = resourceId1;
-
 		SOAPConsole.log("GetFile: resourceId=" + resourceId1, user);
 
 		boolean isOpenapi = user.isOpeanapi();
