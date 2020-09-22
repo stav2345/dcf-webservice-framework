@@ -5,7 +5,6 @@ import java.io.File;
 import javax.xml.soap.SOAPException;
 
 import config.Environment;
-import dcf_log.IDcfLogDownloader;
 import user.IDcfUser;
 
 public class DcfLogDownloaderMock implements IDcfLogDownloader {

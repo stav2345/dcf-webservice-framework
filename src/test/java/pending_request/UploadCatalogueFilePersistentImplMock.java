@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.util.Map;
 
 import config.Environment;
-import pending_request.IPendingRequest;
 import soap.DetailedSOAPException;
 import soap.UploadCatalogueFileAction;
 import soap.UploadCatalogueFileImpl.PublishLevel;
