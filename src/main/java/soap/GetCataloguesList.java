@@ -23,7 +23,7 @@ import user.IDcfUser;
  */
 public class GetCataloguesList<T extends IDcfCatalogue> extends GetList<T> {
 
-	private static final String URL = "https://dcf-cms.efsa.europa.eu/catalogues";
+	private static final String URL = "https://dcf-cms.efsa.europa.eu/catalogues/?wsdl";
 	private static final String OPENAPI_URL = "https://openapi.efsa.europa.eu/api/catalogues.soap";
 	private static final String NAMESPACE = "http://ws.catalog.dc.efsa.europa.eu/";
 	private static final String TEST_URL = "https://dcf-01.efsa.test/dc-catalog-public-ws/catalogues/?wsdl";
@@ -74,7 +74,7 @@ public class GetCataloguesList<T extends IDcfCatalogue> extends GetList<T> {
 		
 		// get the body of the message
 		SOAPBody soapBody = soapMsg.getSOAPPart().getEnvelope().getBody();
-
+		
 		// create the xml message structure to get the dataset list
 		SOAPElement soapElem = soapBody.addChildElement("getCatalogueList", "ws");
 

@@ -34,7 +34,7 @@ public class UploadCatalogueFile extends SOAPRequest implements IUploadCatalogue
 	private static final Logger LOGGER = LogManager.getLogger(UploadCatalogueFile.class);
 	
 	private static final String NAMESPACE = "http://ws.catalog.dc.efsa.europa.eu/";
-	private static final String URL = "https://dcf-cms.efsa.europa.eu/catalogues";
+	private static final String URL = "https://dcf-cms.efsa.europa.eu/catalogues/?wsdl";
 	private static final String TEST_URL = "https://dcf-01.efsa.test/dc-catalog-public-ws/catalogues/?wsdl";
 	
 	private String attachment;
