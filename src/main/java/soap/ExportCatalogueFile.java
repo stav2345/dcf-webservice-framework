@@ -174,7 +174,7 @@ public class ExportCatalogueFile extends SOAPRequest implements IExportCatalogue
 			SOAPElement fileTypeNode = export.addChildElement("fileType");
 			fileTypeNode.setValue(this.fileType);
 		}
-
+		
 		// save the changes
 		request.saveChanges();
 		
