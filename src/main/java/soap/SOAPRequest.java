@@ -129,7 +129,7 @@ public abstract class SOAPRequest {
 		HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
 
 		// Open HTTPS connection
-		URL link = new URL(url);
+		URL link = getEndpoint(url);  //bug corrected by enescva: new URL(url);
 
 		httpsConnection = (HttpsURLConnection) link.openConnection();
 
@@ -268,7 +268,12 @@ public abstract class SOAPRequest {
 
 		// add the content type header
 		soapMsg.getMimeHeaders().addHeader("Content-Type", "text/xml;charset=UTF-8");
-
+		
+		//enescva: add support for proxy authentication
+		GenericAuthenticator.setProperty("dcfPass", user.getPassword());
+		GenericAuthenticator.setProperty("dcfUser", user.getUsername());
+		
+		/** enescva: obsolete
 		// reset the cache of the authentication
 		AuthCacheValue.setAuthCache(new AuthCacheImpl());
 
@@ -288,7 +293,8 @@ public abstract class SOAPRequest {
 
 		// set the default authenticator
 		Authenticator.setDefault(myAuth);
-
+		**/
+		
 		// create the envelope and name it
 		SOAPEnvelope envelope = soapPart.getEnvelope();
 		envelope.addNamespaceDeclaration(prefix, namespace);
@@ -321,6 +327,11 @@ public abstract class SOAPRequest {
 		// add the token to the header
 		soapMsg.getMimeHeaders().addHeader("Ocp-Apim-Subscription-Key", user.getPassword());
 
+		//enescva: add support for proxy authentication
+		GenericAuthenticator.setProperty("dcfPass", user.getPassword());
+		GenericAuthenticator.setProperty("dcfUser", user.getUsername());
+		
+		/** enescva: obsolete
 		// reset the cache of the authentication
 		AuthCacheValue.setAuthCache(new AuthCacheImpl());
 
@@ -340,6 +351,7 @@ public abstract class SOAPRequest {
 
 		// set the default authenticator
 		Authenticator.setDefault(myAuth);
+		**/
 
 		// create the envelope and name it
 		SOAPEnvelope envelope = soapPart.getEnvelope();
