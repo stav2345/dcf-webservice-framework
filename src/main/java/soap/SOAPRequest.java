@@ -54,6 +54,8 @@ import user.IDcfUser;
 import utils.FileUtils;
 import zip_manager.ZipManager;
 
+import proxy.GenericAuthenticator;
+
 /**
  * Abstract class used to create soap requests and to process soap responses.
  * 
