@@ -51,14 +51,14 @@ public class PendingRequestThread extends Thread {
 		try {
 			startRequest();
 		} catch (SOAPException e) {
-			e.printStackTrace();
 			LOGGER.error("Connection/authorization error", e);
+			e.printStackTrace();
 		} catch (IOException e) {
-			e.printStackTrace();
 			LOGGER.error("Log was retrieved but cannot open/parse it", e);
-		} catch (InterruptedException e) {
 			e.printStackTrace();
+		} catch (InterruptedException e) {
 			LOGGER.error("This should never happen, cannot pause the thread", e);
+			e.printStackTrace();
 		}
 	}
 	

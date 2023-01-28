@@ -114,6 +114,7 @@ public class DcfLogDownloader implements IDcfLogDownloader {
 				this.waiting = true;
 				this.wait(interAttemptsTime);
 			} catch(InterruptedException e) {
+				LOGGER.error("Error during wait: ", e);
 				e.printStackTrace();
 			}
 			

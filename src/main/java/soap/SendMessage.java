@@ -13,6 +13,9 @@ import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import config.Environment;
 import message.MessageResponse;
 import response_parser.SendMessageParser;
@@ -26,6 +29,8 @@ import user.IDcfUser;
  *
  */
 public class SendMessage extends SOAPRequest implements ISendMessage {
+	
+	private static final Logger LOGGER = LogManager.getLogger(SendMessage.class);
 
 	private static final String URL = "https://dcf-elect.efsa.europa.eu/elect2/";
 	private static final String TEST_URL = "https://dcf-01.efsa.test/dcf-dp-ws/elect2/?wsdl";
@@ -50,9 +55,13 @@ public class SendMessage extends SOAPRequest implements ISendMessage {
 		this.messageName = file.getName();
 		this.message = prepareMessage(file);
 		
+		LOGGER.info("File to be processed: " + file);
+		
 		String url = env == Environment.PRODUCTION ? URL : TEST_URL;
-	
+		
 		Object response = makeRequest(env, user, NAMESPACE, url);
+		
+		LOGGER.info("Request has been created successfully");
 		
 		SOAPConsole.log("SendMessage:", response);
 		
@@ -75,6 +84,8 @@ public class SendMessage extends SOAPRequest implements ISendMessage {
 		
 		// read the file as byte array and encode it in base64
 		byte[] data = Files.readAllBytes(path);
+		String sData = new String(data);
+		LOGGER.info("Xml content : " + sData);
 		byte[] encodedData = Base64.getEncoder().encode(data);
 		return new String(encodedData);
 	}

@@ -208,6 +208,7 @@ public class GetAckDetailedResId extends SOAPRequest implements IGetAckDetailedR
 				return null;
 			
 		} catch (ParserConfigurationException | SAXException | IOException e) {
+			LOGGER.error("Error during extraction ", e);
 			e.printStackTrace();
 			return null;
 		}

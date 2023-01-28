@@ -64,6 +64,7 @@ public abstract class PendingRequestWorker extends SwingWorker<Void, PendingRequ
 			try {
 				Thread.sleep(3000);
 			} catch (InterruptedException e) {
+				LOGGER.error("Error in doInBackground ", e);
 				e.printStackTrace();
 			}
 		}

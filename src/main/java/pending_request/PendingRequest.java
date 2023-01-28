@@ -223,6 +223,7 @@ public class PendingRequest implements IPendingRequest {
 				this.paused = true;
 				this.wait(interAttemptsTime);
 			} catch(InterruptedException e) {
+				LOGGER.error("Error during wait ", e);
 				e.printStackTrace();
 			}
 			

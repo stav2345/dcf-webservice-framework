@@ -3,6 +3,9 @@ package dcf_log;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * Builder to create a single LogNode step by step.
  * 
@@ -10,6 +13,8 @@ import java.util.Collection;
  * @author shahaal
  */
 public class LogNodeBuilder {
+	
+	private static final Logger LOGGER = LogManager.getLogger(LogNodeBuilder.class);
 
 	private String name;
 	private DcfResponse result;
@@ -29,6 +34,7 @@ public class LogNodeBuilder {
 		try {
 			this.result = DcfResponse.valueOf(result);
 		} catch (IllegalArgumentException e) {
+			LOGGER.error("Error while getting value ", e);
 			e.printStackTrace();
 			this.result = DcfResponse.ERROR;
 		}

@@ -8,6 +8,9 @@ import org.w3c.dom.NodeList;
 import message.MessageResponse;
 import message.TrxCode;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * Parse the DCF response of a send message call.
  * @author avonva
@@ -15,6 +18,8 @@ import message.TrxCode;
  *
  */
 public class SendMessageParser {
+	
+	private static final Logger LOGGER = LogManager.getLogger(SendMessageParser.class);
 	
 	private static final String MESSAGE_ID_NODE = "messageId";
 	private static final String TRX_STATE_NODE = "trxState";
@@ -30,6 +35,7 @@ public class SendMessageParser {
 		// create the response
 		MessageResponse messageResponse = new MessageResponse(messageId, trxCode, trxErr);
 		
+		LOGGER.info("Message response: " + messageResponse);
 		return messageResponse;
 	}
 	
@@ -46,6 +52,7 @@ public class SendMessageParser {
 		if (msgId.getLength() == 0)
 			return null;
 		
+		LOGGER.info("Message id: " + msgId.item(0).getTextContent());
 		return msgId.item(0).getTextContent();
 	}
 	
@@ -64,6 +71,7 @@ public class SendMessageParser {
 		
 		String trxState = trxStateList.item(0).getTextContent();
 		
+		LOGGER.info("Trx state from response: " + TrxCode.fromString(trxState));
 		return TrxCode.fromString(trxState);
 	}
 	
@@ -80,6 +88,7 @@ public class SendMessageParser {
 		if (msgId.getLength() == 0)
 			return null;
 		
+		LOGGER.info("Trx error from response: " + msgId.item(0).getTextContent());
 		return msgId.item(0).getTextContent();
 	}
 }

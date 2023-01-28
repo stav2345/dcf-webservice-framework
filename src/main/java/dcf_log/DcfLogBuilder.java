@@ -61,9 +61,9 @@ public class DcfLogBuilder {
 			ts = new Timestamp(parsedDate.getTime());
 		    
 		} catch (ParseException e) {
-			e.printStackTrace();
 			LOGGER.error("Cannot parse timestamp=" + date 
 					+ " with format=" + ISO_8601_24H_FULL_FORMAT, e);
+			e.printStackTrace();
 		}
 		
 		return ts;
